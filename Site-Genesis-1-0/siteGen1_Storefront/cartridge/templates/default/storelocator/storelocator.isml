@@ -1,0 +1,77 @@
+<isdecorate template="storelocator/pt_storelocator">
+
+<isinclude template="util/modules"/>
+
+<div id="storelocator" class="storelocator">
+
+	<div id="storelocatorsearch" class="storelocatorsearch">
+	    <h1>${Resource.msg('storelocator.header','storelocator',null)}</h1>
+	    <p>${Resource.msg('storelocator.findstoremessage','storelocator',null)}</p>
+	
+				<isif condition="${pdict.Stores != null && empty(pdict.Stores)}">
+					<h3>${Resource.msg('storelocator.noresults','storelocator',null)}</h3>
+					<isprint value="${pdict.StoresPagingModel}"/>
+				</isif>	
+	
+	</div>
+	<div class="clear"><!-- FLOAT CLEAR --></div>
+
+<div class="domestic">
+		
+    <div class="storelocatorzipsearch">
+        <h2>${Resource.msg('storelocator.searchusacanada','storelocator',null)}</h2>
+
+        <div class="zipsearchactions">
+        <form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.storelocator.htmlName}">
+			<fieldset>
+				<input type="hidden" name="${pdict.CurrentForms.storelocator.countryCode.htmlName}" value="US" />
+				<input type="hidden" name="${pdict.CurrentForms.storelocator.distanceUnit.htmlName}" value="mi" />
+				<isinputfield formfield="${pdict.CurrentForms.storelocator.postalCode}" type="input"/>
+				<isinputfield formfield="${pdict.CurrentForms.storelocator.maxdistance}" type="select"/>
+				<button type="submit" name="${pdict.CurrentForms.storelocator.findbyzip.htmlName}" value="${Resource.msg('global.search','locale',null)}"><span>${Resource.msg('global.search','locale',null)}</span></button>
+			</fieldset>
+        </form>
+        </div>
+    </div><!-- END: storelocatorzipsearch -->
+    
+	<div>${Resource.msg('storelocator.searchdivider','storelocator',null)}</div>
+   	    
+    <div class="storelocatorstatesearch">
+        <div class="statesearchactions">    
+	       <form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.storelocator.htmlName}_state">
+			<fieldset>
+				<div class="label">
+					<span class="requiredindicator">*</span>
+					<span class="labeltext">${Resource.msg('storelocator.statelabel','forms',null)}</span>
+				</div>
+				<isinputfield formfield="${pdict.CurrentForms.storelocator.address.states.state}" label="false" type="select" mandatory="false"/>
+				<button type="submit" name="${pdict.CurrentForms.storelocator.findbystate.htmlName}" value="${Resource.msg('global.search','locale',null)}"><span>${Resource.msg('global.search','locale',null)}</span></button>
+			</fieldset>
+	       </form>
+       </div>
+   	</div><!-- END: storelocatorstatesearch -->
+
+
+</div><!-- END: domestic -->
+<div class="international">
+
+
+    <div class="storelocatorsintsearch">
+		<h2>${Resource.msg('storelocator.searchinternationally','storelocator',null)}</h2>
+        <div class="internationalsearchactions"> 		
+	       <form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.storelocator.htmlName}_int">
+			<fieldset>
+				<isinputfield formfield="${pdict.CurrentForms.storelocator.address.country}" type="select" mandatory="false"/>
+				<button type="submit" name="${pdict.CurrentForms.storelocator.findbycountry.htmlName}" value="${Resource.msg('global.search','locale',null)}"><span>${Resource.msg('global.search','locale',null)}</span></button>
+			</fieldset>
+	       </form>
+       </div>
+		<div class="internationalcontent">
+			<span>${Resource.msg('storelocator.unitedkingdomcustomer','storelocator',null)}</span>
+			<span>${Resource.msg('storelocator.shopbrandnew','storelocator',null)}</span> <a href="">${Resource.msg('storelocator.ukwebsite','storelocator',null)}</a>
+		</div>
+   	</div><!-- END: storelocatorintsearch -->
+</div><!-- END: international -->
+<div class="clear"><!-- FLOAT CLEAR --></div>	    
+</div><!-- END: storelocator -->
+</isdecorate>

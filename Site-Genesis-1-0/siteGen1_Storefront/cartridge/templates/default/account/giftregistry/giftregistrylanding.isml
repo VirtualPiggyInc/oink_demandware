@@ -1,0 +1,36 @@
+<isdecorate template="account/giftregistry/pt_giftregistry">
+<isinclude template="util/modules"/>
+
+<div class="giftregistrylanding">
+	<div class="logincreate">
+		<h3>${Resource.msg('giftregistrylanding.create','account',null)}</h3>
+		<div class="createaccount">
+			<div class="createbenefits">
+				<iscontentasset aid="create-giftregistry-benefits"/>
+			</div><!-- END: createbenefits -->
+			<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.login.htmlName}_register">
+				<fieldset>
+					<div class="createaccountbutton">
+						<button type="submit" value="${Resource.msg('global.createbutton','locale',null)}" name="${pdict.CurrentForms.login.register.htmlName}"><span>${Resource.msg('global.createbutton','locale',null)}</span></button>
+					</div><!-- END: createaccountbutton -->
+					<input type="hidden" name="${pdict.CurrentForms.login.secureKeyHtmlName}" value="${pdict.CurrentForms.login.secureKeyValue}"/>
+				</fieldset>
+			</form>
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+		</div><!-- END: createaccount -->
+	</div><!-- END: logincreate -->
+
+	<isinclude template="account/login/logininclude"/>
+
+	<div class="logingeneral">
+		<h3>${Resource.msg('giftregistry.searchheader','account',null)}</h3>
+		<div class="giftregistrysearch">
+			<p>${Resource.msg('giftregistry.searchmessage','account',null)}</p>
+
+			<isinclude template="account/giftregistry/giftregistrysearch"/>
+
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+		</div><!-- END: giftregistry_searchcontainer -->
+	</div><!-- END: giftregistry_search -->
+</div><!-- END: giftregistry_login -->
+</isdecorate>

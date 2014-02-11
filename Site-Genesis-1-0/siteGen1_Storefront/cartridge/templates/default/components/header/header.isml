@@ -1,0 +1,46 @@
+<div id="header">
+	<iscomment>LOGO: Logo set with CSS as background image edit within CSS</iscomment>
+    <h1 class="logo"><a href="${URLUtils.httpHome()}" title="${Resource.msg('global.storename','locale',null)}">${Resource.msg('global.storename','locale',null)}</a></h1>
+    
+    <iscomment>INCLUDE: Customer login information, login, etc. (contains personal information, do not cache)</iscomment>
+	<isinclude url="${URLUtils.url('Home-IncludeHeaderCustomerInfo')}"/>
+	
+    <div class="generalnav">
+        <ul>
+			<li>
+				<a href="${URLUtils.https('Wishlist-Show')}" title="${Resource.msg('header.wishlistlink','components',null)}">${Resource.msg('header.wishlistlink','components',null)}</a>
+				<span class="divider">|</span>
+			</li>
+			<li>
+				<a href="${URLUtils.https('GiftRegistry-Start')}" title="${Resource.msg('header.registrylink','components',null)}">${Resource.msg('header.registrylink','components',null)}</a>
+				<span class="divider">|</span>
+			</li>
+			<li>
+				<a href="${URLUtils.http('Stores-Find')}" title="${Resource.msg('header.storelocator','components',null)}">${Resource.msg('header.storelocator','components',null)}</a>
+				<span class="divider">|</span>
+			</li>
+			<li>
+				<a href="${URLUtils.http('CustomerService-Show')}" title="${Resource.msg('global.helplink','locale',null)}">${Resource.msg('global.helplink','locale',null)}</a>
+			</li>
+        </ul>
+        <div class="clear"><!-- FLOAT CLEAR --></div>
+    </div><!-- END: generalnav -->
+
+	<iscomment>SEARCH BAR</iscomment>
+    <isinclude template="search/simplesearch"/>
+    
+    <iscomment>INCLUDE: Mini-cart, do not cache</iscomment>
+    <div id="minicart" class="minicart"><isinclude url="${URLUtils.url('Cart-MiniCart')}"/></div><!-- END:minicart -->
+    
+    <iscomment>INCLUDE: category menu bar at the bottom of the header (it's computing intensive, it's cached)</iscomment>
+    <isinclude url="${URLUtils.url('Home-IncludeHeaderMenu')}"/>
+
+    <iscomment>SLOT CONFIGURATION:  SLOT/ID: header-banner</iscomment>
+    <div class="headerbanner"><isslot id="header-banner" description="Header banner within the header, between the logo and search bar, width XXXpx by height XXpx." context="global" /></div><!-- END: headerbanner -->
+
+    <iscomment>SLOT CONFIGURATION:  SLOT/ID: header-bar</iscomment>
+	<div class="headerbar"><isslot id="header-bar" description="Header bar slot below the Category Navigation" context="global" /></div><!-- END: headerbar -->
+
+    <div class="clear"><!-- FLOAT CLEAR --></div>
+</div><!-- END: header -->
+

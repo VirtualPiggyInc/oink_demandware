@@ -1,0 +1,20 @@
+<a name='prReview'></a>
+<h2>${Resource.msg('reviews.header','product',null)}</h2>
+<script type="text/javascript"><!--
+  // 'snippet' is for small rating footprint,
+  // 'engine' will display full ratings.
+
+  var pr_page_id = "${pdict.Product.ID}";
+
+  //var pr_locale = "";
+
+  //var pr_zip_location = "";
+  var pr_write_review = "${URLUtils.url('PowerReviews-WriteReview')}?pid=${pdict.Product.ID}";
+  var pr_read_review = "javascript:app.ProductCache.readReviews();";
+
+  if (typeof(engine) != "undefined")
+  {
+    engine(document);
+  }
+
+//--></script>

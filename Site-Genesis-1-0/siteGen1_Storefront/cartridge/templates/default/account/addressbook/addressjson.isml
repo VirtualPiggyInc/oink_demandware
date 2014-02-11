@@ -1,0 +1,20 @@
+<iscontent type="application/json" charset="UTF-8" compact="true"/>
+<iscomment>
+	This template renders the attributes of a customer address as JSON response.
+</iscomment>
+{
+	<isif condition="${!empty(pdict.Address)}">
+		"address": {
+			"ID":           "<isprint value="${pdict.Address.ID}"/>",
+		    "firstName":    "<isprint value="${pdict.Address.firstName}"/>",
+		    "lastName":     "<isprint value="${pdict.Address.lastName}"/>",
+		    "address1":     "<isprint value="${pdict.Address.address1}"/>",
+		    "address2":     "<isprint value="${pdict.Address.address2}"/>",
+		    "postalCode":   "<isprint value="${pdict.Address.postalCode}"/>",
+		    "city":         "<isprint value="${pdict.Address.city}"/>",
+		    "stateCode":    "<isprint value="${pdict.Address.stateCode}"/>",
+		    "countryCode":  "<isprint value="${pdict.Address.countryCode.value}"/>",
+		    "phone":        "<isprint value="${pdict.Address.phone}"/>"
+		}
+	</isif>
+}

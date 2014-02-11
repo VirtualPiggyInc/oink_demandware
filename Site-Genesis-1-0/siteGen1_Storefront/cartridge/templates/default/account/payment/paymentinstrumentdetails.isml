@@ -1,0 +1,117 @@
+<isinclude template="util/modules"/>
+
+<div id="CreditCardDialog" class="creditcardform" >
+	<form id="CreditCardForm" name="CreditCardForm" action="${URLUtils.httpsContinue()}"  method="post" id="newcreditcard">
+		<fieldset>
+			<div class="formfields">
+				<div class="requiredcaption">
+					<span class="requiredindicator">*</span><strong>${Resource.msg('global.requiredfield','locale',null)}</strong></strong>
+				</div>
+	   			<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.paymentinstruments.creditcards.newcreditcard.owner}" type="input" maxlength="40" size="40"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield cardtype">
+					<isinputfield formfield="${pdict.CurrentForms.paymentinstruments.creditcards.newcreditcard.type}" type="select"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.paymentinstruments.creditcards.newcreditcard.number}" p_dynamic="true" type="input" maxlength="16" size="17"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield expirationdate">
+					<div class="label expires">
+						<span class="requiredindicator">*</span>
+						<span>${Resource.msg('paymentinstrumentdetails.expires','account',null)}</span>
+					</div>
+					<span class="month"><isinputfield formfield="${pdict.CurrentForms.paymentinstruments.creditcards.newcreditcard.month}" type="select"/></span><span class="year"><isinputfield formfield="${pdict.CurrentForms.paymentinstruments.creditcards.newcreditcard.year}" type="select"/></span>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="actions">	
+				<div id="formaction"></div>		
+				<button id="applyBtn" type="button" value="${Resource.msg('global.apply','locale',null)}"><span>${Resource.msg('global.apply','locale',null)}</span></button>	
+				<button id="cancelBtn" type="button" value="${Resource.msg('global.cancel','locale',null)}"><span>${Resource.msg('global.cancel','locale',null)}</span></button>
+			</div>
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+			<input type="hidden" name="${pdict.CurrentForms.paymentinstruments.secureKeyHtmlName}" value="${pdict.CurrentForms.paymentinstruments.secureKeyValue}"/>
+		</fieldset>
+	</form>
+</div><!-- END: creditcard_form -->
+
+<div class="confirmationcontainer" id="confirmationcontainer" style="display:none;">
+	<div class="errorform">${Resource.msg('account.forbidden','account',null)}</div><!-- END: errorform -->
+	<button id="confirmBtn" type="button"><span>${Resource.msg('global.close','locale',null)}</span></button>			
+</div>
+
+<script type="text/javascript"><!--
+	app.URLs.submitDialogURL = '${URLUtils.httpContinue()}';
+	if(!jQuery('#dialogcontainer').dialog('isOpen'))
+	{
+		jQuery('#dialogcontainer').dialog({
+			bgiframe: true,
+			autoOpen: false,
+			modal: true,
+			overlay: {
+	    		opacity: 0.5,
+	     		background: "black"
+			},
+	    	height: 230,
+	    	width: 475,
+	    	title: '${Resource.msg('paymentinstrumentdetails.header','account',null)}',
+	    	resizable: false
+		});
+		jQuery('#dialogcontainer').dialog('open');
+	}
+		
+	jQuery(document).ready(function() {		
+		// execute unobtrusive js code
+		app.execUjs();
+	
+		jQuery('#applyBtn').click( function() {
+			action = "${pdict.CurrentForms.paymentinstruments.creditcards.create.htmlName}";
+			jQuery('#formaction').append("<input name='" + action + "' type='hidden' />");
+			
+			var post = jQuery('#CreditCardForm').serialize();
+	  		jQuery.ajax({
+			   type: "POST",
+			   url: app.URLs.submitDialogURL,
+			   data: post,
+			   dataType: 'html',
+			   success: function(data){
+			   		jQuery("#dialogcontainer").empty().html(data);
+			   },
+			   failure: function(data) {
+			   		alert("${Resource.msg('global.serverconnection','locale',null)}");		
+			   },
+			   error : function(XMLHttpRequest, textStatus, errorThrown){
+				   jQuery('#confirmationcontainer').show();	
+				   jQuery('#confirmationcontainer').dialog({
+					   		bgiframe: true,
+							autoOpen: false,
+							modal: true,
+					    	height: 100,
+    						width: 300,
+					    	resizable: false
+					});
+				    jQuery('#confirmationcontainer').dialog('option', 'title', jQuery('#dialogcontainer').dialog('option', 'title'));	
+					jQuery('#confirmationcontainer').dialog('open');
+				}
+			});		
+		});
+
+		jQuery('#confirmBtn').unbind("click").click( function() {
+            jQuery('.confirmationcontainer').dialog('close');
+            jQuery('#dialogcontainer').dialog('close');      
+      	}); 
+
+		jQuery('#confirmationcontainer').bind('dialogclose', function(event, ui) {
+			jQuery('#dialogcontainer').dialog('close'); 
+		});
+		
+		jQuery('#cancelBtn').click( function() {
+			jQuery('#dialogcontainer').dialog('close');
+		});
+	});
+//--></script>

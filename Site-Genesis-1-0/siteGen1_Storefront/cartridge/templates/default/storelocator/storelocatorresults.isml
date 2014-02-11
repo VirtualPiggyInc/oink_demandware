@@ -1,0 +1,87 @@
+<isdecorate template="storelocator/pt_storelocatorresults">
+
+<isinclude template="util/modules"/>
+
+<div id="storelocator" class="storelocator">
+
+    <isif condition="${!empty(pdict.Stores)}">
+        <div class="storelocatorsearchresults">
+       
+        	<h1>${Resource.msg('storelocator.storelocatorresults.yoursearchfound','storelocator',null)} <isprint value="${pdict.StoresCount}"/> ${Resource.msg('storelocator.storelocatorresults.stores','storelocator',null)}</h1>
+        	<a href="${URLUtils.url('Stores-Find')}">&lt;&lt; ${Resource.msg('storelocator.storelocatorresults.backtolocator','storelocator',null)}</a>
+            
+            <div class="locatorsearchresults"><h1>${Resource.msg('storelocator.storelocatorresults.allstores','storelocator',null)} <span class="locationhighlight"><isprint value="${pdict.SearchString}"/></span></h1></div>
+            
+            <table class="storelocator">
+                <thead>
+                    <tr>
+                        <th>${Resource.msg('storelocator.storelocatorresults.storename','storelocator',null)}</th>
+                        <th>${Resource.msg('storelocator.storelocatorresults.address','storelocator',null)}</th>
+                        <th>${Resource.msg('storelocator.storelocatorresults.directions','storelocator',null)}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <isloop items="${pdict.Stores}" var="Store" status="loopstate">
+                        <tr class="tablerow">
+                            <td class="storename">
+                                <div class="storeinformation">
+                                	<h5><isprint value="${Store.name}"/></h5>
+                                	<a class="editbutton" id="${Store.ID}" title="${Resource.msg('storelocator.storelocatorresults.storedetails','storelocator',null)}">${Resource.msg('storelocator.storelocatorresults.storedetails','storelocator',null)}</a>
+                                	
+                               	</div>
+
+                                <isif condition="${Store.storeHours != null}">
+                                    <div class="storehours"><isprint value="${Store.storeHours}" encoding="off"/></div>
+                                </isif>
+
+                                <isif condition="${Store.storeEvents != null}">
+                                    <div class="storeevents"><isprint value="${Store.storeEvents}" encoding="off"/></div>
+                                </isif>
+                            </td>
+                            <td class="storeaddress">
+                                <isprint value="${Store.address1}"/><br/>
+                                <isprint value="${Store.city}"/><isif condition="${Store.city != null && Store.stateCode != null}">,</isif> <isprint value="${Store.stateCode}"/> <isprint value="${Store.postalCode}"/><br/>
+                                <isprint value="${Store.countryCode}"/>
+                            </td>
+                            <iscomment>Example for a link to a map service</iscomment>
+                            <isscript>
+                                var qAttr = "";
+                                if(Store.address1    != null) qAttr += Store.address1 + ", ";
+                                if(Store.address2    != null) qAttr += Store.address2 + ", ";
+                                if(Store.city        != null) qAttr += Store.city + ", ";
+                                if(Store.postalCode  != null) qAttr += Store.postalCode + ", ";
+                                if(Store.stateCode   != null) qAttr += Store.stateCode + ", ";
+                                if(Store.countryCode != null) qAttr += Store.countryCode;
+
+                                var glink = "http://maps.google.com/maps?hl=en&f=q&q=" + encodeURI(qAttr);
+                            </isscript>
+                            <td class="storemap">
+                                <a class="googlemap" name="${glink}">${Resource.msg('storelocator.storelocatorresults.map','storelocator',null)}</a>
+                            </td>
+                        </tr>
+                    </isloop>
+                </tbody>
+            </table>          
+            <a class="backtolocator" href="${URLUtils.url('Stores-Find')}">&lt;&lt; ${Resource.msg('storelocator.storelocatorresults.backtolocator','storelocator',null)}</a>
+        </div><!-- END: storelocatorsearchresults -->
+    </isif>
+</div><!-- END: storelocator -->
+
+
+<script type="text/javascript"><!--
+	jQuery(document).ready(function() {
+		jQuery(".editbutton").click(function() {
+		
+			var url = app.util.appendParamToURL('${URLUtils.url('Stores-Details')}','StoreID',jQuery(this).attr("id"));
+			app.dialog.open(url,'Store Details');
+		});
+		
+		jQuery(".googlemap").click(function() {
+			window.open(this.name);
+		});
+	});
+//--></script>
+
+</isdecorate>
+
+

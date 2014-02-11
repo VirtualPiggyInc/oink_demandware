@@ -1,0 +1,59 @@
+<iscomment>Product compare widget uses session information and therefore must not be cached.</iscomment>
+<isif condition="${(pdict.CompareList != null) && (pdict.Category != null)}">
+	<div id="compareItems" class="compareitems" style="display:none;">
+		<isscript>
+		importScript( "common/libJson.ds" );
+		</isscript>
+		<script type="text/javascript"><!--
+			jQuery(document).ready(function() {
+	    		app.compare.initialize({
+	    			openUrl: "${URLUtils.url('Compare-Show', 'category', pdict.Category.ID)}",
+	    			addUrl: "${URLUtils.url('Compare-AddProduct')}",
+	    			removeUrl: "${URLUtils.url('Compare-RemoveProduct')}",
+	    			emptyImgSrc: "${URLUtils.staticURL('/images/comparewidgetempty.gif')}",
+	    			emptyImgAlt: "${Resource.msg('global.remove', 'locale', null)}",
+	    			baseButtonLabel: "${Resource.msg('productcomparewidget.compareitems', 'search', null)}",
+	    			confirmation: "${Resource.msg('productcomparewidget.maxproducts', 'search', null)}",
+	    			products: [
+	    				<isif condition="${!empty(pdict.CompareList.products)}">
+		    				<isloop items="${pdict.CompareList.products}" var="productID" status="Status">
+		    					<isset name="compareProduct" value="${dw.catalog.ProductMgr.getProduct(productID)}" scope="page"/>
+		    					<isset name="thumbnail" value="${compareProduct.getImage('small',0)}" scope="page"/>
+		    					
+		    					<isif condition="${thumbnail != null}">
+									<isset name="thumbnailUrl" value="${compareProduct.getImage('small',0).url}" scope="page"/>
+								<iselse/>
+									<iscomment>filler for no images. css resizes the image to a proper placeholder</iscomment>
+									<isset name="thumbnailUrl" value="${URLUtils.staticURL('/images/noimagesmall.png')}" scope="page"/>
+								</isif>
+		    					{
+		    						id: "<isprint value="${escapeJsonString(compareProduct.ID)}" encoding="off" />",
+		    						category: "<isprint value="${escapeJsonString(pdict.Category.ID)}" encoding="off" />",
+		    						imgSrc: "${thumbnailUrl}",
+		    						imgAlt: "${compareProduct.name}"
+		    					}<isif condition="${!Status.last}">,</isif>
+		    				</isloop>
+		    			</isif>
+	    			]
+	    		});
+	      	});
+	    //--></script>
+		<h2>${Resource.msg('productcomparewidget.compareitems', 'search', null)}</h2>
+		<div class="comparebar">
+			<button id="compareItemsButton" value="${Resource.msg('productcomparewidget.compareitems', 'search', null)}" disabled="disabled"><span>${Resource.msg('productcomparewidget.compareitems', 'search', null)}</span></button>
+			<button id="clearComparedItemsButton" disabled="disabled" value="${Resource.msg('productcomparewidget.clearall', 'search', null)}"><span>${Resource.msg('productcomparewidget.clearall', 'search', null)}</span></button>
+			<div id="compareItemsPanel" class="compareitemspanel">
+				<isloop begin="0" end="5" step="1" status="Status">
+	 				<div class="compareitem">
+	 					<img id="compareItemsProduct${Status.index}" class="compareproduct" src="${URLUtils.staticURL('/images/comparewidgetempty.gif')}" alt="${Resource.msg('productcomparewidget.empty', 'search', null)}"/>
+	 					<div class="compareitemremove"><img id="compareItemsClear${Status.index}" style="display:none;" src="${URLUtils.staticURL('/images/icon_remove.gif')}" alt="${Resource.msg('global.remove', 'locale', null)}"/></div>
+	  				</div><!-- END: compareitem -->
+		 			<isif condition="${!Status.last}">
+		 				<div class="compareitemsseparator"><!-- Compare Separator --></div><!-- END: compareitemsseparator -->
+		 			</isif>
+		 		</isloop>
+			</div><!-- END: compareitemspanel -->
+	    	<div class="clear"><!-- FLOAT CLEAR --></div>
+		</div><!-- END: comparebar -->
+	</div><!-- END: compareitems -->
+</isif>

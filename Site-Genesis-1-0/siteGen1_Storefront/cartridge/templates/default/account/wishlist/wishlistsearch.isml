@@ -1,0 +1,22 @@
+<div class="wishlistsearchform">
+	<form action="${URLUtils.https('Wishlist-Search')}" method="post" id="${pdict.CurrentForms.wishlist.search.htmlName}">
+		<fieldset>
+			<div class="lastname">
+				<label class="warning"><isprint value="${Resource.msg(pdict.CurrentForms.wishlist.search.lastname.label,'forms',null)}">:</label>
+				<input class="inputbox loginbox" name="${pdict.CurrentForms.wishlist.search.lastname.htmlName}" value="${pdict.CurrentForms.wishlist.search.lastname.htmlValue}" type="text" />
+			</div><!-- END: lastname -->
+			<div class="firstname">
+				<label class="warning"><isprint value="${Resource.msg(pdict.CurrentForms.wishlist.search.firstname.label,'forms',null)}">:</label>
+				<input class="inputbox loginbox" name="${pdict.CurrentForms.wishlist.search.firstname.htmlName}" value="${pdict.CurrentForms.wishlist.search.firstname.htmlValue}" type="text" />
+			</div><!-- END: firstname -->
+			<span class="divider">or</span>
+			<div class="email">
+				<label><isprint value="${Resource.msg(pdict.CurrentForms.wishlist.search.email.label,'forms',null)}">:</label>
+				<input class="inputbox loginbox" name="${pdict.CurrentForms.wishlist.search.email.htmlName}" value="${pdict.CurrentForms.wishlist.search.email.htmlValue}" type="text" />
+			</div><!-- END: email -->
+			<div class="formactions">
+				<button type="submit" value="${Resource.msg('global.find','locale',null)}" name="${pdict.CurrentForms.wishlist.search.search.htmlName}"><span>${Resource.msg('global.find','locale',null)}</span></button>
+			</div><!-- END: wishlistsubmit -->
+		</fieldset>
+	</form>
+</div><!-- END: wishlistsearchform -->

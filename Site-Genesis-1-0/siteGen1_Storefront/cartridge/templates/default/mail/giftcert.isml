@@ -1,0 +1,53 @@
+<iscontent type="text/html" charset="UTF-8" compact="true"/>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<style type="text/css">
+.giftcertemailbody {
+	font-family: Arial, Helvetica, Verdana, sans-serif;
+	font-size: .95em;
+	color: #000;}
+.giftcertamount {
+	font-weight:bold; }
+.giftcertcode {
+	font-weight:bold;
+	font-size:1.1em; }
+</style>
+</head>
+
+<body>
+	<div class="giftcertemailbody">
+		
+		<isif condition="${empty(pdict.GiftCertificate.recipientName)}">
+			<p>Dear customer,</p>
+		<iselse/>
+			<p>Dear <isprint value="${pdict.GiftCertificate.recipientName}"/>,</p>
+		</isif>
+		
+		<p>
+			<isif condition="${empty(pdict.GiftCertificate.senderName)}">
+				Someone
+			<iselse/>
+				<isprint value="${pdict.GiftCertificate.senderName}"/>
+			</isif>
+			pays attention to you and has sent you a <span class="giftcertamount"><isprint value="${pdict.GiftCertificate.amount}"/></span> gift certificate for the <a href="${URLUtils.httpHome()}">Demandware online store</a>.
+		</p>
+		
+		<isif condition="${!empty(pdict.GiftCertificate.message)}">
+			<isif condition="${empty(pdict.GiftCertificate.senderName)}">
+				<p>The following message has been left for you:</p>
+			<iselse/>
+				<p><isprint value="${pdict.GiftCertificate.senderName}"/> has left the following message for you:</p>
+			</isif>
+			
+			<p><isprint value="${pdict.GiftCertificate.message}"/></p>	
+		</isif>
+		
+		<p>
+			To redeem your gift certificate, use the following code within the billing step of the checkout:
+			<span class="giftcertcode"><isprint value="${pdict.GiftCertificate.ID}"/></span>
+		</p>
+
+	</div>
+</body>
+</html>

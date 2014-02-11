@@ -1,0 +1,128 @@
+<isdecorate template="account/giftregistry/pt_giftregistry">
+<isinclude template="util/modules"/>
+<div class="giftregistry">
+	<isslot id="registry-header" description="Banner for Gift Registry" context="global" />
+	<h1>${Resource.msg('registrycustomer.giftregistries','account',null)}</h1>
+	<div class="registrylistsearch">
+		<isinclude template="account/giftregistry/giftregistrysearch"/>	
+	</div>
+<isif condition="${pdict.ProductList == null}">
+	<div class="registrynone">${Resource.msgf('registrycustomer.' + pdict.Status.code, 'account',null, pdict.Status.parameters)}</div><!-- END: registrynone -->
+<iselse/>
+	<a class="printpage">${Resource.msg('global.print','locale',null)}</a>
+	<div id="registry" class="registry">
+		<div class="eventinformation">
+			<div class="eventinformationuserinfo">	
+				<span class="label">${Resource.msg('registrycustomer.role','account',null)}</span>
+				<span class="value"><isprint value="${pdict.ProductList.registrant.role}"/></span><br />
+				<span class="label">${Resource.msg('registrycustomer.name','account',null)}</span>
+				<span class="value"><isprint value="${pdict.ProductList.registrant.firstName}"/>&nbsp;<isprint value="${pdict.ProductList.registrant.lastName}"/></span><br />
+			<isif condition="${pdict.ProductList.coRegistrant != null}">
+				<span class="label">${Resource.msg('registrycustomer.role','account',null)}</span>
+				<span class="value"><isprint value="${pdict.ProductList.coRegistrant.role}"/></span><br />
+				<span class="label">${Resource.msg('registrycustomer.name','account',null)}</span>
+				<span class="value"><isprint value="${pdict.ProductList.coRegistrant.firstName}"/>&nbsp;<isprint value="${pdict.ProductList.coRegistrant.lastName}"/></span><br />
+			</isif><br />
+			</div><!-- END: eventinformationuserinfo --> 
+			<div class="eventinformationeventinfo">	
+				<span class="label">${Resource.msg('registrycustomer.eventtype','account',null)}</span>
+				<span class="value"><isprint value="${pdict.ProductList.eventType}"/></span><br />
+				<span class="label">${Resource.msg('registrycustomer.location','account',null)}</span>
+				<span class="value"><isprint value="${pdict.ProductList.eventCity}"/>,
+				<isprint value="${pdict.ProductList.eventState}"/></span>
+			</div><!-- END: eventinformationuserinfo -->
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+		</div><!-- END: eventinformation -->
+		<div id="giftregistryproducts" class="giftregistryproducts">
+			<h3><isprint value="${pdict.ProductList.name}"/> - <isprint value="${pdict.ProductList.eventDate}"/></h3><br />
+		<isif condition="${empty(pdict.CurrentForms.giftregistry.items)}">
+			<div class="giftregistryemptymessage">${Resource.msg('registrycustomer.noitems','account',null)}</div><!-- END: giftregistryemptymessage -->
+		</isif>			
+			<isloop items="${pdict.CurrentForms.giftregistry.items}" var="item" status="loopstate">
+				<table class="giftregistryitemcontainer">
+					<tr class="tablerow">
+						<td class="imagecolumn">
+							<iscomment>Display product image using module</iscomment>
+							<isdisplayproductimage p_productli="${item.object}"/>
+						</td>
+						<td class="detailscolumn">
+							<div class="giftregistrylineitem">
+								<iscomment>Display product list item using module</iscomment>
+								<isdisplayproductlistitem p_productli="${item.object}"/>
+							</div>
+							<iscomment>display product availability using module</iscomment>
+							<isdisplayproductavailability p_productli="${item.object}"/>
+						</td>
+						<td class="giftregistryactionitems">
+							<div class="giftregistrydateadded">
+								<span class="label">${Resource.msg('registrycustomer.dateadded','account',null)}</span> <span class="value"><isprint value="${item.object.creationDate}"/></span>
+							</div>
+							<isif condition="${item.object.type == item.object.TYPE_PRODUCT}">
+								<div class="giftregistryqty">
+									<div class="giftregistryqty quantity">
+										<span class="label">${Resource.msg('productlist.qtydesired','account',null)}</span> <span class="value"><isprint value="${item.quantity.value}" formatter="#"/></span>
+									</div>
+								</div>
+								<div class="clear"><!-- FLOAT CLEAR --></div>
+								<div class="giftregistrypurchased purchased">
+									<span class="label">${Resource.msg('productlist.qtypurchased','account',null)}</span> <span class="value"><isprint value="${item.purchasedQuantity.value}" formatter="#"/></span>
+								</div> 
+								<div class="clear"><!-- FLOAT CLEAR --></div>
+							</isif>
+							<isloop items="${item.priority.options}" var="option">
+								<isif condition="${item.object.priority == option.htmlValue}">
+									<iscomment>priority select box</iscomment>
+									<div class="giftregistrypriority">
+										<div class="giftregistrypriorityvalue"><span class="label">${Resource.msg('registrycustomer.priority','account',null)}</span> <span class="value">${Resource.msg(option.label,'forms',null)}</span></div>
+									</div>
+								</isif>
+							</isloop>
+							<div class="giftregistryaddtocart">
+								<isif condition="${item.object.type == item.object.TYPE_GIFT_CERTIFICATE}">
+									<form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.giftregistry.htmlName}" name="${pdict.CurrentForms.giftregistry.htmlName}_1">
+										<fieldset>
+											<input type="hidden" name="plid" value="${pdict.ProductList.UUID}"/>
+											<button type="submit" value="${Resource.msg('global.addtocart', 'locale', null)}" name="${item.purchaseGiftCertificate.htmlName}"><span>${Resource.msg('global.addtocart', 'locale', null)}</span></button>
+										</fieldset>
+									</form>
+								<iselse>
+									<span class="label">${Resource.msg('global.qty','locale',null)}:</span><input class="quantityinput" type="text" name="Quantity" value="${Number(empty(pdict.CurrentHttpParameterMap.Quantity.stringValue) ? 1 : pdict.CurrentHttpParameterMap.Quantity.stringValue).toFixed()}"/>
+									<button class="addToCart" id="id${item.object.ID}"><span>${Resource.msg('global.addtocart', 'locale', null)}</span></button>	
+								</isif>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</isloop>
+		</div><!-- END: giftregistryproducts -->
+	</div><!-- END: registry -->
+</div><!-- END: giftregistry -->
+</isif>
+
+<script type="text/javascript"><!--
+  	jQuery(document).ready(function() {
+		jQuery(".addToCart").click(function() {
+			var qty = jQuery(this).prev().val();
+			if (qty == "" || qty < 1)
+			{
+				qty = 1;
+			}
+			
+			var params = new Object; 
+ 			params['pid'] = this.id.substring(2,this.id.length);
+			params['Quantity'] = qty;		
+			params['ProductListID'] = "${pdict.ProductList.ID}";
+			
+			app.minicart.add('${URLUtils.staticURL('/images/loading-progress-98x22.gif')}', params);  
+			return false;
+		});
+
+		// print handler
+		jQuery("a.printpage").click(function() {
+			window.print();
+			return false;
+		});
+	});
+	
+//--></script>
+</isdecorate>

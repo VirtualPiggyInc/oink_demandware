@@ -1,0 +1,5 @@
+<iscontent type="application/json" charset="UTF-8" compact="true"/>
+<isset name="AVM" value="${pdict.Product.availabilityModel}" scope="page"/>
+{
+<isinclude template="product/components/availabilityjson"/>
+}

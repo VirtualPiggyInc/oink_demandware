@@ -1,0 +1,4 @@
+<script type="text/javascript"><!--
+	// just trigger the delete event for the dialog
+	app.dialog.triggerDelete();
+//--></script>

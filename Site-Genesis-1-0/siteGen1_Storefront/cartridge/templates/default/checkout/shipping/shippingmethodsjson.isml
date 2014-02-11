@@ -1,0 +1,14 @@
+<iscontent type="application/json" charset="UTF-8" compact="true"/>
+<iscomment>
+	This template renders a simple array of shipping method IDs as a JSON response.
+</iscomment>
+
+[
+	<isset name="count" value="${0}" scope="page"/>
+	<isloop items="${pdict.ApplicableShippingMethods}" var="method" status="loopstate">
+		<isset name="count" value="${count+1}" scope="page"/>
+		<isif condition="${count > 1}">,</isif>
+		"<isprint value="${method.ID}"/>"
+	</isloop>
+
+]

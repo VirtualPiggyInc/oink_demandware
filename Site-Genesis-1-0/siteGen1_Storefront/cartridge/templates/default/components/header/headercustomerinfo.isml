@@ -1,0 +1,14 @@
+<div class="headercustomerinfo">
+    <isif condition="${pdict.CurrentCustomer.registered}">
+        <span class="welcomemessage">${Resource.msg('headercustomerinfo.welcome','components',null)}</span>
+        <a href="${URLUtils.https('Account-Show')}" title="${Resource.msg('global.accountlink','locale',null)} ${pdict.CurrentCustomer.profile.firstName} ${pdict.CurrentCustomer.profile.lastName}" class="username"><span class="username"><isprint value="${pdict.CurrentCustomer.profile.firstName}"/>&nbsp;<isprint value="${pdict.CurrentCustomer.profile.lastName}"/></span></a>
+         <isif condition="${!pdict.CurrentCustomer.authenticated}">
+            <span class="unauthenticated">(<a title="${Resource.msg('global.login','locale',null)}${pdict.CurrentCustomer.profile.firstName} ${pdict.CurrentCustomer.profile.lastName}" href="${URLUtils.https('Account-Show')}" class="userlogin">${Resource.msg('headercustomerinfo.pleaselogin','components',null)}</a>)</span>
+        </isif>
+        <span class="divider">|</span>
+        (<a title="${Resource.msg('headercustomerinfo.not','components',null)} ${pdict.CurrentCustomer.profile.firstName} ${pdict.CurrentCustomer.profile.lastName}" href="${URLUtils.url('Login-Logout')}" class="usernot">${Resource.msg('headercustomerinfo.not','components',null)} ${pdict.CurrentCustomer.profile.firstName}</a>?)	
+    <iselse>
+        <span class="welcomemessage">${Resource.msg('headercustomerinfo.welcome','components',null)}</span><a title="${Resource.msg('global.login','locale',null)}" href="${URLUtils.https('Account-Show')}" class="userlogin">${Resource.msg('global.login','locale',null)}</a><span class="divider">|</span><a title="${Resource.msg('global.register','locale',null)}" href="${URLUtils.https('Account-StartRegister')}" class="userregister">${Resource.msg('global.register','locale',null)}</a>
+    </isif>
+    <div class="clear"><!-- FLOAT CLEAR --></div>
+</div><!-- END: headercustomerinfo -->

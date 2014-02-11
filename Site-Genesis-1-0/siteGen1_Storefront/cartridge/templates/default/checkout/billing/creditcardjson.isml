@@ -1,0 +1,16 @@
+<iscontent type="application/json" charset="UTF-8" compact="true"/>
+<iscomment>
+	This template renders the attributes of a customer credit card payment instrument as JSON response.
+</iscomment>
+{
+	<isif condition="${!empty(pdict.SelectedCreditCard)}">
+		"creditCard": {
+			"number":	"<isprint value="${pdict.SelectedCreditCard.creditCardNumber}"/>",
+			"maskedNumber":	"<isprint value="${pdict.SelectedCreditCard.maskedCreditCardNumber}"/>",
+		    "holder":	"<isprint value="${pdict.SelectedCreditCard.creditCardHolder}"/>",
+		    "type":		"<isprint value="${pdict.SelectedCreditCard.creditCardType}"/>",
+		    "expirationMonth":	"<isprint value="${pdict.SelectedCreditCard.creditCardExpirationMonth}"/>",
+		    "expirationYear":	"<isprint value="${pdict.SelectedCreditCard.creditCardExpirationYear}"/>"
+		}
+	</isif>
+}

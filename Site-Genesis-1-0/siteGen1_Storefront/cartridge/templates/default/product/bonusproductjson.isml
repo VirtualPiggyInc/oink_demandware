@@ -1,0 +1,29 @@
+{
+name: "${ pdict.Product.name }",
+ID: "${ pdict.Product.ID }",
+qty : "${ pdict.BonusDiscountLineItem.quantityValue }",
+lineItemCtnrUUID : "${ pdict.BonusDiscountLineItem.getLineItemCtnr().getUUID() }",
+variations: {attributes: [
+<isif condition="${pdict.Product.isVariant() || pdict.Product.master}">
+	<isif condition="${pdict.CurrentVariationModel != null}">
+		<isset name="PVM" value="${pdict.CurrentVariationModel}" scope="page"/>
+	<iselse/>
+		<isset name="PVM" value="${pdict.Product.variationModel}" scope="page"/>
+	</isif>
+	<isloop items="${pdict.Product.variationModel.attributeDefinitions}" var="VA" status="loopstatus0">		
+		<isset name="SelectedVariationValue" value="${pdict.Product.variationModel.getSelectedValue(VA)}" scope="page"/>		
+		{displayID: "${VA.ID}", displayName: "${VA.displayName}", selectedDisplayValue: "${SelectedVariationValue.displayValue}", selectedValue : "${SelectedVariationValue.value}"}<isif condition="${!loopstatus0.last}">,</isif>
+	</isloop>
+</isif>
+]},
+options: {attributes: [
+<isif condition="${pdict.BonusDiscountLineItem.optionProductLineItems.size() > 0}">
+	<isloop items="${pdict.BonusDiscountLineItem.optionProductLineItems}" var="optionLI" status="loopstatus1">
+	<isset name="Option" value="${pdict.Product.optionModel.getOption(optionLI.optionID)}" scope="page"/>
+		{displayID: "${optionLI.optionID}", htmlName: "<isif condition="${Option != null}">${Option.htmlName}</isif>", selectedDisplayValue: "${optionLI.lineItemText}", selectedValue : "${optionLI.optionValueID}"}<isif condition="${!loopstatus1.last}">,</isif>
+	</isloop>
+</isif>
+]}
+}
+
+

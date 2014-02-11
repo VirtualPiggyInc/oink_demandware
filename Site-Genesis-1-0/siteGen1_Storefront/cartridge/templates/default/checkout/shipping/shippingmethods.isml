@@ -1,0 +1,115 @@
+<isinclude template="util/modules"/>
+
+<iscomment>
+	This template renders the shipping methods that a customer may choose from.
+	It renders a form for the shipping method selection.  This template is 
+	dynamically loaded using AJAX and may get reloaded as the customer enters
+	shipping address information depending on the configured shipping method
+	address exclusions.
+</iscomment>
+
+<isscript>
+	var shipment : dw.order.Shipment = pdict.Basket.defaultShipment;
+	var shippingModel : dw.order.ShipmentShippingModel = dw.order.ShippingMgr.getShipmentShippingModel( shipment );
+</isscript>
+
+<isset name="DiscountPlan" value="${dw.campaign.PromotionMgr.getDiscounts(pdict.Basket)}" scope="page" />
+
+<h5>${Resource.msg('singleshipping.shippingmethodheader','checkout',null)}</h5>
+
+<iscomment>render list of applicable shipping methods</iscomment>
+<isif condition="${pdict.ApplicableShippingMethods.size() > 0}">
+	<div class="shippingmethods">
+		<isloop items="${pdict.ApplicableShippingMethods}" var="shippingMethod">
+		<isset name="shippingCost" value="${pdict.ShippingCosts.get(shippingMethod.ID)}" scope="page"/>
+			<div class="shippingmethod">
+				<div class="label">&nbsp;</div>
+    			<div class="value"><input type="radio" name="${pdict.CurrentForms.singleshipping.shippingAddress.shippingMethodID.htmlName}" id="shipping-method-${shippingMethod.ID}" value="${shippingMethod.ID}" <isif condition="${(empty(pdict.CurrentForms.singleshipping.shippingAddress.shippingMethodID.value) && shippingMethod.defaultMethod) || (pdict.CurrentForms.singleshipping.shippingAddress.shippingMethodID.value == shippingMethod.ID)}">checked="checked"</isif> /> 
+    			<label for="shipping-method-${shippingMethod.ID}"><isprint value="${shippingMethod.displayName}"/>: 
+    			
+				<iscomment>
+					The format for rendering shipping values is to render the base shipping cost. If there are shipping 
+					price adjustments, the adjustments are also rendered. Finally, if there is a surcharge associated with 
+					the shipping, the surcharge value is rendered.
+			 	</iscomment>
+
+				<isif condition="${shippingCost.shippingPriceAdjustmentsTotal != 0}">
+					<span class="standardshipping"><isprint value="${shippingCost.baseShipping}"/></span> <span class="discountshipping"><isprint value="${shippingCost.baseShippingAdjusted}"/></span>
+				<iselse>
+					<span><isprint value="${shippingCost.baseShipping}"></span>
+				</isif>
+				
+				<isif condition="${shippingCost.surchargeAdjusted > 0}"><span class="shippingsurcharge"> + <isprint value="${shippingCost.surchargeAdjusted}"/> ${Resource.msg('singleshipping.surcharge','checkout',null)}</span></isif>
+
+    				<isif condition="${shippingCost.productShippingCosts.length > 0}">
+    				<span class="formfieldtooltip">(<a class="tooltip">${Resource.msg('singleshipping.details','checkout',null)}
+	    				<div class="tooltip-body" style="display:none">
+	    				<div class="tooltipcontainer shippingdetails">
+	    				<isset name="productShipCost" value="${new dw.value.Money(0.0, dw.system.Site.getCurrent().getCurrencyCode())}" scope="page"/>
+		    			<isloop items="${shippingCost.productShippingCosts}" var="productShipping">
+		    				<isif condition="${productShipping.shippingCost != null && productShipping.shippingCost.amount != null && productShipping.shippingCost.amount > 0}">
+		    					<isset name="productShipCost" value="${productShipCost.add(productShipping.shippingCost.amount)}" scope="page"/>
+		    					<div class="surchargeproduct">
+		    						<div class="label"><isif condition="${productShipping.shippingCost.surcharge}">(${Resource.msg('singleshipping.surcharge','checkout',null)})</isif> <span class="surchargeproduct"><isprint value="${productShipping.name}"/></span>:</div>
+		    						<div class="value"><isif condition="${productShipping.qty != null && productShipping.qty > 1}"><span class="surchargeqty">x<isprint value="${productShipping.qty}"/></span></isif><isprint value="${productShipping.shippingCost.amount}"/> </div>
+		    						<div class="clear"><!-- FLOAT CLEAR --></div>
+		    					</div>
+		    				</isif>				    				
+		    			</isloop>
+		    			<div class="shippingmethodcost">
+		    				<div class="label">${Resource.msg('singleshipping.standard','checkout',null)}</div>
+		    				<div class="value"><isprint value="${shippingModel.getShippingCost(shippingMethod).getAmount()}"/></div>
+		    				<div class="clear"><!-- FLOAT CLEAR --></div>
+		    			</div>
+		    			<isloop items="${shippingCost.shippingPriceAdjustments}" var="shippingPA">
+		    				<isif condition="${shippingPA.calloutMsg != null}">
+								<div class="promo"><div class="label"><isprint value="${shippingPA.calloutMsg}"/>: </div><div class="value"><isprint value="${shippingPA.price}"/></div><div class="clear"><!-- FLOAT CLEAR --></div></div>										
+							</isif>
+		    			</isloop>
+		    			<isloop items="${shippingCost.productShippingDiscounts}" var="productShippingDiscount">
+	    					<isset name="shippingPromotion" value="${productShippingDiscount.calloutMsg}" scope="page"/>
+							<isif condition="${shippingPromotion != null}">
+								<div class="promo">
+									<div class="label"><isprint value="${shippingPromotion}"/>:</div>
+									<div class="value"><isprint value="${productShippingDiscount.price}"/>
+								<iscomment><isif condition="${productShippingDiscount.type == dw.campaign.Discount.TYPE_FIXED_PRICE_SHIPPING}">
+									:</div>
+									<div class="value"><isprint value="${productShippingDiscount.fixedPrice}"/>
+								<iselseif condition="${productShippingDiscount.type == dw.campaign.Discount.TYPE_FREE_SHIPPING}"></iscomment>
+									</div>
+									<div class="value"><iscomment><isprint value="${shippingCost.shippingExclDiscounts.subtract(shippingCost.shippingInclDiscounts)}"/></iscomment>
+								<iscomment></isif></iscomment>
+									</div>
+									<div class="clear"><!-- FLOAT CLEAR --></div>
+								</div>
+							</isif>
+	    				</isloop>
+		    			<iscomment><isif condition="${shippingCost.shippingExclDiscounts > shippingCost.shippingInclDiscounts}">${Resource.msg('singleshipping.discount','checkout',null)} <isprint value="${shippingCost.shippingExclDiscounts.subtract(shippingCost.shippingInclDiscounts)}"/></isif></iscomment>
+		    			<div class="shippingtotal">
+		    				<div class="label">${Resource.msg('singleshipping.total','checkout',null)}</div>
+		    				<div class="value"><isprint value="${shippingCost.shippingInclDiscounts}"/></div>
+		    				<div class="clear"><!-- FLOAT CLEAR --></div>
+		    			</div>
+		    		</div></div>
+		    		</a>)</span>
+	    			</isif></label>
+	    			<isif condition="${!empty(shippingMethod.description)}">
+	    				<div class="shippingdescription">(<isprint value="${shippingMethod.description}"/>)</div>
+	    			</isif>				    			
+    			
+					<!---  Display approaching shipping promotional discounts. --->
+				    <ul class="shippingpromos"> 
+					    <isloop items="${DiscountPlan.getApproachingShippingDiscounts(shipment, shippingMethod)}" var="shippingDiscount">
+					        <li>${Resource.msg('approachingpromo.purchase','checkout',null)} <isprint value="${shippingDiscount.getDistanceFromConditionThreshold()}" /> ${Resource.msg('approachingpromo.more','checkout',null)} ${Resource.msg('approachingpromo.receive','checkout',null)}: ${shippingDiscount.getDiscount().getPromotion().getCalloutMsg()}<br/>
+					    </isloop>
+				    </ul>
+
+    			</div>			    			
+    			<div class="clear"><!-- FLOAT CLEAR --></div>
+    		</div><!-- END: shippingmethod -->
+		</isloop>					
+	</div><!-- END: shippingmethods -->
+<iselse/>
+	<div class="noshippingmethods">${Resource.msg('singleshipping.noshippingmethods','checkout',null)}</div><!-- END: noshippingmethods -->
+</isif>
+

@@ -1,0 +1,243 @@
+<isdecorate template="account/giftregistry/pt_giftregistry">
+
+<isinclude template="util/modules"/>
+
+<script type="text/javascript"><!--
+	jQuery(document).ready(function(){
+		jQuery("#giftRegistryTabsDiv").tabs({ selected: 0});
+	});
+//--></script>
+
+<div class="giftregistry giftregistrylist">
+	<isslot id="registry-header" description="Banner for Gift Registry" context="global" />
+		<form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.giftregistry.htmlName}">
+	<fieldset>
+		<isif condition="${pdict.ProductList != null}">
+			<isinclude template="account/giftregistry/navigation"/>
+		</isif>						
+		<isif condition="${empty(pdict.ProductList.giftCertificateItem)}">
+			<div class="giftregistryaddgiftcert">
+				<div class="giftregistryaddgiftcertbutton"><button type="submit" value="${Resource.msg('giftregistry.addgiftcert','account',null)}" name="${pdict.CurrentForms.giftregistry.addGiftCertificate.htmlName}"><span>${Resource.msg('giftregistry.addgiftcert','account',null)}</span></button></div>
+				<div class="giftregistryhelp">${Resource.msg('giftregistry.addgiftcertmessage','account',null)}</div>
+			</div>
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+		</isif>					
+		<div class="shareregistry">	
+			<div class="clear"><!-- FLOAT CLEAR --></div>				
+			<div class="giftregistryprivatepublic">		
+				<isif condition="${pdict.ProductList.public}">
+					<button type="submit" value="${Resource.msg('giftregistry.makeregprivate','account',null)}" name="${pdict.CurrentForms.giftregistry.setPrivate.htmlName}"><span>${Resource.msg('giftregistry.makeregprivate','account',null)}</span></button>
+				<iselse/>
+					<button type="submit" value="${Resource.msg('giftregistry.makeregpublic','account',null)}" name="${pdict.CurrentForms.giftregistry.setPublic.htmlName}"><span>${Resource.msg('giftregistry.makeregpublic','account',null)}</span></button>
+				</isif>							
+			</div>	
+			<isif condition="${pdict.ProductList.public}">
+				<isset name="giftregistryurl" value="${URLUtils.httpHome() + "/giftregistry/" + pdict.ProductList.UUID}" scope="page"/>
+				<div class="share">
+					<button type="button" id="sendToFriend" value="${Resource.msg('account.sendlisttofriend','account',null)}" name="sendToFriend"><span>${Resource.msg('account.sendlisttofriend','account',null)}</span></button>
+				</div>
+				<div class="shareurl">
+					${Resource.msg('registry.copypaste','account',null)} <a href="${URLUtils.http('GiftRegistryCustomer-Show', 'ID', pdict.ProductList.ID)}" title="${Resource.msg('registry.copypaste','account',null)}" class="detail"><isprint value="${URLUtils.http('GiftRegistryCustomer-Show', 'ID', pdict.ProductList.ID)}"/></a>
+				</div>
+			</isif>
+			<div class="clear"><!-- FLOAT CLEAR --></div>		
+		</div><!-- END: shareregistry -->
+		</fieldset>
+		</form>
+			
+		<isset name="formID" value="${pdict.CurrentForms.giftregistry.items.htmlName}" scope="page"/>
+
+		<form action="${URLUtils.continueURL()}" method="post" id="${formID}">
+		<fieldset>
+		<iscomment>These vars are used by the above specified pipeline</iscomment>
+		<input type="hidden" name="productListID" value="${pdict.ProductList.ID}" />
+		<input type="hidden" name="selectedItemID" value="" />
+
+		<div class="giftregistryproducts">
+		<h3><isprint value="${pdict.ProductList.name}"/> - <isprint value="${pdict.ProductList.eventDate}" timezone="utc"/></h3>
+
+		<isif condition="${empty(pdict.CurrentForms.giftregistry.items)}">
+			<div class="giftregistryempty">
+				<div class="giftregistryemptymessage">${Resource.msg('giftregistry.giftregnoitems','account',null)}</div>
+				<a href="${URLUtils.httpHome()}" title="${Resource.msg('global.storename','locale',null)}">${Resource.msg('giftregistry.emptyadd','account',null)}</a>
+			</div><!-- END: giftregistryempty -->
+		<iselse/>
+		
+			<isif condition="${pdict.Status != null && pdict.Status.isError()}">
+				<span class="errorcaption"><isprint value="${Resource.msgf('giftregistry.' + pdict.Status.code,'giftregistry',null, pdict.Status.parameters)}"/></span>
+			</isif>
+			<table class="giftregistryitemcontainer" summary="Gift Registry Table">
+			<isloop items="${pdict.CurrentForms.giftregistry.items}" var="item" status="loopstate">
+			<tr class="tablerow">
+				<td class="imagecolumn">						
+					<iscomment>Display product image using module</iscomment>	
+					<isdisplayproductimage p_productli="${item.object}"/>
+				</td>
+				<td class="detailscolumn">
+					<div class="giftregistrylineitem">
+						<iscomment>Display product list item using module</iscomment>
+						<isdisplayproductlistitem p_productli="${item.object}"/>
+					</div>
+					<iscomment>edit product list item details</iscomment>
+					<isif condition="${item.object.type != item.object.TYPE_GIFT_CERTIFICATE && item.object.product != null}">
+						<div class="editdetails">
+							<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+								<a name="${item.object.ID}" href="${item.object.productOptionModel.url('Product-Show').append('Quantity', item.object.quantity)}" title="" >${Resource.msg('global.editdetails','locale',null)}</a>
+							</isif>
+						</div>
+					</isif>
+					<iscomment>display product availability using module</iscomment>
+					<isdisplayproductavailability p_productli="${item.object}"/>
+				</td>
+				<td class="giftregistryactionitems">
+					<iscomment>action items</iscomment>
+					<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+						<div class="giftregistrydateadded">
+							<span class="label">${Resource.msg('registry.dateadded','account',null)}</span> <isprint value="${item.object.creationDate}"/>
+						</div>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+						<isif condition="${item.object.type == item.object.TYPE_PRODUCT}">
+						<div class="giftregistryqty quantity">						
+							<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+								<span class="label">${Resource.msg('productlist.qtydesired','account',null)}</span> <isinputfield formfield="${item.quantity}" type="input" label="false"/>
+							<iselse>
+								<span class="label">${Resource.msg('productlist.qtydesired','account',null)}</span> <isprint value="${item.quantity.value}"/>
+							</isif>						
+						</div>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+						<div class="giftregistrypurchased purchased">						
+							<span class="label">${Resource.msg('productlist.qtypurchased','account',null)}</span> <isprint value="${item.purchasedQuantity.value}" formatter="#"/>			
+						</div> 
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+						<iselseif condition="${item.object.type == item.object.TYPE_GIFT_CERTIFICATE}">
+							<!-- Gift Cetificate Qty Message -->
+						</isif>
+						<div class="giftregistrypriority">
+							<span class="label">${Resource.msg('registry.priority','account',null)}:</span><isinputfield formfield="${item.priority}" type="select" label="false"/>
+						</div>
+						<div class="clear"><!-- FLOAT CLEAR --></div>		
+						<iscomment>public checkbox</iscomment>
+						<div class="giftregistrymakeprivate">
+							<isinputfield formfield="${item.public}" type="checkbox" label="false"/>${Resource.msg('giftregistry.itempublic','account',null)}
+						</div>
+						<div class="clear"><!-- FLOAT CLEAR --></div>			
+						<div class="giftregistryremove">
+							<input name="${item.deleteItem.htmlName}" style="display:none;" type="image" src="${URLUtils.staticURL('/images/icon_remove.gif')}" value="test" />
+							<a href="javascript:deleteItem('${item.deleteItem.htmlName}');" name="${item.deleteItem.htmlName}" title="${Resource.msg('global.remove','locale',null)}">${Resource.msg('global.remove','locale',null)}</a>
+						</div>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+						<div class="giftregistryupdate">
+							<input name="${item.updateItem.htmlName}" style="display:none;" type="image" src="${URLUtils.staticURL('/images/icon_remove.gif')}" value="test" />
+							<a href="javascript:updateItem('${item.updateItem.htmlName}');" name="${item.updateItem.htmlName}" title="${Resource.msg('global.update','locale',null)}">${Resource.msg('global.update','locale',null)}</a>
+						</div>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+					</isif>								 	
+		 	<iscomment>end gift registry items form</iscomment>
+					<div class="giftregistryaddtocart">
+						<iscomment>add to cart</iscomment>
+						<isif condition="${item.object.type == item.object.TYPE_GIFT_CERTIFICATE}">
+							<form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.giftregistry.htmlName}_1">
+								<fieldset>
+									<button type="submit" value="${Resource.msg('global.addtocart', 'locale', null)}" name="${item.purchaseGiftCertificate.htmlName}"><span>${Resource.msg('global.addtocart', 'locale', null)}</span></button>
+								</fieldset>
+							</form>
+						<iselseif condition="${item.object.product != null}">																
+							<span class="label">${Resource.msg('global.qty','locale',null)}:</span><input class="quantityinput" type="text" name="Quantity" value="${Number(empty(pdict.CurrentHttpParameterMap.Quantity.stringValue) ? 1 : pdict.CurrentHttpParameterMap.Quantity.stringValue).toFixed()}"/>
+							<button class="addToCart" id="id${item.object.ID}"><span>${Resource.msg('global.addtocart', 'locale', null)}</span></button>	
+						</isif>
+					</div>
+				</td>
+			</tr>
+		</isloop>
+		</table>
+	</isif>
+	</div><!-- End: giftregistryproducts -->		
+</fieldset>
+</form>
+</div><!-- End: giftregistry -->
+
+<script type="text/javascript"><!--
+
+	jQuery(document.body).bind('dialogClosed', function(event){
+	
+    });
+
+	function deleteItem(itemName) {
+		itemName = "[name=" + itemName + "]";
+		jQuery(itemName).click();
+	}
+
+	function updateItem(itemName) {
+		itemName = "[name=" + itemName + "]";
+		jQuery(itemName).click();
+	}
+	
+  	jQuery(document).ready(function() {
+		jQuery(document).bind('dialogopen', function(event, msg) {
+			jQuery('#dialogcontainer').dialog('option', 'title', '${Resource.msg('registry.sendtitle','account',null)}');
+	
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.message.htmlName}]");
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.subject.htmlName}]").val("${Resource.msg('registry.emailsubject','account',null)}");
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.messagelink.htmlName}]").val("${URLUtils.http('GiftRegistryCustomer-Show', 'ID', pdict.ProductList.ID)}");
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.messagelinktext.htmlName}]").val("${Resource.msg('registry.emailsubject','account',null)}");
+		});
+	
+		jQuery('#sendToFriend').click( function() {
+			app.dialog.open('${URLUtils.url('SendToFriend-Start','plid',pdict.ProductList.ID)}','${Resource.msg('registry.emailsubject','account',null)}');
+		});
+		
+		jQuery(".addToCart").click(function() {
+			var qty = jQuery(this).prev().val();
+			if (qty == "" || qty < 1)
+			{
+				qty = 1;
+			}
+			var params = new Object;
+ 			params['pid'] = this.id.substring(2,this.id.length);
+			params['Quantity'] = qty;	
+			params['ProductListID'] = "${pdict.ProductList.ID}";
+			
+			app.minicart.add('${URLUtils.staticURL('/images/loading-progress-98x22.gif')}', params);
+			return false;
+		});
+		
+		jQuery(".editdetails a").click(function(){
+			var url = "${URLUtils.httpsContinue()}";
+			// append the continue node next action which is editLineItem in this case
+			var plid = this.name;
+						
+			// unbind any existing event handlers
+			jQuery(document).unbind("AddToCart");
+			// bind to AddToCart event, it gets triggered when the user has made selections
+			// on the product detail page and clicked A2C button
+			// event.selectedOptions contain name/value pair for the selected produt data e.g. pid, Quantity, any options
+			jQuery(document).bind("AddToCart", function(event){
+				var pliOptions = jQuery.extend({}, {}, event.selectedOptions);
+				var updateurl = "${URLUtils.https('GiftRegistry-ReplaceProductListItem')}";
+				updateurl = app.util.appendParamToURL(updateurl, "plid", plid);
+				updateurl = app.util.appendParamToURL(updateurl, "productlistid", "${pdict.ProductList.ID}");
+				// make server call to replace the lineitem and refresh the cart
+				// update the product
+				jQuery.ajax({
+							type	: "POST",
+							url		: updateurl,
+							cache	: false,
+							data	: pliOptions,
+							success	: function(response){
+									jQuery("#loader").html(response);
+									var showurl = "${URLUtils.https('GiftRegistry-ShowRegistryByID','ProductListID',pdict.ProductList.ID)}";
+									window.location.href = showurl;
+							},
+							error	: function(){app.refreshCart();}
+							});
+							
+							
+			});
+			
+			app.quickView.show({url: this.href, source: "cart", label: "${Resource.msg('global.update','locale',null)}"});
+			return false;
+		});
+	});
+	
+//--></script>
+</isdecorate>

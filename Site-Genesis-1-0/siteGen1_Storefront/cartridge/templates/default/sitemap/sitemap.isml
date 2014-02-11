@@ -1,0 +1,20 @@
+<isdecorate template="content/pt_customerservice">
+<isinclude template="util/modules"/>
+<div class="sitemap">
+	<h1>${Resource.msg('global.storename','locale',null)}</h1>
+	<div class="categories">
+		<isloop items="${dw.catalog.CatalogMgr.getSiteCatalog().getRoot().getOnlineSubCategories().iterator()}" var="topCategory" status="loopstatus">
+			<h2>
+				<a href="${URLUtils.http('Search-Show','cgid', topCategory.getID())}" title="${topCategory.displayName}"><isprint value="${topCategory.displayName}"/></a>
+			</h2>
+			<isif condition="${topCategory.getOnlineSubCategories().iterator().hasNext()}">
+				<ul class="subcategory">
+					<isloop items="${topCategory.getOnlineSubCategories().iterator()}" var="subCategory" status="loopstatus">
+						<li><a href="${URLUtils.http('Search-Show','cgid', subCategory.getID())}" title="${subCategory.displayName}"><isprint value="${subCategory.displayName}"/></a></li>
+					</isloop>
+				</ul>
+			</isif>
+		</isloop>
+	</div>
+</div><!-- END: sitemap -->
+</isdecorate>

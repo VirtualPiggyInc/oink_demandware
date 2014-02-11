@@ -1,0 +1,36 @@
+/**
+*	This script just updates vpOrderStatus custom Order attribute
+*
+*	@input orderId : String
+*	@input newStatus : String
+*	@input cancelOrder : Boolean
+*	@input AccountNumber : String
+*	@input ExpirationDate : String
+*	@input Confirmation : String
+*
+*/
+importPackage( dw.order );
+importPackage( dw.system );
+
+function execute( args : PipelineDictionary ) : Number {
+	var order : Order = OrderMgr.getOrder(args.orderId);
+	if (!order) {
+		return PIPELET_ERROR;
+	}
+	
+	order.custom["vpOrderStatus"] = args.newStatus;
+	if (order.custom["vpOrderStatus"] != args.newStatus) {
+		return PIPELET_ERROR;
+	}
+	
+	if (args.newStatus == "AUTHORIZED") {
+		order.setExportStatus(Order.EXPORT_STATUS_READY);
+		
+	}
+	
+	if (args.cancelOrder == true) {
+		order.setStatus(Order.ORDER_STATUS_CANCELLED);
+	}
+	
+	return PIPELET_NEXT;
+}

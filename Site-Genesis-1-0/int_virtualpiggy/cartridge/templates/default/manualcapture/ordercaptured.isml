@@ -1,0 +1,2 @@
+<!--- TEMPLATENAME: ordercaptured.isml --->
+<p>${Resource.msg('vp.manualcapture.ordercaptured','virtualpiggy',null)}</p>

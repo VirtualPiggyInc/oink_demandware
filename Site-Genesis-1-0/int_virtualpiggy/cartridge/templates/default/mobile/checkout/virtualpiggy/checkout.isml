@@ -1,0 +1,579 @@
+<isdecorate template="mobile/pt_mobilevp">
+<isinclude template="util/modules"/>
+
+
+<iscomment>
+	This template visualizes the last step of the checkout, the order summary
+	page prior to the actual order placing.
+	It displays the complete content of the cart including product line items,
+	bonus products, redeemed coupons and gift certificate line items.
+</iscomment>
+
+<isreportcheckout checkoutname="${'VirtualPiggyCheckout'}"/>
+<isscript>
+	var basket = pdict.Basket;
+</isscript>
+	<isif condition="${pdict.CheckoutError != null}">
+		<div class="error-form">${pdict.CheckoutError}</div>
+	</isif>
+	
+	<div id="summary" class="mobilecontent">
+
+	<iscomment>
+	<isif condition="${!pdict.CurrentForms.multishipping.entered.value}">
+    	<ischeckoutprogressindicator step="3" multishipping="false" rendershipping="${pdict.Basket.productLineItems.size() == 0 ? 'false' : 'true'}">
+	<iselse/>
+		<ischeckoutprogressindicator step="4" multishipping="true" rendershipping="${pdict.Basket.productLineItems.size() == 0 ? 'false' : 'true'}">
+	</isif>
+	</iscomment>
+	
+	<h3 class="header" style="margin-bottom:15px;">Review and Submit</h3>
+	
+	<isif condition="${pdict.PlaceOrderError != null}">
+		<div class="errorMsg mobilecontent" style="color: red;background-color:pink;">
+		${Resource.msg(pdict.PlaceOrderError.code,'checkout',null)}
+		</div>
+	</isif>
+	
+	<div id="summarycontainer">
+	
+		<isloop iterator="${basket.shipments}" alias="shipment" status="shipmentloopstate">
+			<isif condition="${shipment.productLineItems.size() > 0 || shipment.giftCertificateLineItems.size() > 0}">
+			<!--- 
+			<h4>${Resource.msg('summary.shipment','checkout',null)} ${'#' + shipmentloopstate.count}</h4>
+			--->
+			<isloop iterator="${shipment.productLineItems}" alias="productLineItem" status="pliloopstate">
+				<table width="100%">
+					<tr>
+						<td valign="top" width="60">
+							<div class="summaryproductimg">
+								<isif condition="${productLineItem.product.getImage('small',0) != null}">
+									<img width="75" src="${productLineItem.product.getImage('small',0).url}"/>
+								<iselse>
+									<img src="${URLUtils.staticURL('/images/noimagesmall.png')}"/>
+								</isif>
+							</div>
+						</td>
+						<td valign="top">
+							<div class="summaryproductname">${productLineItem.getProduct().getName()}</div>
+							<div class="summaryproductdetails">
+								
+								<isdisplayliproduct p_productli="${productLineItem}" p_formli="${FormLi}" p_editable="${false}" p_hideprice="${true}" p_hidepromo="${true}">
+								
+								<div class="summaryproductqty">
+									${Resource.msg('global.qty','locale',null)}: <isprint value="${productLineItem.quantity}" /><br>
+								</div>
+								<div class="summaryproductprice">
+									<iscomment><isprint value="${productLineItem.basePrice}" /><br>
+									(<isprint value="${productLineItem.quantity}" />x) </iscomment>
+									
+									<isprint value="${productLineItem.adjustedPrice}" /><br>
+								</div>
+								<iscomment>
+								<div style="font-size:9pt;">
+								<isdisplayproductavailability p_productli="${productLineItem}">
+								</div>
+								</iscomment>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div class="linecontainerwhite"><div class="linewhite"></div></div>
+			</isloop>
+			
+			<iscomment>RENDER COUPON/ORDER DISCOUNTS</iscomment>
+			<isloop items="${basket.couponLineItems}" var="couponLineItem" status="cliloopstate">
+				<isif condition="${couponLineItem.valid}">
+					<table width="100%">
+						<tr>
+							<td valign="top" width="60">
+								<div class="summaryproductimg" style="width:75px">
+									<!--- No Image --->
+								</div>
+							</td>
+							<td valign="top">
+								<div class="summaryproductname">${Resource.msg('summary.coupon','checkout',null)}</div>
+								<div class="summaryproductdetails">
+									<span>${Resource.msg('summary.couponnumber','checkout',null)}</span>
+									<span><isprint value="${couponLineItem.couponCode}"/></span>
+						
+									<isloop items="${couponLineItem.priceAdjustments}" var="Promo">
+										<span><isprint value="${Promo.lineItemText}"></span><br>										
+									</isloop>
+
+									<isif condition="${couponLineItem.applied}">
+										<span>${Resource.msg('summary.applied','checkout',null)}</span>
+									<iselse/>
+										<span>${Resource.msg('summary.notapplied','checkout',null)}</span>
+									</isif>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div class="linecontainerwhite"><div class="linewhite"></div></div>
+				</isif>
+			</isloop>
+			
+			
+			<iscomment>For the parent checkout - show the controls</iscomment>
+			<div class="paymentmethodform">
+				
+				
+				<isif condition="${!pdict.IsChild}">
+					<h5>Select Child and Payment Information</h5>
+					<br>
+					<isif condition="${!empty(pdict.CurrentForms.vpparentcheckout.childrenList.options)}">
+						<div class="formfield">
+							<isinputfield formfield="${pdict.CurrentForms.vpparentcheckout.childrenList}" type="select" label="true" />
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+							<isinputfield formfield="${pdict.CurrentForms.vpparentcheckout.senttochildaddress}" type="checkbox" rowclass="label-inline" />
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+						</div>
+						
+						
+						
+					<iselse>
+						<div>${Resource.msg('vp.checkout.nochildren','virtualpiggy',null)}</div>
+					</isif>
+					
+					<div class="formfield">
+					<isif condition="${!empty(pdict.CurrentForms.vpparentcheckout.paymentAccounts.options)}">
+						<isinputfield formfield="${pdict.CurrentForms.vpparentcheckout.paymentAccounts}" type="select" label="false" />
+					<iselse>
+						<div>${Resource.msg('vp.checkout.nopaymentcards','virtualpiggy',null)}</div>
+					</isif>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+						</div>
+				</isif>
+			</div>
+			<br/>	
+			<div id="shippingmethodform"></div><!-- END: shippingmethodform -->
+			<div>
+			<br/>
+			
+				<div>
+					
+					<div id="rightcolumn">
+							<isset name="checkoutstep" value="${'5'}" scope="page"/>
+						
+						
+							<isif condition="${!empty(checkoutstep) && (checkoutstep >= 2)}">
+								<div class="checkoutminisummary" >
+						
+								<isif condition="${checkoutstep <= 5}">
+								
+								<div class="contentwrapper">
+								<isif condition="${checkoutstep < 5}">
+								<div class="checkoutminicart">
+									<isminilineitems p_lineitemctnr="${pdict.Basket}" p_viewid="${'minisummary'}"/>
+								</div><!-- END: check_minicart -->
+								</isif>
+							</isif>
+						
+							<iscomment>render the order totals</iscomment>
+							<div class="checkoutordertotals">
+								
+								<div class="formactions placeorder-formactions">
+			
+								    <iscomment><button type="submit" class="bag-button-28-submit" value="${Resource.msg('vp.checkout.buttoncheckout', 'virtualpiggy', null)}" name="${pdict.CurrentForms.vpcheckout.checkout.htmlName}">
+									${Resource.msg('vp.checkout.buttoncheckout', 'virtualpiggy', null)}
+									</button></iscomment>
+											
+									<div class="clear"></div><br />
+									
+								</div>
+					
+							</div><!-- END: checkoutordertotals -->
+						
+							
+							<iscomment>render single shipment boxes
+							<isset name="Editable" value="${'false'}" scope="pdict"/>
+							<isif condition="${!empty(checkoutstep) && (checkoutstep > 3)}">
+								<isinclude template="checkout/shipping/minishipments"/>
+							</isif></iscomment>
+						
+							<iscomment>render billing information: billing address and payment instruments
+							<isif condition="${!empty(checkoutstep) && (checkoutstep > 4)}">
+								<isinclude template="checkout/billing/minibillinginfo"/>
+							</isif></iscomment>
+						</div>
+						</div><!-- END: checkoutminisummary -->
+						</isif>
+					</div><!-- END: rightcolumn -->
+		
+				</div>
+				<div><!-- FLOAT CLEAR --></div>
+				
+			</div>
+			<br/>
+			<form action="${URLUtils.httpsContinue().host(pdict.CurrentSession.custom.mobileHost)}" method="post">
+				<button class="submitorderbtn" type="submit" name="submit" value="${Resource.msg('global.submitorder','locale',null)}"><span>Submit Order</span></button>
+				
+				<div  style="float: right;text-align:right;">
+					<isinclude template="components/verisign" />
+				</div>
+				<div class="clear"></div><br />
+									
+									
+			</form>
+				
+			<isif condition="${shipment.shippingAddress != null}">
+				<isset name="address" value="${shipment.shippingAddress}" scope="page"/>
+			
+				<div id="shippingAddress">
+				<div class="shippingheader">${Resource.msg('summary.shippingaddress','checkout',null)}</div>
+					<isprint value="${address.fullName}"/><br>
+					<isprint value="${address.address1}"/><br>
+					<isif condition="${!empty(address.address2)}">
+						<isprint value="${address.address2}"/><br>
+					</isif>
+					<isprint value="${address.city}"/>,&nbsp;<isprint value="${address.stateCode}"/>&nbsp;&nbsp;<isprint value="${address.postalCode}"/><br>
+					<isprint value="${address.phone}"/><br>
+				</div>
+			</isif>
+			
+			<isloop items="${shipment.giftCertificateLineItems}" var="giftCertificateLineItem" status="gcliloopstate">
+					
+				<isprint value="${giftCertificateLineItem.lineItemText}"/>
+				<span >${Resource.msg('global.to','locale',null)}:</span>
+					<span ><isprint value="${giftCertificateLineItem.recipientName}"/> (<isprint value="${giftCertificateLineItem.recipientEmail}"/>)</span>
+				</div>
+				<div>
+					<span >${Resource.msg('global.from','locale',null)}:</span>
+					<span ><isprint value="${giftCertificateLineItem.senderName}"/></span>
+				</div>
+			
+				<isprint value="${giftCertificateLineItem.price}"/>
+					
+				</isloop>	
+			</isif>
+		</isloop>
+		
+		<isscript>
+			var billingAddress = basket.getBillingAddress();
+		</isscript>
+		
+		<div id="billingaddress" class="billingaddress">
+		<div class="billingheader">${Resource.msg('summary.billingaddress','checkout',null)}</div>
+			${billingAddress.fullName}<br>
+			${billingAddress.address1}<br>
+			<isif condition="${!empty(billingAddress.address2)}">
+				${billingAddress.address2}<br>
+			</isif>
+			${billingAddress.city},&nbsp;${billingAddress.stateCode}&nbsp;&nbsp;${billingAddress.postalCode}<br>
+			<isif condition="${!empty(billingAddress.phone)}">
+				${billingAddress.phone}<br>
+			</isif>
+		</div>
+		
+		<div id="paymentdetails">
+		
+		<isscript>
+			var paymentInstr = basket.paymentInstrument;
+			var cardHolder = paymentInstr.getCreditCardHolder();
+			var maskedNumber = paymentInstr.getMaskedCreditCardNumber();
+			var cardType : String = paymentInstr.getCreditCardType();
+			var cardName = dw.order.PaymentMgr.getPaymentCard(cardType).name;
+			
+			var expiration = StringUtils.formatNumber(paymentInstr.getCreditCardExpirationMonth(),"00");
+			expiration = expiration + "/" + paymentInstr.getCreditCardExpirationYear();
+		</isscript>
+		<isset name="paymentInstruments" value="${pdict.Basket.paymentInstruments}" scope="page"/>
+		
+		<div class="paymentheader">Payment Information</div>
+			<isif condition="${!empty(paymentInstruments)}">
+				<iscomment>render a box per payment instrument</iscomment>
+
+				<isloop items="${paymentInstruments}" var="paymentInstr" status="loopstate">
+					<div class="minipaymentinstrument">
+			
+						<isif condition="${! 'PayPal'.equals(paymentInstr.paymentMethod) && true==false}"/>
+							<div class="header">
+								<a href="${URLUtils.https('mCOBilling-Start').host(pdict.CurrentSession.custom.mobileHost)}">(${Resource.msg('global.edit','locale',null)})</a>
+							</div>
+						</isif>
+			
+						<div class="details">
+							<iscomment>
+								render the detail section depending on the type of the payment instrument
+							</iscomment>
+							<isif condition="${dw.order.PaymentInstrument.METHOD_CREDIT_CARD.equals(paymentInstr.paymentMethod)}">
+								<iscomment>a credit card</iscomment>
+								<div><isprint value="${paymentInstr.creditCardHolder}"/></div>
+								<div><isprint value="${paymentInstr.creditCardType}"/></div>
+								<div><isprint value="${paymentInstr.maskedCreditCardNumber}"/></div>
+								<div>${Resource.msg('minibillinginfo.expiration','checkout',null)} <isprint value="${paymentInstr.creditCardExpirationMonth}" formatter="00"/>.<isprint value="${paymentInstr.creditCardExpirationYear}" formatter="0000"/></div>
+								
+								
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: 
+									<isif condition="${empty(pdict.CurrentSession.custom.CACheckout) || pdict.CurrentSession.custom.CACheckout == false}">
+										<isprint value="${paymentInstr.paymentTransaction.amount}"/>
+									<iselseif condition="${!empty(pdict.Basket.custom.borderFreeBasketOrderTotal)}">
+										<isprint value="${new dw.value.Money(pdict.Basket.custom.borderFreeBasketOrderTotal,'USD').toNumberString()+'CAD'}"/>
+									</isif>
+								</div>
+			
+							<iselseif condition="${'PRIV_LABEL_CC'.equals(paymentInstr.paymentMethod)}">
+								<iscomment>alliance credit card</iscomment>
+								${Resource.msg('forms.checkout.paymentmethods.plcc','forms',null)}
+								<div><isprint value="${paymentInstr.maskedCreditCardNumber}"/></div>
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: 
+								<isif condition="${empty(pdict.CurrentSession.custom.CACheckout) || pdict.CurrentSession.custom.CACheckout == false}">
+									<isprint value="${paymentInstr.paymentTransaction.amount}"/>
+								<iselseif condition="${!empty(pdict.Basket.custom.borderFreeBasketOrderTotal)}">
+									<isprint value="${new dw.value.Money(pdict.Basket.custom.borderFreeBasketOrderTotal,'USD').toNumberString()+'CAD'}"/>
+								</isif>
+								</div>
+			
+							<iselseif condition="${dw.order.PaymentInstrument.METHOD_BML.equals(paymentInstr.paymentMethod)}"/>
+								<iscomment>bill me later</iscomment>
+								${Resource.msg('forms.checkout.paymentmethods.bml','forms',null)}
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: 
+									<isif condition="${empty(pdict.CurrentSession.custom.CACheckout) || pdict.CurrentSession.custom.CACheckout == false}">
+										<isprint value="${paymentInstr.paymentTransaction.amount}"/>
+									<iselseif condition="${!empty(pdict.Basket.custom.borderFreeBasketOrderTotal)}">
+										<isprint value="${new dw.value.Money(pdict.Basket.custom.borderFreeBasketOrderTotal,'USD').toNumberString()+'CAD'}"/>
+									</isif>
+								</div>
+			
+							<iselseif condition="${'GIFT_CARD'.equals(paymentInstr.paymentMethod)}"/>
+								<iscomment>gift card</iscomment>
+								Gift Card
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: 
+									<isif condition="${empty(pdict.CurrentSession.custom.CACheckout) || pdict.CurrentSession.custom.CACheckout == false}">
+										<isprint value="${paymentInstr.paymentTransaction.amount}"/>
+									<iselseif condition="${!empty(pdict.Basket.custom.borderFreeBasketOrderTotal)}">
+										<isprint value="${new dw.value.Money(pdict.Basket.custom.borderFreeBasketOrderTotal,'USD').toNumberString()+'CAD'}"/>
+									</isif>
+								</div>
+			
+							<iselseif condition="${dw.order.PaymentInstrument.METHOD_GIFT_CERTIFICATE.equals(paymentInstr.paymentMethod)}"/>
+								<iscomment>gift certificate</iscomment>
+								<div>Gift Certificate: <isprint value="${paymentInstr.maskedGiftCertificateCode}"/></div>
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: <isprint value="${paymentInstr.paymentTransaction.amount}"/></div>
+							<iselseif condition="${'PayPal'.equals(paymentInstr.paymentMethod)}"/>
+								<iscomment>pay pal</iscomment>
+								<div>${Resource.msg('forms.checkout.paymentmethods.paypal','forms',null)}</div>
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: 
+									<isif condition="${empty(pdict.CurrentSession.custom.CACheckout) || pdict.CurrentSession.custom.CACheckout == false}">
+										<isprint value="${paymentInstr.paymentTransaction.amount}"/>
+									<iselseif condition="${!empty(pdict.Basket.custom.borderFreeBasketOrderTotal)}">
+										<isprint value="${new dw.value.Money(pdict.Basket.custom.borderFreeBasketOrderTotal,'USD').toNumberString()+'CAD'}"/>
+									</isif>
+								</div>
+							<iselseif condition="${'VIRTUAL_PIGGY'.equals(paymentInstr.paymentMethod)}"/>
+								<iscomment>VIRTUAL_PIGGY</iscomment>
+								<div>${Resource.msg('minibillinginfo.virtualpiggy','checkout',null)}</div>
+								<div>${Resource.msg('minibillinginfo.amount','checkout',null)}: <isprint value="${paymentInstr.paymentTransaction.amount}"/></div>
+							<iselse/>
+								<iscomment>n/a</iscomment>
+								Unknown payment method
+							</isif>
+						</div>
+					</div>
+				</isloop>
+				<div>
+				<isif condition="${'y'.equalsIgnoreCase(pdict.CurrentSession.privacy.installment)}">
+					<iscontentasset aid="installment-selected">
+				<iselseif condition="${'y'.equalsIgnoreCase(pdict.CurrentSession.privacy.deferred)}">
+					<iscontentasset aid="deferred-selected">
+				</isif>
+				</div>
+			</isif>
+		</div>
+		
+		<div>
+			<table cellpadding="0" cellspacing="0" width="100%" border="0">
+			<tr>
+			<iscomment><td>
+				<form action="${URLUtils.https('mCOBilling-BillingMethodDetails').host(pdict.CurrentSession.custom.mobileHost)}" method="post">
+					<button class="backbutton" type="submit" value="back" name="action">back</button>
+				</form>
+			</td></iscomment>
+			<td align="left">
+				<form action="${URLUtils.https('mCOSummary-Submit').host(pdict.CurrentSession.custom.mobileHost)}" method="post">
+					<button class="submitorderbtn" type="submit" name="submit" value="${Resource.msg('global.submitorder','locale',null)}"><span>Submit Order</span></button>
+				</form>
+			</td>
+			</tr>
+			</table>			    
+		</div>
+		
+   	</div>
+</div><!-- END: checkout -->
+		
+		
+			
+			
+
+		<isslot id="placeorder-slot" description="Slot next to Order Totals in the footer of the Place Order page." context="global"/>
+
+
+		
+<br>
+	
+			
+		
+<script type="text/javascript"><!--
+
+// selects a shipping method for the default shipment
+// and updates the summary section on the right hand side
+function selectShippingMethod(shippingMethodID) {
+	// nothing entered
+	if(!shippingMethodID) {
+		return;
+	}
+	// attempt to set shipping method
+	var url = getShippingMethodURL("${URLUtils.https('COShipping-SelectShippingMethod').host(pdict.CurrentSession.custom.mobileHost)}");
+	url = app.util.appendParamToURL(url, "shippingMethodID", shippingMethodID);
+	var result = app.ajax.getJson({
+		url: url,
+		callback: function(data) {
+			updateSummary();
+			if(!data || !data.shippingMethodID) {
+				alert("Couldn't select shipping method.");
+				return false;
+			}
+			// display promotion in UI and update the summary section,
+			// if some promotions were applied
+			jQuery(".shippingpromotions").empty();
+			if(data.shippingPriceAdjustments && data.shippingPriceAdjustments.length > 0) {
+				for(var i=0; i<data.shippingPriceAdjustments.length; i++) {
+					var spa = data.shippingPriceAdjustments[i];
+					jQuery(".shippingpromotions").append("<div>${Resource.msg('shipment.qualifiesfor','checkout',null)} " + spa.calloutMessage + "<\/div>");
+				}
+			}
+		}
+	});
+}
+
+// updates the order summary based on a possibly recalculated 
+// basket after a shipping promotion has been applied
+function updateSummary() {
+	var url = "${URLUtils.url('COBilling-UpdateSummaryVP').host(pdict.CurrentSession.custom.mobileHost)}";
+
+	// indicate progress
+	//jQuery("#rightcolumn").html(app.showProgress());
+
+	// load the updated summary area
+	jQuery("#rightcolumn").load( url, function() { 
+		// hide edit shipping method link 
+		jQuery("#rightcolumn").fadeIn("fast"); 
+		jQuery('.checkoutminisummary .minishipment .header a').hide(); 
+		jQuery('.ordertotalstable .ordershipping .label a').hide(); 
+	});
+}
+
+/**
+ * Cached JavaScript array of currently applicable shipping methods.
+ */
+var shippingMethods;
+
+/**
+ * Helper method which constructs a URL for an AJAX request using the 
+ * entered address information as URL request parameters.
+ */
+function getShippingMethodURL(url) 
+{
+	var add1 = "";
+	var add2 = "";
+	var countryCode = "US";
+	var stateCode = "";
+	var postalCode = "";
+	var city = "";
+
+	url = app.util.appendParamToURL(url, "countryCode", countryCode);
+	url = app.util.appendParamToURL(url, "stateCode", stateCode);
+	url = app.util.appendParamToURL(url, "postalCode", postalCode);
+	url = app.util.appendParamToURL(url, "city", city);
+	url = app.util.appendParamToURL(url, "add1", add1);
+	url = app.util.appendParamToURL(url, "add2", add2);
+	//alert(add1);
+	return url;
+}
+
+
+/**
+ * Make an AJAX request to the server to retrieve the list of applicable shipping methods
+ * based on the merchandise in the cart and the currently entered shipping address 
+ * (the address may be only partially entered).  If the list of applicable shipping methods 
+ * has changed because new address information has been entered, then issue another AJAX 
+ * request which updates the currently selected shipping method (if needed) and also updates
+ * the UI.  In particular, the list of available shipping methods and the right hand summary
+ * must change.
+ */
+function updateShippingMethodList() {
+
+	var add1 = "";
+	var add2 = "";
+
+	var excludeMethods1  = false;
+	var excludeMethods2  = false;
+	
+	
+	var url = getShippingMethodURL("${URLUtils.https('COShipping-GetApplicableShippingMethodsJSON').host(pdict.CurrentSession.custom.mobileHost)}");
+	//alert(url);
+
+	var result = app.ajax.getJson({
+		url: url,
+		callback: function(data) {
+			if(!data) {
+				alert("Couldn't get list of applicable shipping methods.");
+				return false;
+			}
+			/*if (shippingMethods != null && shippingMethods.toString() == data.toString())
+			{
+				// No need to update the UI.  The list has not changed.
+				return true;
+			}*/
+
+			// We need to update the UI.  The list has changed.
+			// Cache the array of returned shipping methods.
+			shippingMethods = data;
+	
+			url = getShippingMethodURL("${URLUtils.https('COShipping-UpdateShippingMethodList').host(pdict.CurrentSession.custom.mobileHost)}");
+
+			// indicate progress
+			//jQuery("#shippingmethodform").html(app.showProgress());
+
+			// load the shipping method form
+			jQuery("#shippingmethodform").load( url, function() {
+				jQuery("#shippingmethodform").fadeIn("fast");
+
+				// rebind the radio buttons onclick function to a handler.
+				jQuery("input[name=${pdict.CurrentForms.singleshipping.shippingAddress.shippingMethodID.htmlName}]").click(function() {
+					var selectedMethodID = jQuery(this).val();
+					selectShippingMethod(selectedMethodID);
+				});
+
+				// activate the tooltips in the newly loaded AJAX section
+				//app.tooltipDefault();
+				
+				// update the summary
+				updateSummary();
+			});
+		}
+	});
+}
+
+
+
+jQuery(document).ready(function() {
+
+	
+	// update shipping method list on load
+	updateShippingMethodList();
+
+	// bind shipping method selection
+	jQuery("input[name=${pdict.CurrentForms.singleshipping.shippingAddress.shippingMethodID.htmlName}]").click(function() {
+		var selectedMethodID = jQuery(this).val();
+		selectShippingMethod(selectedMethodID);
+	});
+
+	
+	
+});
+
+//--></script>
+
+</isdecorate>

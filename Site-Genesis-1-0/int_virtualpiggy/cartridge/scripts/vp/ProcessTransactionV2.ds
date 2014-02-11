@@ -1,0 +1,65 @@
+/**
+* Demandware Script File
+* To define input and output parameters, create entries of the form:
+*
+* @<paramUsageType> <paramName> : <paramDataType> [<paramComment>]
+*
+* where
+*   <paramUsageType> can be either 'input' or 'output'
+*   <paramName> can be any valid parameter name
+*   <paramDataType> identifies the type of the parameter
+*   <paramComment> is an optional comment
+*
+* For example:
+*
+*   @input Basket : dw.order.Basket
+*   @input OrderNo : String
+*   @input ChildId : String
+*   @input PaymentInputId : String
+*
+*	@output TransactionId : String
+*	@output ApprovalStatus : String
+*	@output ErrorMessage : String
+*
+*/
+importPackage( dw.system );
+importPackage( dw.util );
+
+importScript("vp/LibVirtualPiggy.ds");
+
+var VP : Object = null;
+
+function execute( args : PipelineDictionary ) : Number {
+	VP = VirtualPiggyObject();
+	if (!VP || VP == null) {
+		return PIPELET_ERROR;
+	}
+	
+	var orderNo : String = args.OrderNo;
+	var basket : Basket = args.Basket;
+	
+	var transactionXML : XML = VP.utils.prepareTransactionXML(basket, orderNo);
+	var orderDescription : String = VP.utils.prepareTransactionDescription(basket, orderNo);
+	var childId : String = args.ChildId;
+	var paymentInputId : String = args.PaymentInputId;	
+	
+	var response : HashMap;
+	if(session.custom.vpUserType == "Child"){
+		response = VP.processTransaction(session.custom.vpUserToken, transactionXML, orderDescription);
+	} else {
+		response = VP.processParentTransaction(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
+	}
+	if (response.status == false || response.transactionStatus == "Error" || response.transactionStatus == "LimitExceeded" || response.transactionStatus == "Cancelled") {	
+		args.ErrorMessage = response.errorMessage;
+		if(response.transactionStatus == "Cancelled"){
+			Logger.error("Processtransaction.ds: order cancelled");
+			args.ErrorMessage = "Technical error";
+		}
+		return PIPELET_ERROR;
+	}
+	
+	args.TransactionId = response.transactionIdentifier;
+	args.ApprovalStatus = response.transactionStatus;
+
+	return PIPELET_NEXT;
+}

@@ -1,0 +1,18 @@
+<!--- TEMPLATENAME: noaccess.isml --->
+<isdecorate template="application/MenuFrame">
+	
+	<iscontent type="text/html" charset="UTF-8" compact="true"/>
+	<isinclude template="inc/Modules">
+		
+	<isset name="TOP_URL" value="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', 'orders')}" scope="PAGE">
+	<isset name="ORDER_NAME" value="${'Order: ' + pdict.Order.getOrderNo()}" scope="PAGE" >
+	<isset name="ORDER_URL" value="${URLUtils.url('ViewOrder_52-Dispatch', 'payment', 'payment', 'OrderID', pdict.CurrentHttpParameterMap.OrderID.value)}" scope="PAGE">
+	
+	<ISBreadcrumb name1="Orders" url1="${TOP_URL}" name2="${ORDER_NAME}" url2="${ORDER_URL}" name3="Virtual Piggy">
+	
+	<div class="fielditem">	
+		<p>${Resource.msg('vp.manualcapture.noaccess','virtualpiggy',null)}</p>		
+		<p><input id="showButttons" type="submit" value="&lt;&lt; Back" name="back" class="button" onclick="javascript:location.href = '${URLUtils.url('ViewOrder_52-Dispatch', 'payment', 'payment', 'OrderID', pdict.CurrentHttpParameterMap.OrderID.value)}'"/></p>		
+	</div>
+	
+</isdecorate>

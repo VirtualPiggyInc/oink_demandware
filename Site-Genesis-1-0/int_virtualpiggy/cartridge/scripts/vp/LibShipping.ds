@@ -1,0 +1,71 @@
+/*
+*	Library of update shipping methods
+*
+*/
+
+importPackage( dw.order );
+importPackage( dw.system );
+importPackage( dw.util );
+
+function prepareShipment(basket : Basket, address : HashMap, shippingMethodID : String) {
+	
+	var shippingAddress : OrderAddress = prepareShippingAddress(basket, address);	
+	var shipment : dw.order.Shipment = basket.defaultShipment;	
+	var shippingMethod : dw.order.ShippingMethod = null;
+	
+	// Determine the list of applicable shipping methods.
+	var shippingModel : ShipmentShippingModel = ShippingMgr.getShipmentShippingModel(shipment);
+	var shippingMethods : Collection = shippingModel.getApplicableShippingMethods(address);
+
+	// 1) Try to set the shipment shipping method to the passed one.
+	var shippingMethodsIter : Iterator = shippingMethods.iterator();
+	while( shippingMethodsIter.hasNext() ) 	{
+		var method : ShippingMethod = shippingMethodsIter.next();
+		if( !method.ID.equals( shippingMethodID ) ) continue;
+
+		
+		// set this shipping method
+		shipment.setShippingMethod( method );
+		return PIPELET_NEXT;
+	}
+
+	return PIPELET_ERROR;
+}
+
+function prepareShippingAddress(basket : Basket, address : HashMap) {
+	var shippingAddress : OrderAddress = basket.defaultShipment.createShippingAddress();
+	shippingAddress.setFirstName( address.name );
+	shippingAddress.setAddress1( address.address );
+	shippingAddress.setCity( address.city );
+	shippingAddress.setPostalCode( address.zip );
+	shippingAddress.setStateCode( address.state );
+	shippingAddress.setCountryCode( address.country );
+	shippingAddress.setPhone( address.parentPhone );
+	
+	//shippingAddress.copyTo( basket.billingAddress );
+	
+	var billingAddress : OrderAddress = basket.billingAddress;
+	billingAddress.setFirstName( address.name );
+	billingAddress.setAddress1( address.address );
+	billingAddress.setCity( address.city );
+	billingAddress.setPostalCode( address.zip );
+	billingAddress.setStateCode( address.state );
+	billingAddress.setCountryCode( address.country );
+	billingAddress.setPhone( address.parentPhone );	
+	basket.setCustomerName(address.name);
+	basket.setCustomerEmail(address.parentEmail);
+
+	return shippingAddress;
+}
+
+function removeExistingPaymentInstruments( basket : Basket ) {
+	// get all payment instruments
+	var paymentInstruments : Iterator = basket.getPaymentInstruments().iterator();
+	var existingPI : OrderPaymentInstrument = null;
+
+	// remove them
+	while (paymentInstruments.hasNext()) {
+		existingPI = paymentInstruments.next();
+		basket.removePaymentInstrument( existingPI );
+	}
+}

@@ -1,0 +1,28 @@
+/**
+* Script File send request to Virtual Piggy to capture or cancel order
+*
+* @input OrderIterator : dw.util.Iterator	client's order iterator 
+* @output Order : dw.order.Order			client's order number
+*
+*/
+
+importPackage( dw.order );
+importPackage( dw.system );
+importPackage( dw.util );
+
+
+function execute( pdict : PipelineDictionary ) : Number {
+    
+    var orderIterator: Iterator = pdict.OrderIterator;
+        
+    if(!orderIterator){
+    	Logger.error("SendCaptureRequest.ds: no order found by ID");
+    	return PIPELET_ERROR;
+    }
+    
+    var order: Order = orderIterator.next();
+    
+    pdict.Order = order;    
+    
+    return PIPELET_NEXT;
+}

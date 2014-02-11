@@ -1,0 +1,19 @@
+/**
+*
+*   @input hashmap : dw.util.HashMap
+*   @output json : String
+*
+*/
+importPackage( dw.system );
+importScript("vp/LibVirtualPiggy.ds");
+
+function execute( args : PipelineDictionary ) : Number {
+	var VP = VirtualPiggyObject();
+	if (!VP || VP == null) {
+		return PIPELET_ERROR;
+	}
+	
+	args.json = VP.utils.convertToJSON(args.hashmap);
+
+	return PIPELET_NEXT;
+}

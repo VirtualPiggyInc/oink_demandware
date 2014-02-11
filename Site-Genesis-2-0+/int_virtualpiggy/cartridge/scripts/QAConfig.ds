@@ -1,0 +1,35 @@
+﻿//importPackage(dw.system);
+
+/**
+*	This script updates QAConfig attributes
+*
+*/
+
+function QAConfig() {
+	return {
+		"security": {
+			"vp": {
+				"merchantID": dw.system.Site.getCurrent().getCustomPreferenceValue("vpMerchantID"),
+				"apiKey": dw.system.Site.getCurrent().getCustomPreferenceValue("vpApiKey")
+			},
+			"default": {}			
+		},
+		"services": {
+			"VirtualPiggy": {
+				"url": dw.system.Site.getCurrent().getCustomPreferenceValue("vpEndPointURL"),
+				"nameSpace" : "vp",
+				"propMerchantID" : "MerchantIdentifier",
+				"propApiKey" : "APIkey",
+				"timeout": 30000,
+				"retries": 0,
+				"securityKey": "vp"
+			},
+			"IP2Geo": {
+				"url": "http://ws.cdyne.com/ip2geo/ip2geo.asmx",
+				"timeout": 10000,
+				"retries": 1,
+				"securityKey": "default"
+			}
+		}
+	};
+};

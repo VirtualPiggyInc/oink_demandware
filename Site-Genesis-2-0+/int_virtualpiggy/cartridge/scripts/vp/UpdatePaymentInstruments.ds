@@ -1,0 +1,53 @@
+/**
+*
+*   @input Basket : dw.order.Basket This is a sample comment.
+*	@input VirtualPiggyCheckout : Boolean True leaves only VP PI. False removes only VP PI.
+*
+*/
+importPackage( dw.system );
+
+function execute( args : PipelineDictionary ) : Number {
+
+	var basket : dw.order.Basket = args.Basket;
+	if (empty(basket)) {
+		return PIPELET_ERROR;
+	}
+	
+	if (args.VirtualPiggyCheckout == true) {
+		// remove existing payment methods from the basket
+		removeExistingPaymentInstruments( basket );
+	
+		// create a payment instrument for Virtual Piggy
+		basket.createPaymentInstrument( "VIRTUAL_PIGGY", basket.totalGrossPrice );
+	} else {
+		removeVirtualPiggyPaymentInstrument(basket);
+	}
+
+   return PIPELET_NEXT;
+}
+
+function removeExistingPaymentInstruments( basket : Basket ) {
+	// get all payment instruments
+	var paymentInstruments : Iterator = basket.getPaymentInstruments().iterator();
+	var existingPI : OrderPaymentInstrument = null;
+
+	// remove them
+	while (paymentInstruments.hasNext()) {
+		existingPI = paymentInstruments.next();
+		basket.removePaymentInstrument( existingPI );
+	}
+}
+
+function removeVirtualPiggyPaymentInstrument( basket : Basket ) {
+	// get all payment instruments
+	var paymentInstruments : Iterator = basket.getPaymentInstruments().iterator();
+	var existingPI : OrderPaymentInstrument = null;
+
+	// remove them
+	while (paymentInstruments.hasNext()) {
+		existingPI = paymentInstruments.next();
+		if (existingPI.paymentMethod == "VIRTUAL_PIGGY") {
+			basket.removePaymentInstrument( existingPI );
+		}
+	}
+}

@@ -1,0 +1,36 @@
+/**
+* Script File send request to Virtual Piggy to capture or cancel order
+*
+* @input IsCapture : Boolean				is order captured
+* @input OrderNo : String					client's order number
+*
+*/
+
+importPackage( dw.order );
+importPackage( dw.system );
+
+importScript("vp/LibVirtualPiggy.ds");
+
+function execute( pdict : PipelineDictionary ) : Number {
+    
+    var isCapture : Boolean = pdict.IsCapture;
+    var order : Order = OrderMgr.getOrder(pdict.OrderNo);
+    var transactionId : String = "";
+    
+	if(!empty(order) && !empty(order.custom["vpTransactionId"])){
+    	transactionId = order.custom["vpTransactionId"];
+    } else {
+    	Logger.error("SendCaptureRequest.ds: no transaction ID in the order");
+    	return PIPELET_ERROR;
+    }
+    	
+    var vp = new VirtualPiggyObject();
+    try{
+    	vp.captureTransactionByIdentifier(transactionId, isCapture);
+    } catch(e){
+    	Logger.error("SendCaptureRequest.ds: " + e.message);
+    	return PIPELET_ERROR;
+    }
+    
+    return PIPELET_NEXT;
+}

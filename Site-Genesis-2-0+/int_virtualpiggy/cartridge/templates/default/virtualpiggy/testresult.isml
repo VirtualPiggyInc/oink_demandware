@@ -1,0 +1,6 @@
+<!--- TEMPLATENAME: testresult.isml --->
+<h1>Result:</h1>
+<isprint value="${pdict.TestResult}" encoding="off"/>
+<isif condition="${!empty(pdict.Log)}">
+	<br/><br/>ScriptLog: <isprint value="${pdict.Log}" encoding="off"/>
+</isif>

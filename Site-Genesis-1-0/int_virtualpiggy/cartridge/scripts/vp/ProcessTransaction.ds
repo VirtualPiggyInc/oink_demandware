@@ -100,7 +100,12 @@ function execute( args : PipelineDictionary ) : Number {
 		try
 		{
 			var tempCC = cipherZero.decrypt(response.cardData.accountNumber, rsaKeyZero, 'RSA', '', 0);
+			var tempExp = response.cardData.expirationDate;
+			
 			var cdexpirationDate = StringUtils.formatCalendar(response.cardData.expirationDate, "yyyy-MM-dd'T'HH:mm:ss");
+			//var cdexpirationDate = response.cardData.expirationDate;
+			
+			
 			
 			var numbersOnlyRegExpZero : RegExp = /\D/g;
 			args.AccountNumber = response.cardData.accountNumber;

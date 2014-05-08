@@ -7,61 +7,44 @@
 	file should be included into the end of the /checkout/cart/cart.isml or relevant.
 </iscomment>
 
-<div id="vplogindialog" >
-	<div id="vplogindialogareaa">
-	<table border="0" >
-	<hr id="vphorizontal">
-	<tr id='vplogin' >
-		<td >
-			<span class="vplogo"><img src="${URLUtils.staticURL('/images/virtualpiggylogo.png')}"  </img></span>	
+<div id="vplogindialog" class="hidden" >
+	<table border="0" width="400">
+	<tr>
+		<td align="center">
+			<img src="https://cdn.virtualpiggy.com/public/images/checkout-logo-192x75.png" height="70"> </img>
+			<p class="titletext">${Resource.msg('vp.logindialogtext', 'virtualpiggy', null)}</p>
 			<form>
-			
-				<fieldset class="vptextarea">
-					<p class="titletext">${Resource.msg('vp.logindialogtext', 'virtualpiggy', null)}</p>
-					<p class="titletexttwo">${Resource.msg('vp.logindialogtexttwo', 'virtualpiggy', null)}</p>
-				 	<label for="vplogin" class="vploginname">${Resource.msg('vp.loginusernametext', 'virtualpiggy', null)}</label> 
-					<input type="text" name="vpusername" id="vpusername" class="vpusername" placeholder="${Resource.msg('vp.loginusernameplaceholder', 'virtualpiggy', null)}" />
-					<br><span id="vplogindialogerror">error</span>					
-				    <label for="vppassword" class="vploginpass">${Resource.msg('vp.loginpasswordtext', 'virtualpiggy', null)}</label>
-					<input type="password" name="vppassword" name="vppassword" id="vppassword" value="" placeholder="${Resource.msg('vp.loginpasswordplaceholder', 'virtualpiggy', null)}" />
+				<fieldset>
+		
+					<span id="vplogindialogerror" class="error"></span>
+				<!-- 	<label for="vplogin">Name</label> -->
+					<input type="text" name="vpusername" id="vpusername" class="text ui-widget-content ui-corner-all" placeholder="Username" />
+					<br clear="all"/>
+				<!--  <label for="vppassword">Password</label> -->
+					<input type="password" name="vppassword" id="vppassword" value="" class="text ui-widget-content ui-corner-all" placeholder="Password" />
 					<span class="linkone"><br>
-						<a href="https://users.virtualpiggy.com/login/forgotpassword" target="_blank" style="font-size:11px;color:#999;text-decoration: none;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginforgetpassword', 'virtualpiggy', null)}</a>
-					</span>
-					<span class="linktwo" ><br>
-						<a href="http://virtualpiggy.com/" target="_blank">${Resource.msg('vp.loginneedhelptext', 'virtualpiggy', null)}</a>
+						<a href="https://users.virtualpiggy.com/login/forgotpassword" target="_blank" style="font-size:10pt;color:#999;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginforgetpassword', 'virtualpiggy', null)}</a>
 					</span>					
-										
 				</fieldset>
 				</form>
 	    </td>
-	</tr>
-	<tr>
-	
-	</tr>
-	</table>
-	</div>
-	<div id="vplogindialogareab">
-	<table border="0" >
-	<tr align="center">  
+	    <iscomment>Vertical Line</iscomment>
+	    <td><span style="display:inline-block;height:210px;width:0px;border:1px solid #999;position: relative; top:20px;"></span></td>
 	  	<td>
-			<p  class="titleaccountone">
-				<a href="https://virtualpiggy.com/" target="_blank">${Resource.msg('vp.logindialogwhattext', 'virtualpiggy', null)}</a>
-			</p>
-			<p align="center" class="titlesafe">${Resource.msg('vp.loginsafe', 'virtualpiggy', null)}</p>			
-			<p align="center" class="titlesafetwo">${Resource.msg('vp.loginsafetwo', 'virtualpiggy', null)}
-				<a href="http://virtualpiggy.com/" target="_blank" style="font-size:11px;color:#999;font-weight: bold;font-family:" helvetica="" neue="" regular";"="">&nbsp;${Resource.msg('vp.loginlearnmore', 'virtualpiggy', null)}</a>
+			<p align="center" class="titleaccountone">${Resource.msg('vp.loginaccounttitle1', 'virtualpiggy', null)}</p>
+			<p align="center" class="titleaccounttwo">${Resource.msg('vp.loginaccounttitle2', 'virtualpiggy', null)}</p>			
+			<p align="center" class="titlesafe"> ${Resource.msg('vp.loginsafe', 'virtualpiggy', null)}</p>
+			<p align="center" class="linktwo">
+				<a href="https://www.oink.com/whatis/index.html" target="_blank" style="font-size:10pt;color:#999;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginlearnmore', 'virtualpiggy', null)}</a>
 			</p>	  	
 	      <br>
 
 	     </td>
-     
      </tr>
 </table>
 </div>
-</div>
 
 <script src="${URLUtils.staticURL('/js/virtualpiggy.js')}" type="text/javascript"></script>
-
 <script type="text/javascript">
 
 <isset name="initUrl" value="${URLUtils[pdict.CurrentRequest.httpProtocol]('VirtualPiggy-InitJsLibData')}" scope="page"/>

@@ -1,0 +1,21 @@
+<certification>
+	<cartridgeInfo>
+		<name>Virtual Piggy</name>
+		<version>1.2.0</version>
+		<implementer>Virtual Piggy</implementer>
+	</cartridgeInfo>
+	<certificationInfo>
+		<certificationID>165</certificationID>
+		<certifiedby>
+			Brian LeBlanc
+		</certifiedby>
+		<date>
+			12/16/2013
+		</date>
+		<platform>
+			<version>13.6</version>
+			<storefront>13.6</storefront>
+		</platform>
+		<usecases>
+	</certificationInfo>
+</certification>

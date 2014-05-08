@@ -1,9 +1,0 @@
-<iscomment>
-	This template is being injected into <head> section of the pt_checkout.isml template
-	accordingly the latest SiteGenesis modifications (12.5+).
-	
-	If your solution is based on an older SiteGenesis version, the content of this
-	file should be included into /components/header/htmlhead.isml or relevant.
-</iscomment>
-
-<link rel="stylesheet" href="${URLUtils.staticURL('/css/virtualpiggy.css')}" />

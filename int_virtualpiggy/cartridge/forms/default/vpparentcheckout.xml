@@ -5,7 +5,7 @@
   	</field>
   	<field formid="senttochildaddress" label="vp.checkout.senttochildaddress" type="boolean"/>
   	<field formid="paymentAccounts" label="" type="string" mandatory="false">
-			<options optionid-binding="identifier" value-binding="identifier" label-binding="name"/>
+   		<options optionid-binding="identifier" value-binding="identifier" label-binding="name"/>
   	</field>
   	
 	<action formid="checkout" valid-form="false"/>

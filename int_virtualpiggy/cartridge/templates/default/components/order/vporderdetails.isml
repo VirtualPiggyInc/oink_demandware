@@ -13,7 +13,9 @@
 </iscomment>
 <isset name="Order" value="${pdict.order}" scope="page"/>
 
-
+<h2 class="content-header">
+	<isprint value="${Resource.msg('summary.title','checkout',null)}" />
+</h2>
 
 <table class="item-list">
 

@@ -13,32 +13,35 @@
 	<isinclude template="util/modules"/>
 	
 	<isinclude template="components/header/htmlhead"/>
+	<isinclude template="checkout/pt_checkout_UI"/>
 
-	<iscomment>Add page specific header information here.</iscomment>
-	<link rel="stylesheet" href="${URLUtils.staticURL('/css/virtualpiggy.css')}" />
+	<iscomment>Add template-specific header information here.</iscomment>	
 	
 </head>
 
 <body>
 
-	<div id="container" class="pt_checkout">
-		<isinclude template="components/header/header"/>
-		<div id="main">
-			<div id="content">
+	<div id="wrapper" class="pt_checkout">
+	
+		<isinclude url="${URLUtils.url('Home-IncludeHeader')}"/>
+			
+		<div id="main" role="main" class="primary-focus clearfix">
+		
+			<div id="primary" class="primary-content">
 				<isreplace/>
 			</div>
 			
-			<div id="rightcolumn" class="nav summary">
-				<isinclude template="checkout/minisummary"/>
+			<div id="secondary" class="nav summary">
+				<isinclude template="checkout/vpminisummary"/>
 			</div>
 			
 		</div>
 	
 	
 		<isinclude template="components/footer/footer"/>
+		<isinclude template="checkout/pt_checkout_VARS"/>
 		
 	</div>
-	
 	
 </body>
 </html>

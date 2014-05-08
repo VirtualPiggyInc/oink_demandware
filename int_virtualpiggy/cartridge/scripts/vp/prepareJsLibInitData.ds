@@ -2,7 +2,6 @@
 *	@output json : String
 *
 */
-
 importPackage( dw.system );
 importPackage( dw.web );
 

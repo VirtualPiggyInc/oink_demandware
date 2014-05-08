@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="Order">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="vpOrderStatus">
+                <display-name xml:lang="x-default">Virtual Piggy Order Status</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">None</display>
+                        <value>NONE</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Pending Approval</display>
+                        <value>PENDING_APPROVAL</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Authorized</display>
+                        <value>AUTHORIZED</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Captured</display>
+                        <value>CAPTURED</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Declined by a Parent</display>
+                        <value>DECLINED</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Voided by a Merchant</display>
+                        <value>VOIDED</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Wasn't approved in term</display>
+                        <value>EXPIRED</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="vpTransactionId">
+                <display-name xml:lang="x-default">Virtual Piggy Transaction Id</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <field-length>0</field-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="SitePreferences">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="vpApiKey">
+                <display-name xml:lang="x-default">API Key</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="vpCurrencyID">
+                <display-name xml:lang="x-default">Site Currency</display-name>
+                <description xml:lang="x-default">Optional. Please consult your Virtual Piggy contact whether you should put here anything.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <regex>/^[A-Z]{3}$/</regex>
+            </attribute-definition>
+            <attribute-definition attribute-id="vpEndPointURL">
+                <display-name xml:lang="x-default">Transaction Service URL</display-name>
+                <description xml:lang="x-default">If empty points to a development instance</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <field-length>0</field-length>
+                <default-value>https://development.virtualpiggy.com/Services/TransactionService.svc</default-value>
+            </attribute-definition>            
+            <attribute-definition attribute-id="vpManualCapture">
+                <display-name xml:lang="x-default">Manual Capture</display-name>
+                <description xml:lang="x-default">Should be checked if you'd like to use Manual Capture feature.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="vpMerchantID">
+                <display-name xml:lang="x-default">Merchant ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <field-length>0</field-length>
+                <regex>/^[0-9a-f-]+$/</regex>
+            </attribute-definition>
+            <attribute-definition attribute-id="vpOrderExpirationDays">
+                <display-name xml:lang="x-default">Order Expires in (days)</display-name>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <field-length>0</field-length>
+				<min-value>1</min-value>
+                <default-value>7</default-value>				
+            </attribute-definition>
+            <attribute-definition attribute-id="vpShippingMethodID">
+                <display-name xml:lang="x-default">Shipping Method ID</display-name>
+                <description xml:lang="x-default">Please put here id of a shipping method that will be used for all Virtual Piggy orders. Please ensure that this shipping method is applicable for all locations required.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>				
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="VIRTUAL_PIGGY">
+                <display-name xml:lang="x-default">Virtual Piggy settings</display-name>
+				<attribute attribute-id="vpEndPointURL"/>
+				<attribute attribute-id="vpMerchantID"/>
+				<attribute attribute-id="vpApiKey"/>
+				<attribute attribute-id="vpCurrencyID"/>
+				<attribute attribute-id="vpShippingMethodID"/>
+				<attribute attribute-id="vpOrderExpirationDays"/>
+				<attribute attribute-id="vpManualCapture"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+</metadata>

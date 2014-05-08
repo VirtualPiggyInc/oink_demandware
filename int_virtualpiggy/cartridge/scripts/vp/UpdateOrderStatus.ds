@@ -4,9 +4,6 @@
 *	@input orderId : String
 *	@input newStatus : String
 *	@input cancelOrder : Boolean
-*	@input AccountNumber : String
-*	@input ExpirationDate : String
-*	@input Confirmation : String
 *
 */
 importPackage( dw.order );
@@ -21,11 +18,6 @@ function execute( args : PipelineDictionary ) : Number {
 	order.custom["vpOrderStatus"] = args.newStatus;
 	if (order.custom["vpOrderStatus"] != args.newStatus) {
 		return PIPELET_ERROR;
-	}
-	
-	if (args.newStatus == "AUTHORIZED") {
-		order.setExportStatus(Order.EXPORT_STATUS_READY);
-		
 	}
 	
 	if (args.cancelOrder == true) {

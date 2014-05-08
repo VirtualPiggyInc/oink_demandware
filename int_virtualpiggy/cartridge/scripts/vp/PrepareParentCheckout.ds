@@ -33,18 +33,10 @@ function execute( args : PipelineDictionary ) : Number {
 	if(!empty(children) && children.status){		
 		childrenListSelect.setOptions(new ArrayList(children.resultArray).iterator());
 	}
-	else
-	{		
-		childrenListSelect.setOptions(new ArrayList().iterator());
-	}
 	
 	var paymentAccounts : Object = VP.getPaymentAccounts(userToken);
 	if(!empty(paymentAccounts) && paymentAccounts.status){		
 		paymentAccountsSelect.setOptions(new ArrayList(paymentAccounts.resultArray).iterator());
-	}
-	else
-	{		
-		paymentAccountsSelect.setOptions(new ArrayList().iterator());
 	}
 	
 	return PIPELET_NEXT;

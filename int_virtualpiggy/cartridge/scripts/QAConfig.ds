@@ -1,4 +1,4 @@
-//importPackage(dw.system);
+﻿//importPackage(dw.system);
 
 /**
 *	This script updates QAConfig attributes
@@ -20,13 +20,13 @@ function QAConfig() {
 				"nameSpace" : "vp",
 				"propMerchantID" : "MerchantIdentifier",
 				"propApiKey" : "APIkey",
-				"timeout": 90000,
+				"timeout": 30000,
 				"retries": 0,
 				"securityKey": "vp"
 			},
 			"IP2Geo": {
 				"url": "http://ws.cdyne.com/ip2geo/ip2geo.asmx",
-				"timeout": 90000,
+				"timeout": 10000,
 				"retries": 1,
 				"securityKey": "default"
 			}

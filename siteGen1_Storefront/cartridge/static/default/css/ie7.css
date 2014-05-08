@@ -1,0 +1,38 @@
+button {padding:0;}
+
+.logincreate {float:right;height:auto;min-height:419px;}
+
+/***** Product Next/Previous on Product Detail Page (productnav.isml) *****/
+.productdetail .productnavigation .productprevious {background-position: 0 center;}
+.productdetail .productnavigation .productnext {background-position: right center;}
+
+.sorthitscontainer {height:20px;}
+.sorthitscontainer .resultshits {line-height:18pt;}
+
+/* CART
+--------------------------------------------------------------------------------------- */
+.quantitycolumndetails a, .quantitycolumndetails .stockstate {margin-left:4px;}
+.cart table.carttable tbody tr.tablerow td, .checkoutplaceorder table.placeordertable tbody tr.tablerow td {border-bottom: 1px dashed #898989;}
+
+/***** Account Login (accountlogin.isml) *****/
+.returningcustomers .rememberme label {vertical-align:middle;}
+
+/***** Account Add Address (editaddress.isml) *****/
+.accountaddress .actions button {margin:0 0 0 18px;}
+
+/***** ACCOUNT PAYMENT INSTRUMENTS (paymentinstruments.isml) *****/
+.creditcardform .formfield .month .errormessage {left:-145px;top:25px;}
+
+/* RESET PASSWORD
+--------------------------------------------------------------------------------------- */
+.passwordreset select.selectbox {width:175px;}
+.passwordreset input.textinput {width:175px;}
+
+/* WISHLIST
+--------------------------------------------------------------------------------------- */
+.wishlistitems .wishlistsharing .productlisturl {width:685px;}
+
+/* GIFT REGISTRY
+--------------------------------------------------------------------------------------- */
+.giftregistry .shareurl{width:685px;}
+.giftregistry .giftregistryitemcontainer td {border-bottom:1px dashed #898989;}

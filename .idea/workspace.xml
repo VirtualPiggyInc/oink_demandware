@@ -5,7 +5,7 @@
     <ignored path="oink_demandware.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="adf70320-0891-4dcc-87d0-7ab0eb44bb40" time="1394817325823" ignored="false" />
-    <file path="/*.regexp" changelist="adf70320-0891-4dcc-87d0-7ab0eb44bb40" time="1394820806805" ignored="false" />
+    <file path="/*.regexp" changelist="adf70320-0891-4dcc-87d0-7ab0eb44bb40" time="1394837044065" ignored="false" />
     <file path="/ProcessTransaction.ds" changelist="adf70320-0891-4dcc-87d0-7ab0eb44bb40" time="1394820788092" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,18 +27,18 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="ProcessTransaction.ds" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Site-Genesis-1-0/int_virtualpiggy/cartridge/scripts/mobile/vp/ProcessTransaction.ds">
+        <entry file="file://$PROJECT_DIR$/int_virtualpiggy/cartridge/scripts/mobile/vp/ProcessTransaction.ds">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="70" selection-start="4302" selection-end="4302" vertical-scroll-proportion="0.0">
+            <state line="144" column="23" selection-start="4965" selection-end="4977" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="ProcessTransaction.ds" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Site-Genesis-1-0/int_virtualpiggy/cartridge/scripts/vp/ProcessTransaction.ds">
+        <entry file="file://$PROJECT_DIR$/int_virtualpiggy/cartridge/scripts/vp/ProcessTransaction.ds">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="108" column="55" selection-start="3611" selection-end="3611" vertical-scroll-proportion="0.15478261">
+            <state line="26" column="38" selection-start="820" selection-end="820" vertical-scroll-proportion="0.76869565">
               <folding />
             </state>
           </provider>
@@ -62,8 +62,8 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/Site-Genesis-1-0/int_virtualpiggy/cartridge/scripts/mobile/vp/ProcessTransaction.ds" />
-        <option value="$PROJECT_DIR$/Site-Genesis-1-0/int_virtualpiggy/cartridge/scripts/vp/ProcessTransaction.ds" />
+        <option value="$PROJECT_DIR$/int_virtualpiggy/cartridge/scripts/mobile/vp/ProcessTransaction.ds" />
+        <option value="$PROJECT_DIR$/int_virtualpiggy/cartridge/scripts/vp/ProcessTransaction.ds" />
       </list>
     </option>
   </component>
@@ -124,7 +124,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="C:/Documents and Settings" />
+    <property name="last_opened_file_path" value="C:/codebase" />
   </component>
   <component name="RunManager">
     <list size="0" />
@@ -223,16 +223,16 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Site-Genesis-1-0/int_virtualpiggy/cartridge/scripts/mobile/vp/ProcessTransaction.ds">
+    <entry file="file://$PROJECT_DIR$/int_virtualpiggy/cartridge/scripts/mobile/vp/ProcessTransaction.ds">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="70" selection-start="4302" selection-end="4302" vertical-scroll-proportion="0.0">
+        <state line="144" column="23" selection-start="4965" selection-end="4977" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Site-Genesis-1-0/int_virtualpiggy/cartridge/scripts/vp/ProcessTransaction.ds">
+    <entry file="file://$PROJECT_DIR$/int_virtualpiggy/cartridge/scripts/vp/ProcessTransaction.ds">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="108" column="55" selection-start="3611" selection-end="3611" vertical-scroll-proportion="0.15478261">
+        <state line="26" column="38" selection-start="820" selection-end="820" vertical-scroll-proportion="0.76869565">
           <folding />
         </state>
       </provider>

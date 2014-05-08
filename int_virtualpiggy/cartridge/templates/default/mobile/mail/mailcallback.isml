@@ -1,0 +1,12 @@
+<iscomment>
+	This template callback status
+</iscomment>
+<iscontent type="text/html" charset="UTF-8"/>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+	<subject>VP CallBack works!</subject>
+	<head>
+	</head>
+	<body>
+		<h3>CallBack works for order Id - <isprint value="${pdict.OrderNo}" encoding="off" />!</h3>
+	</body>
+</html>

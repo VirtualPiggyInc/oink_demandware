@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<isinclude template="util/modules"/>
+<head>
+<iscomment>
+	Include all important information globally , e.g. meta-data, link information, and
+	javascript.
+</iscomment>
+<isinclude template="components/header/htmlhead"/>
+
+<iscomment>Add page type specific header information here.</iscomment>
+<link href="${URLUtils.staticURL('/css/print.css')}" type="text/css" rel="stylesheet" media="print" />
+	
+</head>
+<body>
+<div id="container" class="pt_orderconfirmation">
+	<isinclude template="components/header/header"/>
+	<div id="main">
+		<div id="content">
+			<isreplace/>
+		</div><!-- END: content -->
+
+		<iscomment>Provide a create account form for unregistered customers</iscomment>
+		<isif condition="${!pdict.CurrentCustomer.authenticated}">
+			<div id="rightcolumn">
+				<h3>${Resource.msg('pt_orderconfirmation.createheader','checkout',null)}</h3>
+				<div class="createaccount">
+					<form action="${URLUtils.httpsContinue()}" method="post">
+						<fieldset>
+							<p>${Resource.msg('pt_orderconfirmation.accountmessage','checkout',null)}</p>
+							<div class="formfields">
+								<div class="formfield firstname">
+									<isinputfield formfield="${pdict.CurrentForms.profile.customer.firstname}" type="input"/>
+									<div class="clear"><!-- FOAT CLEAR --></div>
+								</div><!-- END: firstname -->
+								<div class="formfield lastname">
+									<isinputfield formfield="${pdict.CurrentForms.profile.customer.lastname}" type="input"/>
+									<div class="clear"><!-- FOAT CLEAR --></div>
+								</div>
+								<div class="formfield">
+									<isinputfield formfield="${pdict.CurrentForms.profile.customer.email}" type="input"/>
+									<div class="clear"><!-- FOAT CLEAR --></div>
+								</div>
+								<div class="formfield">
+									<isinputfield formfield="${pdict.CurrentForms.profile.customer.emailconfirm}" type="input"/>
+									<div class="clear"><!-- FOAT CLEAR --></div>
+								</div>
+								<div class="formfield">
+									<isinputfield formfield="${pdict.CurrentForms.profile.login.password}" type="password"/>
+									<div class="clear"><!-- FOAT CLEAR --></div>
+								</div>
+								<div class="formfield">
+									<isinputfield formfield="${pdict.CurrentForms.profile.login.passwordconfirm}" type="password"/>
+									<div class="clear"><!-- FOAT CLEAR --></div>
+								</div>
+								<div class="actions">
+									<button type="submit" value="${Resource.msg('global.createbutton','locale',null)}" name="${pdict.CurrentForms.profile.confirm.htmlName}"><span>${Resource.msg('global.createbutton','locale',null)}</span></button>
+								</div>
+								<input type="hidden" name="${pdict.CurrentForms.profile.secureKeyHtmlName}" value="${pdict.CurrentForms.profile.secureKeyValue}"/>	
+							</div><!-- END: formfields -->
+						</fieldset>
+					</form>
+				</div>
+			</div><!-- END: rightcolumn -->
+		</isif>
+	</div><!-- END: main -->
+	<isinclude template="components/footer/footer"/>
+</div> <!-- END: container -->
+</body>
+</html>

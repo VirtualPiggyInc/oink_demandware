@@ -1,0 +1,37 @@
+﻿importPackage(dw.system);
+
+/**
+*	This script sets ConfigMgr
+*
+*/
+
+function WebServiceConfigMgr() {};
+
+(function () {
+	WebServiceConfigMgr.getConfig = function (serviceName) {
+		var isProd = System.getInstanceType() === System.PRODUCTION_SYSTEM,
+			config = null,
+			serviceInfo = null,
+			securityInfo = null;
+
+		if (isProd) {
+			importScript("ProdConfig.ds");
+			config = ProdConfig();
+		} else {
+			importScript("QAConfig.ds");
+			config = QAConfig();
+		};
+
+		serviceInfo = config.services[serviceName];		
+		securityInfo = config.security[serviceInfo.securityKey];
+
+		delete serviceInfo.securityKey;
+
+		return {
+			"service": serviceInfo,
+			"security": securityInfo
+		};
+	};
+
+	return WebServiceConfigMgr;
+})();

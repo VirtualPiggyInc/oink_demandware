@@ -1,0 +1,21 @@
+<iscontent type="text/html" charset="UTF-8" compact="true"/>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>${Resource.msg('lockoutemail.title','account',null)}</title>
+</head>
+<body>
+<div style="font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; font-size: x-small; color: Black;">
+	${Resource.msg('passwordemail.dear','account',null)}&nbsp;<isprint value="${pdict.TempCustomer.profile.firstName}"/>&nbsp;<isprint value="${pdict.TempCustomer.profile.lastName}"/>,
+	<br/><br/>
+	${Resource.msg('lockoutemail.message1','account',null)}
+	<br/>
+	${Resource.msg('lockoutemail.message2','account',null)}
+	<br />
+	${Resource.msg('lockoutemail.message3','account',null)}
+	<br/>
+	${Resource.msg('lockoutemail.message4','account',null)}	
+	<br /><br />
+</div>
+</body>
+</html>

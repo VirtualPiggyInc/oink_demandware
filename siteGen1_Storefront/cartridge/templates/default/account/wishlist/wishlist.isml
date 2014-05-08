@@ -1,0 +1,304 @@
+<isdecorate template="account/wishlist/pt_wishlist">
+<isinclude template="util/modules"/>
+
+<div class="wishlist">
+	<isslot id="wishlist-banner" description="Banner on Wish List pages" context="global" />
+
+	<span class="label">${Resource.msg('wishlist.searchheader','account',null)}</span>
+	<isinclude template="account/wishlist/wishlistsearch"/>
+
+	<isset name="formID" value="${pdict.CurrentForms.wishlist.htmlName + '_items'}" scope="page"/>
+
+	<iscomment>wishlist items form</iscomment>
+	<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.wishlist.htmlName}_shipping">
+
+	<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+		<div class="wishlistshippingaddress">
+		<isif condition="${pdict.CurrentCustomer.profile.addressBook.addresses.size() > 0}">
+			<div class="label">${Resource.msg('wishlist.addresslabel','account',null)}</div>
+			<select class="selectbox" name="editAddress" id="editAddress">
+				<option value="">${Resource.msg('wishlist.noshippingaddress','account',null)}</option>
+				<isloop items="${pdict.CurrentCustomer.profile.addressBook.addresses}" var="address">
+					<option
+					<isif condition="${pdict.ProductList.shippingAddress != null && pdict.ProductList.shippingAddress.ID == address.ID}">
+						selected="selected"
+					</isif>
+						value="${address.ID}">(<isprint value="${address.ID}"/>) <isprint value="${address.address1}"/>, <isprint value="${address.city}"/>, <isprint value="${address.stateCode}"/>, <isprint value="${address.postalCode}"/>
+					</option>
+				</isloop>
+			</select>
+		</isif>
+		</div>
+		
+		<isif condition="${pdict.ProductList.giftCertificateItem == null}">
+			<div class="wishlistaddgiftcert">
+				<button type="submit" value="${Resource.msg('wishlist.addgiftcert','account',null)}" name="${pdict.CurrentForms.wishlist.addGiftCertificate.htmlName}"><span>${Resource.msg('wishlist.addgiftcert','account',null)}</span></button>
+				<p>${Resource.msg('wishlist.addgiftcertmessage','account',null)}</p>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+		</isif>
+	</isif>
+	</form>
+
+	<div class="wishlistitems">
+		<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+			<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.wishlist.htmlName}_share">		
+				<div class="wishlistsharing">
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+					<div class="wishlistprivatepublic">
+						<isif condition="${pdict.ProductList.public}">
+							<button type="submit" value="Continue" name="${pdict.CurrentForms.wishlist.setListPrivate.htmlName}"><span>${Resource.msg('wishlist.listprivate','account',null)}</span></button>
+						<iselse/>
+							<button type="submit" value="Continue" name="${pdict.CurrentForms.wishlist.setListPublic.htmlName}"><span>${Resource.msg('wishlist.listpublic','account',null)}</span></button>
+						</isif>
+					</div>
+					<div class="wishlistsendlist">
+						<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+							<iscomment>Send wish list</iscomment>
+							<iscomment>Example of building a search friendly url for wishlist</iscomment>
+							<isset name="wishlisturl" value="${URLUtils.httpHome() + "/wishlist/" + pdict.ProductList.UUID}" scope="page"/>
+							<div class="productlistshare">
+								<button type="button" id="sendToFriend" value="Continue" name="sendToFriend"><span>${Resource.msg('wishlist.sendwishlist','account',null)}</span></button>
+							</div>
+							<div class="productlisturl">
+								${Resource.msg('wishlist.copylabel','account',null)} <a href="${URLUtils.http('Wishlist-ShowOther', 'WishListID', pdict.ProductList.UUID)}" class="detail"><isprint value="${URLUtils.http('Wishlist-ShowOther', 'WishListID', pdict.ProductList.UUID)}"/></a>
+							</div>
+						</isif>
+					</div>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div><!-- END: wishlistsharing -->			
+			</form>
+			<h5>&nbsp;</h5>		
+		<iselse/>
+			<h5><isprint value="${pdict.ProductList.owner.profile.firstName}"/> <isprint value="${pdict.ProductList.owner.profile.lastName}"/> ${Resource.msg('other.wishlistheader','account',null)}</h5>
+		</isif>
+		
+		
+		<isif condition="${empty(pdict.CurrentForms.wishlist.items)}">
+			<div class="wishlistempty">
+				<div class="wishlistemptymessage">${Resource.msg('wishlist.empty','account',null)}</div>
+				<a href="${URLUtils.httpHome()}" title="${Resource.msg('global.storename','locale',null)}">${Resource.msg('wishlist.emptyadd','account',null)}</a>
+			</div><!-- END: wishlistempty -->			
+		<iselse/>
+			<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.wishlist.htmlName}_items">
+				<fieldset>
+					<div id="formaction"></div>		
+					
+					<iscomment>These vars are used by the above specified pipeline</iscomment>
+					<input type="hidden" name="productListID" value="${pdict.ProductList.ID}"/>
+					<input type="hidden" name="selectedItemID" value=""/>
+		
+					<div class="wishlistproducts" id="wishlistproducts">
+					<isloop items="${pdict.CurrentForms.wishlist.items}" var="item" status="loopstate">
+						<isif condition="${((pdict.CurrentCustomer == pdict.ProductList.owner) || (pdict.CurrentCustomer != pdict.ProductList.owner && item.public.value))}">
+							<table class="productlisttable" summary="Wishlist Products Table">
+							<tr class="tablerow">
+								<td class="imagecolumn">	
+									<iscomment>Display product image using module</iscomment>	
+									<isdisplayproductimage p_productli="${item.object}"/>
+								</td>
+			
+								<td class="detailscolumn">
+									<div class="wishlistlineitem">
+										<iscomment>Display product list item using module</iscomment>
+										<isdisplayproductlistitem p_productli="${item.object}"/>
+									</div>
+									<isif condition="${item.object.type != item.object.TYPE_GIFT_CERTIFICATE && item.object.product != null}">
+										<div class="editdetails">
+											<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner && item.object.productOptionModel != null }">
+												<a name="${item.object.ID}" href="${item.object.productOptionModel.url('Product-Show').append('Quantity', item.object.quantity)}" title="" >${Resource.msg('global.editdetails','locale',null)}</a>
+											</isif>
+										</div>
+									</isif>
+		
+									<iscomment>display product availability using module</iscomment>
+									<isdisplayproductavailability p_productli="${item.object}"/>	
+								</td>
+								<td class="iteminfo">
+									<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+										<div class="wishlistdateadded">${Resource.msg('wishlist.dateadded','account',null)} <isprint value="${item.object.creationDate}" formatter="MMMMM dd, yyyy"/></div>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+											<div class="wishlistqty quantity">
+											<isif condition="${item.object.type == item.object.TYPE_PRODUCT}">
+												<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+													<span class="label">${Resource.msg('productlist.qtydesired','account',null)}</span>
+													<isinputfield formfield="${item.quantity}" type="input" label="false"/>
+												<iselse>
+													<span class="label">${Resource.msg('productlist.qtydesired','account',null)}</span>
+													<span class="value"><isprint value="${item.quantity.value}"/></span>
+												</isif>
+											<iselseif condition="${item.object.type == item.object.TYPE_GIFT_CERTIFICATE}">
+												<!-- Gift Certificates Qty Message -->
+											</isif>
+											</div>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+										<div class="wishlistpriority">
+											<span class="label">${Resource.msg('wishlist.priority','account',null)}</span>
+											<isinputfield formfield="${item.priority}" type="select" label="false"/>
+											<div class="clear"><!-- FLOAT CLEAR --></div>
+										</div>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+										<isif condition="${pdict.ProductList.public}">
+											<div class="wishlistmakeprivate">
+												<isinputfield formfield="${item.public}" type="checkbox" label="false"/>
+												<span class="label">${Resource.msg('wishlist.itempublic','account',null)}</span>
+											</div>
+										</isif>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+										<div class="wishlistremove">
+											<input type="submit" name="${item.deleteItem.htmlName}" style="display:none;"/>
+											<a href="javascript:deleteItem('${item.deleteItem.htmlName}');" name="${item.deleteItem.htmlName}" title="${Resource.msg('global.remove','locale',null)}">${Resource.msg('global.remove','locale',null)}</a>
+											<div class="clear"><!-- FLOAT CLEAR --></div>
+										</div>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+										<div class="wishlistupdate">
+											<input type="submit" name="${item.updateItem.htmlName}" style="display:none;"/>
+											<a href="javascript:updateItem('${item.updateItem.htmlName}');" title="${Resource.msg('global.update','locale',null)}">${Resource.msg('global.update','locale',null)}</a>
+										</div>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+									<iselse>
+										<div class="wishlistdateadded">${Resource.msg('wishlist.dateadded','account',null)} <isprint value="${item.object.creationDate}" formatter="MMMMM dd, yyyy"/></div>
+											<div class="wishlistqtyguestview quantity">
+												<isif condition="${item.object.type == item.object.TYPE_PRODUCT}">
+													<isif condition="${pdict.CurrentCustomer == pdict.ProductList.owner}">
+														<isinputfield formfield="${item.quantity}" type="input" label="false"/>
+													<iselse>
+														<span class="label">${Resource.msg('productlist.qtydesired','account',null)}</span><span class="value"><isprint value="${item.quantity.value}"/></span>
+													</isif>
+												<iselseif condition="${item.object.type == item.object.TYPE_GIFT_CERTIFICATE}">
+													<!-- Gift Certificate Quanity -->
+												</isif>
+												</div>
+										<div class="clear"><!-- FLOAT CLEAR --></div>
+										<isloop items="${item.priority.options}" var="option">
+											<isif condition="${item.object.priority == option.htmlValue}">
+												<iscomment>priority select box</iscomment>
+												<div class="wishlistpriority">
+													<div class="wishlistpriorityvalue"><span class="label">${Resource.msg('wishlist.priority','account',null)}:</span> ${Resource.msg(option.label,'forms',null)}</div>
+												</div>
+											</isif>
+										</isloop>
+									</isif>
+									
+									<div class="wishlistaddtocart">
+										<iscomment>add to cart</iscomment>
+										<isif condition="${item.object.type == item.object.TYPE_GIFT_CERTIFICATE}">
+											<div id="addGiftCertificate">
+												<button type="button" value="${Resource.msg('global.addtocart', 'locale', null)}"><span>${Resource.msg('global.addtocart', 'locale', null)}</span></button>
+											</div>
+										<iselseif condition="${item.object.product != null}">							
+											<span class="label">${Resource.msg('global.qty','locale',null)}:</span><input class="quantityinput" type="text" name="Quantity" value="${Number(empty(pdict.CurrentHttpParameterMap.Quantity.stringValue) ? 1 : pdict.CurrentHttpParameterMap.Quantity.stringValue).toFixed()}"/>
+											<button class="addToCart" id="id${item.object.ID}"><span>${Resource.msg('global.addtocart', 'locale', null)}</span></button>										
+										</isif>
+									</div>
+								</td>
+							</tr>
+							</table>
+						</isif>						
+						</isloop>	
+					</div><!-- END: wishlistproducts -->
+				</fieldset>
+			</form>
+		</isif>
+	</div><!-- END: wishlistitems -->
+</div>
+<script type="text/javascript"><!--
+
+	jQuery(document.body).bind('dialogClosed', function(event){
+	      window.location.href = "${URLUtils.https('Wishlist-Show')}";
+    });
+
+	function deleteItem(itemName) {
+		itemName = "[name=" + itemName + "]";
+		jQuery(itemName).click();
+	}
+
+	function updateItem(itemName) {
+		itemName = "[name=" + itemName + "]";
+		jQuery(itemName).click();
+	}
+
+  	jQuery(document).ready(function() {
+		jQuery(document).bind('dialogopen', function(event, msg) {
+			jQuery('#dialogcontainer').dialog('option', 'title', '${Resource.msg('wishlist.sendwishlist','account',null)}');
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.message.htmlName}]");
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.subject.htmlName}]").val("${Resource.msg('wishlist.emailsubject','account',null)}");
+	     	jQuery("[name=${pdict.CurrentForms.sendtofriend.messagelink.htmlName}]").val("${URLUtils.http('Wishlist-ShowOther', 'WishListID', pdict.ProductList.UUID)}");
+		    jQuery("[name=${pdict.CurrentForms.sendtofriend.messagelinktext.htmlName}]").val("${Resource.msg('wishlist.emailsubject','account',null)}");
+		});
+
+		jQuery('#sendToFriend').click( function() {
+			app.dialog.open('${URLUtils.url('SendToFriend-Start','plid',pdict.ProductList.UUID)}','${Resource.msg('wishlist.sendwishlist','account',null)}');
+		});
+		
+		jQuery('#addGiftCertificate button').click( function() {
+			var owner = "${pdict.ProductList.owner.profile.firstName + " " + pdict.ProductList.owner.profile.lastName}";
+			var url = "${URLUtils.https('GiftCert-Purchase', 'plid',pdict.ProductList.UUID)}";
+			window.location.href = url;
+		});
+
+		// select address from list
+		jQuery(".wishlistshippingaddress select").change(function() {
+			var addressId = jQuery(this).val();
+			var url = "${URLUtils.https('Wishlist-SetShippingAddress', 'AddressID', '')}" + addressId;
+			window.location.href = url;
+		});
+		
+		jQuery(".addToCart").click(function() {
+			var qty = jQuery(this).prev().val();
+			if (qty == "" || qty < 1)
+			{
+				qty = 1;
+			}	
+		
+			var params = new Object; 
+ 			params['pid'] = this.id.substring(2,this.id.length);
+			params['Quantity'] = qty;
+			params['ProductListID'] = '${pdict.ProductList.UUID}'; // used by Cart-MiniAddProduct to distinguish between a WL a2c event
+	
+			jQuery("." + this.value + "options").children("span").each(function(i) {
+				params[jQuery(this).attr("class")] = this.childNodes[0].nodeValue;;
+			});
+			app.minicart.add('${URLUtils.staticURL('/images/loading-progress-98x22.gif')}', params);  
+			return false;
+		});
+		
+		jQuery(".editdetails a").click(function(){
+			var url = "${URLUtils.httpContinue()}";
+			// append the continue node next action which is editLineItem in this case
+			var plid = this.name;
+				
+			// unbind any existing event handlers
+			jQuery(document).unbind("AddToCart");
+			// bind to AddToCart event, it gets triggered when the user has made selections
+			// on the product detail page and clicked A2C button
+			// event.selectedOptions contain name/value pair for the selected produt data e.g. pid, Quantity, any options
+			jQuery(document).bind("AddToCart", function(event){
+				var pliOptions = jQuery.extend({}, {}, event.selectedOptions);
+				var updateurl = "${URLUtils.https('Wishlist-ReplaceProductListItem')}";
+				updateurl = app.util.appendParamToURL(updateurl, "plid", plid);
+				// make server call to replace the lineitem and refresh the cart
+				// update the product
+				jQuery.ajax({
+							type	: "POST",
+							url		: updateurl,
+							cache	: false,
+							data	: pliOptions,
+							success	: function(response){ 
+									jQuery("#loader").html(response);
+									var showurl = "${URLUtils.https('Wishlist-Show')}";
+									window.location.href = showurl;
+							},
+							error	: function(){app.refreshCart();}
+							});
+							
+							
+			});
+			
+			app.quickView.show({url: this.href, source: "cart", label: "${Resource.msg('global.update','locale',null)}"});
+			return false;
+		});
+	});
+
+//--></script>
+</isdecorate>

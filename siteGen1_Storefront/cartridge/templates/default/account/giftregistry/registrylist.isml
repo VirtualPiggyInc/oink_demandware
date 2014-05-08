@@ -1,0 +1,92 @@
+<isdecorate template="account/giftregistry/pt_giftregistry">
+<isinclude template="util/modules"/>
+<iscomment>CREATES SCRIPT TO RUN THROUGH ODD/EVEN ROWS COLOR </iscomment>
+<isscript>
+	/*
+		Small function to realize odd and even recognition of rows across multiple
+	   	loops
+	*/
+	function RowClass()
+	{
+		// define the counter
+		var rowCounter = 0;
+
+		RowClass.prototype.getName = function()
+		{
+			// increase counter
+			rowCounter++;
+
+			if (rowCounter % 2 == 0)
+			{
+				return 'even';
+			}
+			else
+			{
+				return 'odd';
+			}
+		}
+	};
+</isscript>
+<isscript>
+	/* create a new instance to name our rows 'odd' or 'even' */
+	var rowNaming = new RowClass();
+</isscript>
+<div id="giftregistry" class="giftregistry">
+	<isslot id="registry-header" description="Banner for Gift Registry" context="global" />
+	<div class="registrylistsearch">
+		<h2>${Resource.msg('giftregistry.searchheader','account',null)}</h2>
+		<isinclude template="account/giftregistry/giftregistrysearch"/>	
+	</div><!-- END: registrylistsearch -->
+	<div class="registrycreatemessage">
+		<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.giftregistry.htmlName}">	
+			<fieldset>
+				<button type="submit" value="${Resource.msg('registrylist.newregistry','account',null)}" name="${pdict.CurrentForms.giftregistry.create.htmlName}"><span>${Resource.msg('registrylist.newregistry','account',null)}</span></button>
+				${Resource.msg('registrylist.newregistrydescription','account',null)}
+			</fieldset>
+		</form>	
+	</div><!-- END: registrycreatemessage -->
+	<isif condition="${!empty(pdict.CurrentForms.productlists.items)}">
+	<div id="registryitems" class="registryitems">
+		<h1>${Resource.msg('registrylist.registriesheader','account',null)}</h1>
+		<table class="registryresultstable" summary="${Resource.msg('registrylist.registriesheader','account',null)}">
+			<tr>
+				<th>${Resource.msg('registrylist.eventnameheader','account',null)}</th>
+				<th>${Resource.msg('registrylist.eventtypeheader','account',null)}</th>
+				<th>${Resource.msg('registrylist.dateheader','account',null)}</th>
+				<th>${Resource.msg('registrylist.locationheader','account',null)}</th>
+				<th>${Resource.msg('global.details','locale',null)}</th>
+				<th>${Resource.msg('global.delete','locale',null)}</th>				
+			</tr>
+		<isloop items="${pdict.CurrentForms.productlists.items}" var="item">
+			<tr class="${rowNaming.getName()}">
+				<td class="eventname"><isprint value="${item.object.name}"/></td>
+				<td class="eventtype"><isprint value="${item.object.eventType}"/></td>
+				<td class="eventdate"><isprint value="${item.object.eventDate}" timezone="utc"/></td>
+				<td class="eventlocation"><isprint value="${item.object.eventCity}"/>, <isprint value="${item.object.eventState}"/></td>
+				<td class="eventdetails"><a href="${URLUtils.https('GiftRegistry-ShowRegistryByID','ProductListID', item.object.UUID)}" title="${Resource.msg('global.view','locale',null)}">${Resource.msg('global.view','locale',null)}</a></td>
+				<td class="eventdelete">
+					<a class="remove" id="${item.object.ID}" alt="${Resource.msg('global.delete','locale',null)}" /><img src="${URLUtils.staticURL('/images/icon_remove.gif')}" alt="${Resource.msg('global.delete','locale',null)}" /></a>
+				</td>
+			</tr>
+		</isloop>
+		</table>
+	</div>	<!-- END: registryitems -->
+	</isif>
+	<div class="clear"><!-- FLOAT CLEAR --></div>
+</div><!-- END giftregistry -->
+
+<script type="text/javascript"><!--
+
+	jQuery(document).ready(function() {
+		jQuery(".remove").click(function() {	
+			var accepted = confirm("${Resource.msg('giftregistry.deleteregistryconfirm','account',null)}");
+			if(accepted) {
+				deleteurl = "${URLUtils.https('GiftRegistry-Delete')}";
+				deleteurl = app.util.appendParamToURL(deleteurl, "ProductListID", this.id);			
+				window.location.href = deleteurl;
+			};	
+		});	
+	});
+
+//--></script>
+</isdecorate>

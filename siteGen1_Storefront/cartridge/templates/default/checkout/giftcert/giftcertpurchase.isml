@@ -1,0 +1,263 @@
+<isdecorate template="account/pt_account">
+<isinclude template="util/modules"/>
+
+<div class="giftcertpurchase">
+
+	<iscomment>render a slot with a banner at the top of the page</iscomment>
+	<isslot id="gift-banner" description="Banner for Gift Certificate Purchase Page" context="global"/>
+
+	<div class="giftcertcolumn">
+		<p><iscontentasset aid="gift-details"/></p>
+		<div class="giftcertpurchaseform">
+			<form method="post" id="GiftCertificateForm" action="">
+				<fieldset>
+					<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.lineItemId}" type="hidden"/>
+					<isif condition="${!pdict.CurrentHttpParameterMap.plid.empty}">
+						<input type="hidden" name="plid" value="${pdict.CurrentHttpParameterMap.plid}"/>
+					</isif>
+					<div class="giftcertificatepurchaseinformation">
+						<div class="formfield from">
+							<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.from}" type="input"/>
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+							<div id="${pdict.CurrentForms.giftcert.purchase.from.htmlName}_message" class="errorform" style="display:none;"></div>
+						</div><!-- END: from -->
+						<div class="formfield recipient">
+							<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.recipient}" type="input"/>
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+							<div id="${pdict.CurrentForms.giftcert.purchase.recipient.htmlName}_message" class="errorform" style="display:none;"></div>
+						</div><!-- END: recipient -->
+						<div class="formfield recipientemail">
+							<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.recipientEmail}" type="input"/>
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+							<div id="${pdict.CurrentForms.giftcert.purchase.recipientEmail.htmlName}_message" class="errorform" style="display:none;"></div>
+						</div><!-- END: recipientemail -->
+						<div class="formfield confirmrecipientemail">
+							<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.confirmRecipientEmail}" type="input"/>
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+							<div id="${pdict.CurrentForms.giftcert.purchase.confirmRecipientEmail.htmlName}_message" class="errorform" style="display:none;"></div>
+						</div><!-- END: confirmrecipientemail -->
+						<div class="formfield message">
+							<div class="label">&nbsp;</div>
+							<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.message}" type="textarea" label="false" attribute1="rows" value1="5" attribute2="cols" value2="50"/>
+							<div class="clear"><!-- FLOAT CLEAR --></div>
+							<div id="${pdict.CurrentForms.giftcert.purchase.message.htmlName}_message" class="errorform" style="display:none;"></div>
+						</div><!-- END: message -->
+					</div><!-- END: giftcertificatepurchaseinformation -->
+
+					<div id="AddToBasketMessage" class="errorform" style="display:none;"><iscomment>Error Message Display</iscomment></div><!-- END: errorform -->
+
+					<div class="addtocartbar">
+						<table summary="Gift Certificate Amount" class="giftcertificateamounttable">
+							<tr>
+								<td>
+									<span class="amountlabel">${Resource.msg('giftcertpurchase.amount', 'checkout', null)}</span>
+									<span class="amountexample">${Resource.msg('giftcertpurchase.minimumamount', 'checkout', null)}</span>
+								</td>
+								<td>
+									<isinputfield formfield="${pdict.CurrentForms.giftcert.purchase.amount}" type="input" label="false"/>
+								</td>
+								<td>
+									<span class="amountlabel">${Resource.msg('giftcertpurchase.cents', 'checkout', null)}</span>
+									<button type="button" id="AddToBasketButton"><span><isif condition="${pdict.GiftCertificateLineItem == null}">${Resource.msg('global.addtocart', 'locale', null)}<iselse/>${Resource.msg('global.updatecart', 'locale', null)}</isif></span></button>
+								</td>
+							</tr>
+						</table>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+					</div><!-- END: addtocartbar -->
+				</fieldset>
+			</form>
+		</div><!-- END: giftcertpurchaseform -->
+		<div class="giftadditionaldetails"><iscontentasset aid="gift-additional-details"/></div><!-- END: giftadditionaldetails -->
+	</div><!-- END: giftcertcolumn -->
+	
+	<div class="giftcertcolumn">
+		<div class="giftcheckbalance"><iscontentasset aid="gift-check-balance"/></div><!-- END: giftcheckbalance -->
+		<div class="giftcheckbalanceform">
+			<form action="${URLUtils.continueURL()}" method="post" class="suppress">
+				<fieldset>
+					<isinputfield formfield="${pdict.CurrentForms.giftcert.balance.giftCertID}" type="input" label="false"/>
+					<button type="button" id="CheckBalanceButton" value="${Resource.msg('global.checkbalance', 'locale', null)}"><span>${Resource.msg('global.checkbalance', 'locale', null)}</span></button>
+				</fieldset>
+			</form>
+			<div class="balance"><!-- contains the balance information on a successful balance check --></div>
+		</div><!-- END: gift-check-balance-form -->
+	</div><!-- END: giftcertcolumn -->
+</div><!-- END: giftcertpurchase -->
+
+<script type="text/javascript"><!--
+function setGiftCertError(msg) {
+	if(!msg) {
+		jQuery(".giftcertcolumn span.errormessage").remove();
+		return;
+	}
+	jQuery("input[name=${pdict.CurrentForms.giftcert.balance.giftCertID.htmlName}]").parent().append("<span class=\"errormessage\">" + msg + "<\/span>");
+}
+
+function setGiftCertBalanceInfo(amountExpr) {
+	if(!amountExpr) {
+		jQuery(".giftcertcolumn .balance").empty();
+		return;
+	}
+	jQuery(".giftcertcolumn .balance").text("${Resource.msg('giftcert.currentbalance','checkout',null)}" + amountExpr);
+}
+
+jQuery(document).ready(function() {
+	// check balance
+  	jQuery("#CheckBalanceButton").click(function() {
+  		setGiftCertError(null);
+		setGiftCertBalanceInfo(null);
+		
+  		var giftCertID = jQuery("input[name=${pdict.CurrentForms.giftcert.balance.giftCertID.htmlName}]").val();
+  		if(!giftCertID) {
+  			setGiftCertError("${Resource.msg('giftcertpurchase.missingcode','checkout',null)}");
+  			return false;
+  		}
+  		
+		var url = app.util.appendParamToURL("${URLUtils.url('GiftCert-CheckBalance')}", "giftCertID", giftCertID);
+		var result = app.ajax.getJson({
+			url: url,
+			callback: function(data) {
+				if(!data || !data.giftCertificate) {
+					setGiftCertError("${Resource.msg('giftcertpurchase.checkinvalid','checkout',null)}");
+					return false;
+				}
+				// display details in UI
+				setGiftCertBalanceInfo(data.giftCertificate.balance);
+			}
+		});
+  	});
+
+	var invalidFormMessage = '${Resource.msg('giftcertpurchase.errorinfo', 'checkout', null)}';
+
+	// Customer profile name to prepopulate in the form
+	var profileName = '<isif condition="${pdict.CurrentCustomer.registered}"><isprint value="${pdict.CurrentCustomer.profile.firstName + ' ' + pdict.CurrentCustomer.profile.lastName}"/></isif>';
+
+	// Whether or not the form represents editing a gift certificate in the basket
+	var editing = <isif condition="${pdict.GiftCertificateLineItem == null}">false<iselse>true</isif>;
+
+	// Shows the mini cart for the gift certificate line item with the given ID
+	var showMiniCart = function(lineItemId) {
+		jQuery.ajax({
+			type : 'POST',
+			url	: '${URLUtils.url('GiftCert-ShowMiniCart')}',
+			cache : false,
+			data : {lineItemId: lineItemId},
+			success	: function(html) {
+				app.minicart.show(html);
+			},
+			error : function(html) {
+			}
+		});
+	};
+
+	// Validates the add to basket form
+	var purchaseFormValid = function() {
+		var form = jQuery('#GiftCertificateForm')[0];
+
+		var from = form['${pdict.CurrentForms.giftcert.purchase.from.htmlName}'].value;
+		if ((from == null) || (from.length == 0)) {
+			return false;
+		}
+
+		var recipient = form['${pdict.CurrentForms.giftcert.purchase.recipient.htmlName}'].value;
+		if ((recipient == null) || (recipient.length == 0)) {
+			return false;
+		}
+
+		var recipientEmail = form['${pdict.CurrentForms.giftcert.purchase.recipientEmail.htmlName}'].value;
+		if ((recipientEmail == null) || (recipientEmail.length == 0)) {
+			return false;
+		}
+
+		var amount = form['${pdict.CurrentForms.giftcert.purchase.amount.htmlName}'].value;
+		if ((amount == null) || (amount.length == 0)) {
+			return false;
+		}
+
+		return true;
+	};
+
+    // Adds a gift certificate to the cart when the button is clicked
+  	jQuery('#AddToBasketButton').click(function() {
+  		var hideErrorMessages = function() {
+  			jQuery('#AddToBasketMessage').hide();
+  			var elements = [
+  				'${pdict.CurrentForms.giftcert.purchase.from.htmlName}',
+  				'${pdict.CurrentForms.giftcert.purchase.recipient.htmlName}',
+  				'${pdict.CurrentForms.giftcert.purchase.recipientEmail.htmlName}',
+  				'${pdict.CurrentForms.giftcert.purchase.confirmRecipientEmail.htmlName}',
+  				'${pdict.CurrentForms.giftcert.purchase.message.htmlName}',
+  				'${pdict.CurrentForms.giftcert.purchase.amount.htmlName}'
+  			];
+  			for (var i = 0; i < elements.length; i++) {
+  				var messageElement = jQuery(String.fromCharCode(35) + elements[i] + '_message');
+  				messageElement.html('');
+  				messageElement.hide();
+  			}
+  		};
+
+		var showErrorMessages = function(errors) {
+			for (formElementName in errors.FormErrors) {
+				if (formElementName != '${pdict.CurrentForms.giftcert.purchase.amount.htmlName}') {
+					var messageElement = jQuery(String.fromCharCode(35) + formElementName + '_message');
+					messageElement.html(errors.FormErrors[formElementName]);
+					messageElement.show();
+				}
+			}
+
+			var messageElement = jQuery('#AddToBasketMessage');
+			var errorHtml = '';
+			for (var i = 0; i < errors.GeneralErrors; i++) {
+				errorHtml += '<' + 'div' + '>' + errors.GeneralErrors[i] + '<' + '/div' + '>';
+			}
+			var amountError = errors.FormErrors['${pdict.CurrentForms.giftcert.purchase.amount.htmlName}'];
+			if (amountError != null) {
+				errorHtml += amountError;
+			}
+			messageElement.html(errorHtml);
+			messageElement.show();
+		};
+
+  		hideErrorMessages();
+
+  		if (!purchaseFormValid()) {
+			var messageElement = jQuery('#AddToBasketMessage');
+			messageElement.html(invalidFormMessage);
+			messageElement.show();
+  			return;
+  		}
+
+		var post = jQuery('#GiftCertificateForm').serialize();
+
+	 	jQuery.ajax({
+		   type: 'POST',
+		   url: '<isif condition="${pdict.GiftCertificateLineItem == null}">${URLUtils.url('GiftCert-AddToBasket')}<iselse>${URLUtils.url('GiftCert-Update')}</isif>',
+		   data: post,
+		   dataType: 'json',
+		   success: function(data){
+		   		if (data.success === true) {
+		   			if (editing) {
+		   				document.location.href = '${URLUtils.url('Cart-Show')}';
+		   				return;
+		   			}
+
+					showMiniCart(data.result.lineItemId);
+
+					jQuery('#GiftCertificateForm')[0].reset();
+					if (profileName != null) {
+						jQuery('#GiftCertificateForm')[0]['${pdict.CurrentForms.giftcert.purchase.from.htmlName}'].value = profileName;
+					}
+				}
+				else {
+					showErrorMessages(data.errors);
+				}
+			},
+			failure: function(data) {
+				showErrorMessages(data.errors);
+			}
+		});
+  	});
+});
+//--></script>
+
+</isdecorate>

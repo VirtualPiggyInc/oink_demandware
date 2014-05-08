@@ -1,0 +1,22 @@
+<isdecorate template="account/pt_account">
+<div class="accounteditaddress">
+	<isslot id="account-banner" description="Banner for My Account pages" context="global" />
+	<h4>${Resource.msg('addresslist.header','account',null)}</h4>
+	<a class="createaddress" title="${Resource.msg('addresslist.create','account',null)}">${Resource.msg('addresslist.create','account',null)}</a>
+	<div id="address_list" class="address_list">
+		<isinclude template="account/addressbook/addressinclude"/>
+	</div><!-- END: address_list -->
+</div><!-- END: accounteditaddress -->
+<script type="text/javascript"><!--
+	jQuery(document.body).bind('dialogClosed', function(event){
+	      window.location.href = "${URLUtils.url('Address-List')}";	
+    });
+    
+    jQuery(document).ready(function() {
+		jQuery(".createaddress").click(function() {	
+			app.dialog.open('${URLUtils.url('Address-Add')}','Create Address')
+		});	
+	});
+
+//--></script>
+</isdecorate>

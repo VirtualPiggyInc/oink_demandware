@@ -1,0 +1,15 @@
+<isinclude template="util/modules"/>
+<iscomment>
+	Creates an alert for an approaching promotion.
+
+    Parameters:
+    p_approachingdiscount: ApproachingDiscount to render.
+</iscomment>
+
+<isset name="approachingdiscount" value="${pdict.p_approachingdiscount}" scope="page"/>
+<div class="approachingpromo">
+	${Resource.msg('approachingpromo.purchase','checkout',null)}<br/>
+	<isprint value="${approachingdiscount.getDistanceFromConditionThreshold()}" /> ${Resource.msg('approachingpromo.more','checkout',null)}<br/>
+	<span class="normal">${Resource.msg('approachingpromo.receive','checkout',null)}</span><br/>
+	<isprint value="${approachingdiscount.getDiscount().getPromotion().getCalloutMsg()}" />
+</div>

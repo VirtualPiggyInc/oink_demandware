@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<isinclude template="mobile/util/modules"/>
+
+<iscomment>This page must be cachable. It inherits the caching attributes by the decorated template.</iscomment>
+
+<head>
+	<iscomment>Include all important information globally , e.g. meta-data, link information, and javascript.</iscomment>
+	<isinclude template="mobile/components/header/htmlhead"/>
+
+	<iscomment>Add page specific header information here.</iscomment>
+	
+    <iscomment>Insert meta tag for the "Google-Verification" feature to verify that you are the owner of this site.</iscomment>
+    <isif condition="${'GoogleVerificationTag' in dw.system.Site.current.preferences.custom && dw.system.Site.current.preferences.custom.GoogleVerificationTag!=''}">
+        <meta name="verify-v1" content="<isprint value="${dw.system.Site.current.preferences.custom.GoogleVerificationTag}"/>" />
+    </isif>
+    
+    <isif condition="${!empty(pdict.Product.availabilityModel.availabilityStatus)&& pdict.Product.availabilityModel.availabilityStatus!= dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_NOT_AVAILABLE}">
+		<meta property="og:image" content="${pdict.Product.getImage("large",0).url.toString()}" />
+
+		<meta property="eb:id" content="${pdict.Product.variant?pdict.Product.variationModel.master.ID:pdict.Product.ID}" />
+		<isif condition="${!empty(pdict.CurrentPageMetaData.keywords)}"><meta property="eb:tags" content="${pdict.CurrentPageMetaData.keywords}" /></isif>
+		<meta property="eb:related" content="${products}" />
+		<meta property="eb:price" content="${pdict.Product.custom.priceafterdiscount.toFixed(2)}" />
+		<meta property="eb:currency" content="USD" />
+		<meta property="og:url" content="${URLUtils.http('Product-Show','pid', (pdict.Product.variant?pdict.Product.variationModel.master.ID:pdict.Product.ID))}" />
+		
+	</isif>
+		
+	<isif condition="${empty(pdict.CurrentHttpParameterMap.pid)}">
+		<link rel="canonical" href="${URLUtils.abs('Search-Show','cgid', pdict.CurrentHttpParameterMap.cgid)}" />
+	</isif>
+	
+	<link rel="stylesheet" href="${URLUtils.staticURL('/css/virtualpiggy.css')}" />
+		
+							
+	
+</head>
+<body>
+<div id="container" class="pt_mobile">
+    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaxxxxxxxxxxxxxx<isinclude template="mobile/components/header/header"/>
+    <isinclude template="mobile/search/simplesearch"/>
+    
+    <isinclude url="${URLUtils.url('mHome-IncludeHeaderMenu')}"/>
+    <p id="autohidebacktotop" style="display:none;"><a href="${'#'}">Back to top</a></p>
+    <div id="main">
+    	qqqqqqqqqqqqqqqqqqqq
+    <div id="rightcolumn">
+			aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+			<iscomment>
+				This template renders the summary of the current basket at the right hand side
+				of all checkout pages. It includes an order summary including order totals,
+				a list of all included shipments as well as the payment methods used to pay
+				the basket.
+			</iscomment>
+			
+			
+				<isset name="checkoutstep" value="${'5'}" scope="page"/>
+			
+			
+			<isif condition="${true==true}">
+				<div class="checkoutminisummary">
+			
+					<iscomment>
+					<iscontentasset aid="cs-contact-number"/>
+					</iscomment>
+					<isif condition="${checkoutstep <= 5}">
+					<div class="checkoutsummaryheader">
+						<iscomment>
+							The edit link depends on the basket content: if there is just one gift 
+							certificate in the basket the edit link leads to the gift certificate purchase page
+							offering to edit the gift certificate settings.
+						</iscomment>
+						<isset name="editUrl" value="${URLUtils.url('Cart-Show')}" scope="page"/>
+						<isif condition="${pdict.Basket.productLineItems.size() == 0 && pdict.Basket.giftCertificateLineItems.size() == 1}">
+							<isset name="editUrl" value="${URLUtils.url('GiftCert-Edit','GiftCertificateLineItemID', pdict.Basket.giftCertificateLineItems[0].UUID)}" scope="page"/>
+						</isif>
+						<a style="margin-top:-5px;" href="${editUrl}" class="gray-button"><span>${Resource.msg('global.edit','locale',null)}</span></a>
+						
+						<span>Order Summary</span>
+					</div><!-- END: checkoutsummaryheader -->
+					<div class="contentwrapper">
+					<isif condition="${checkoutstep < 5}">
+					<div class="checkoutminicart">
+						<isminilineitems p_lineitemctnr="${pdict.Basket}" p_viewid="${'minisummary'}"/>
+					</div><!-- END: check_minicart -->
+					</isif>
+				</isif>
+			
+				<iscomment>render the order totals</iscomment>
+				<div class="checkoutordertotals">
+					<isif condition="${checkoutstep > 3}">
+						<isordertotals p_lineitemctnr="${pdict.Basket}" p_showshipmentinfo="${true}" p_shipmenteditable="${false}" p_totallabel="Order Total:"/>
+					<iselse>
+						<isordertotals p_lineitemctnr="${pdict.Basket}" p_showshipmentinfo="${false}" p_shipmenteditable="${false}" p_totallabel="Estimated Total:"/>
+					</isif>
+					<div class="formactions placeorder-formactions">
+							
+									<iscomment><a href="${URLUtils.http('Cart-Show')}" class="editcart">${Resource.msg('summary.editcart','checkout',null)}</a>
+									<button class="bag-button-28-submit" type="submit" name="submit" value="${Resource.msg('global.submitorder','locale',null)}"><span>${Resource.msg('global.submitorder','locale',null)}</span></button>
+									</iscomment>
+									
+								    <button type="submit" class="bag-button-28-submit" value="${Resource.msg('vp.checkout.buttoncheckout', 'virtualpiggy', null)}" name="${pdict.CurrentForms.vpcheckout.checkout.htmlName}">
+									${Resource.msg('vp.checkout.buttoncheckout', 'virtualpiggy', null)}
+									</button>
+								
+						<div class="clear"></div><br />
+						<div  style="float: right;text-align:right;">
+							<isinclude template="components/verisign" />
+						</div>
+						<div class="clear"></div><br />
+					</div>
+		
+				</div><!-- END: checkoutordertotals -->
+			
+				<iscomment>render single shipment boxes
+				<isset name="Editable" value="${'false'}" scope="pdict"/>
+				<isif condition="${!empty(checkoutstep) && (checkoutstep > 3)}">
+					<isinclude template="checkout/shipping/minishipments"/>
+				</isif></iscomment>
+			
+				<iscomment>render billing information: billing address and payment instruments
+				<isif condition="${!empty(checkoutstep) && (checkoutstep > 4)}">
+					<isinclude template="checkout/billing/minibillinginfo"/>
+				</isif></iscomment>
+			</div>
+			</div><!-- END: checkoutminisummary -->
+			</isif>
+		</div><!-- END: rightcolumn -->
+		<div class="clear"><!-- FLOAT CLEAR --></div>
+    
+    
+    	
+		<isreplace/>
+    </div>
+    
+    
+    
+    
+    
+    <isinclude template="mobile/components/footer/footer"/>
+</div>
+
+		
+<script type="application/x-javascript">if (navigator.userAgent.indexOf('iPhone') != -1){addEventListener("load", function(){setTimeout(hideURLbar, 0);}, false);}function hideURLbar(){if (navigator.userAgent.indexOf('iPhone') != -1) window.scrollTo(0, 1);}</script>
+	
+<isinclude template="mobile/analytics/tags"/>
+</body>
+</html>

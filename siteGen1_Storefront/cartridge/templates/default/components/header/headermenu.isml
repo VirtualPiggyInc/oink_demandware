@@ -1,0 +1,52 @@
+<iscache type="relative" hour="24"/>
+
+<iscomment>
+	This template displays a 3-level category tree as top navigation.
+	Only categories marked with showInMenu are shown.
+</iscomment>
+
+<isscript>
+	// get root category of current site's navigation catalog
+	var siteCatalog = dw.catalog.CatalogMgr.getSiteCatalog();
+	var root = null;
+	if(siteCatalog!=null) {root = siteCatalog.getRoot();}
+
+	// get the "sale" category
+	var saleCategory = dw.catalog.CatalogMgr.getCategory('sale');
+</isscript>
+<isif condition="${root != null}">
+<div class="categorymenu">
+	<ul>
+		<isloop items="${root.getOnlineSubCategories()}" var="topCat">
+			<isif condition="${('showInMenu' in topCat.custom) && topCat.custom.showInMenu.valueOf()}">
+				<li><a href="${URLUtils.http('Search-Show', 'cgid', topCat.getID())}"><isprint value="${topCat.getDisplayName()}"/><!--[if IE 7]><!--></a><!--<![endif]-->
+					<!--[if lte IE 6]><table><tr><td><![endif]-->
+					<ul>
+					<isloop items="${topCat.getOnlineSubCategories()}" var="subCat">
+						<isif condition="${('showInMenu' in subCat.custom) && subCat.custom.showInMenu.valueOf()}">
+							<li><a href="${URLUtils.http('Search-Show', 'cgid', subCat.getID())}"><isprint value="${subCat.getDisplayName()}"/></a>
+							<isloop items="${subCat.getOnlineSubCategories()}" var="subCatsub">
+								<isif condition="${('showInMenu' in subCatsub.custom) && subCatsub.custom.showInMenu.valueOf()}">
+									<div class="subcategories"><a href="${URLUtils.http('Search-Show', 'cgid', subCatsub.getID())}">- <isprint value="${subCatsub.getDisplayName()}"/></a></div>
+								</isif>
+							</isloop>
+		                    </li>
+		                </isif>
+					</isloop>
+                    </ul>
+	            <!--[if lte IE 6]></td></tr></table></a><![endif]-->
+	            </li>
+	    	</isif>
+		</isloop>
+		<li>
+			<a title="${Resource.msg('global.giftcertificates','locale',null)}" href="${URLUtils.http('GiftCert-Purchase')}" class="gccatmenu">${Resource.msg('global.giftcertificates','locale',null)}</a>
+		</li>
+	<isif condition="${saleCategory != null && saleCategory.online}">
+		<li>
+			<a title="${saleCategory.displayName}" href="${URLUtils.http('Search-Show','cgid',saleCategory.ID)}" class="salecatmenu"><isprint value="${saleCategory.displayName}"/></a>
+		</li>
+	</isif>
+	</ul>
+    <div class="clear"><!-- FLOAT CLEAR --></div>
+</div><!-- END: categorymenu -->
+</isif>

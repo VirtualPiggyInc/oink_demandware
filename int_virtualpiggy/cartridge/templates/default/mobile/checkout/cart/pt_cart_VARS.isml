@@ -1,0 +1,80 @@
+<iscomment>
+	This template is being injected after the footer element (within the <body>,
+	but near the end) of the pt_cart.isml template accordingly the latest
+	SiteGenesis modifications (12.5+).
+	
+	If your solution is based on an older SiteGenesis version, the content of this
+	file should be included into the end of the /checkout/cart/cart.isml or relevant.
+</iscomment>
+
+<div id="vplogindialog" >
+	<div id="vplogindialogareaa">
+	<table border="0" >
+	<hr id="vphorizontal">
+	<tr id='vplogin' >
+		<td >
+			<span class="vplogo"><img src="${URLUtils.staticURL('/images/virtualpiggylogo.png')}"  </img></span>	
+			<form>
+			
+				<fieldset class="vptextarea">
+					<p class="titletext">${Resource.msg('vp.logindialogtext', 'virtualpiggy', null)}</p>
+					<p class="titletexttwo">${Resource.msg('vp.logindialogtexttwo', 'virtualpiggy', null)}</p>
+				 	<label for="vplogin" class="vploginname">${Resource.msg('vp.loginusernametext', 'virtualpiggy', null)}</label> 
+					<input type="text" name="vpusername" id="vpusername" class="vpusername" placeholder="${Resource.msg('vp.loginusernameplaceholder', 'virtualpiggy', null)}" />
+					<br><span id="vplogindialogerror">error</span>					
+				    <label for="vppassword" class="vploginpass">${Resource.msg('vp.loginpasswordtext', 'virtualpiggy', null)}</label>
+					<input type="password" name="vppassword" name="vppassword" id="vppassword" value="" placeholder="${Resource.msg('vp.loginpasswordplaceholder', 'virtualpiggy', null)}" />
+					<span class="linkone"><br>
+						<a href="https://users.virtualpiggy.com/login/forgotpassword" target="_blank" style="font-size:11px;color:#999;text-decoration: none;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginforgetpassword', 'virtualpiggy', null)}</a>
+					</span>
+					<span class="linktwo" ><br>
+						<a href="http://virtualpiggy.com/" target="_blank">${Resource.msg('vp.loginneedhelptext', 'virtualpiggy', null)}</a>
+					</span>					
+										
+				</fieldset>
+				</form>
+	    </td>
+	</tr>
+	<tr>
+	
+	</tr>
+	</table>
+	</div>
+	<div id="vplogindialogareab">
+	<table border="0" >
+	<tr align="center">  
+	  	<td>
+			<p  class="titleaccountone">
+				<a href="https://virtualpiggy.com/" target="_blank">${Resource.msg('vp.logindialogwhattext', 'virtualpiggy', null)}</a>
+			</p>
+			<p align="center" class="titlesafe">${Resource.msg('vp.loginsafe', 'virtualpiggy', null)}</p>			
+			<p align="center" class="titlesafetwo">${Resource.msg('vp.loginsafetwo', 'virtualpiggy', null)}
+				<a href="http://virtualpiggy.com/" target="_blank" style="font-size:11px;color:#999;font-weight: bold;font-family:" helvetica="" neue="" regular";"="">&nbsp;${Resource.msg('vp.loginlearnmore', 'virtualpiggy', null)}</a>
+			</p>	  	
+	      <br>
+
+	     </td>
+     
+     </tr>
+</table>
+</div>
+</div>
+
+<script src="${URLUtils.staticURL('/js/virtualpiggy.js')}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+<isset name="initUrl" value="${URLUtils[pdict.CurrentRequest.httpProtocol]('VirtualPiggy-InitJsLibData')}" scope="page"/>
+
+jQuery(document).ready(function() {	
+	
+	if (jQuery('#vploginbutton')) {
+		app.virtualpiggy.init('${initUrl}');
+		app.virtualpiggy.dialogLoginInit();
+		jQuery('#vploginbutton').bind('click', app.virtualpiggy.buttonShowDialogHandler);
+		jQuery('#vploginbutton').removeClass('inactive');
+	};
+
+});
+
+</script>

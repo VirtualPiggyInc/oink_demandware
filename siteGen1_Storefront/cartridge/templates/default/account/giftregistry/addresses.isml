@@ -1,0 +1,520 @@
+<isdecorate template="account/giftregistry/pt_giftregistry">
+<isinclude template="util/modules"/>
+
+<script type="text/javascript"><!--
+	jQuery(document).ready(function(){
+		jQuery("#giftRegistryTabsDiv").tabs({ selected: 2 });
+	});
+//--></script>
+
+<div id="giftregistry" class="giftregistry">
+	<isslot id="registry-header" description="Banner for Gift Registry" context="global" />
+	<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.giftregistry.htmlName}_navigation">
+		<isif condition="${pdict.ProductList != null}">
+			<isinclude template="account/giftregistry/navigation"/>
+		</isif>
+	</form>
+	<div id="giftregistryaddresses" class="giftregistryaddresses">
+	<form action="${URLUtils.httpsContinue()}" method="post" id="${pdict.CurrentForms.giftregistry.htmlName}">
+		<div class="giftregistryaddressbefore">
+			<h3>${Resource.msg('addresses.beforeheader','account',null)}</h3>
+			<p>${Resource.msg('addresses.beforemessage','account',null)}</p>
+			<div id="formaction"></div>
+			<isif condition="${pdict.CurrentCustomer.profile.addressBook.addresses.size() > 0}">
+				<div class="addresslist">
+					<div class="selectaddress">
+						<span class="selectaddressstar">*</span>
+						<span class="selectaddressmessage">${Resource.msg('global.selectaddressmessage','locale',null)}:</span>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+					</div><!-- END: selectaddress -->
+					<div class="addressbefore">
+						<select name="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeList.htmlName}">
+							<option value="${Resource.msg('global.selectaddress','locale',null)}" selected="selected">${Resource.msg('global.selectaddress','locale',null)}</option>
+							<isif condition="${pdict.CurrentCustomer.profile.addressBook.addresses.size() == 0}">
+								<option value="${Resource.msg('global.nosavedaddress','locale',null)}">${Resource.msg('global.nosavedaddress','locale',null)}</option>
+							<iselse>
+								<isloop items="${pdict.CurrentCustomer.profile.addressBook.addresses}" var="address">
+									<isif condition="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.addressid.htmlValue == address.ID}">
+										<option value="${address.ID}" selected="selected">(<isprint value="${address.ID}"/>) <isprint value="${address.address1}"/>, <isprint value="${address.city}"/>, <isprint value="${address.stateCode}"/>, <isprint value="${address.postalCode}"/></option>
+									<iselse>
+										<option value="${address.ID}">(<isprint value="${address.ID}"/>) <isprint value="${address.address1}"/>, <isprint value="${address.city}"/>, <isprint value="${address.stateCode}"/>, <isprint value="${address.postalCode}"/></option>
+									</isif>								
+								</isloop>
+							</isif>
+						</select>
+					</div><!-- END: addressbefore -->			
+				</div><!-- END: addresslist -->
+			</isif>
+			<div class="requiredcaption"><span class="requiredindicator">*</span><strong>${Resource.msg('global.requiredfield','locale',null)}</strong></div>
+			<div class="formfield">
+				<input type="hidden" name="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.addressid.htmlName}" value="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.addressid.value}"/>
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.firstname}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.lastname}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.address1}" type="input"/>
+				<span class="formfieldtooltip">(<a class="tooltip">${Resource.msg('singleshipping.apofpo','checkout',null)}<div class="tooltip-body" style="display:none"><div class="tooltipcontainer"><iscontentasset aid="apo-fpo"/></div></div></a>)</span>
+				<div class="clear"><!-- FOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.address2}" type="input"/>
+				<div class="clear"><!-- FOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country}" type="select"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield state">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state}" type="select"/>
+		    	<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateUS}" type="select" label="false"/>
+		    	<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateCA}" type="select" label="false"/>
+		    	<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateDE}" type="select" label="false"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.city}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.zip}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.phone}" type="input"/>
+		    	<span class="formfieldtooltip">(<a class="tooltip">${Resource.msg('singleshipping.phonerequired','checkout',null)}<div class="tooltip-body" style="display:none"><div class="tooltipcontainer"><iscontentasset aid="help-telephone"/></div></div></a>)</span>
+		    	<div class="tooltip-phone" style="display:none"><div class="tooltipcontainer"><iscontentasset aid="help-telephone"/></div></div>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="addaddresscontainer">
+	    		<isinputfield formfield="${pdict.CurrentForms.giftregistry.copyAddress}" type="checkbox"/>
+			</div>
+		</div><!-- END: giftregistryaddressbefore -->
+		<div class="giftregistryaddressafter">
+			<h3>${Resource.msg('addresses.postheader','account',null)}</h3>
+			<p>${Resource.msg('addresses.postmessage','account',null)}</p>
+			<isif condition="${pdict.CurrentCustomer.profile.addressBook.addresses.size() > 0}">
+				<div class="addresslist">
+					<div class="selectaddress">
+						<span class="selectaddressstar">*</span><span class="selectaddressmessage">${Resource.msg('global.selectaddressmessage','locale',null)}:</span>
+						<div class="clear"><!-- FLOAT CLEAR --></div>
+					</div><!-- END: selectaddress -->
+					<div class="addressafter">
+						<select name="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterList.htmlName}">
+							<option value="${Resource.msg('global.selectaddress','locale',null)}" selected="selected">${Resource.msg('global.selectaddress','locale',null)}</option>
+							<isif condition="${pdict.CurrentCustomer.profile.addressBook.addresses.size() == 0}">
+								<option value="${Resource.msg('global.nosavedaddress','locale',null)}">${Resource.msg('global.nosavedaddress','locale',null)}</option>
+							<iselse>
+								<isloop items="${pdict.CurrentCustomer.profile.addressBook.addresses}" var="address">														
+									<isif condition="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.addressid.htmlValue == address.ID}">
+										<option value="${address.ID}" selected="selected">(<isprint value="${address.ID}"/>) <isprint value="${address.address1}"/>, <isprint value="${address.city}"/>, <isprint value="${address.stateCode}"/>, <isprint value="${address.postalCode}"/></option>
+									<iselse>
+										<option value="${address.ID}">(<isprint value="${address.ID}"/>) <isprint value="${address.address1}"/>, <isprint value="${address.city}"/>, <isprint value="${address.stateCode}"/>, <isprint value="${address.postalCode}"/></option>
+									</isif>								
+								</isloop>
+							</isif>
+						</select>
+					</div>
+				</div><!-- END: addresslist -->
+			</isif>
+			<div class="formfield">
+				<input type="hidden" name="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.addressid.htmlName}" value="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.addressid.value}"/>
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.firstname}" type="input">
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.lastname}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address1}" type="input"/>
+				<span class="formfieldtooltip">(<a class="tooltip">${Resource.msg('singleshipping.apofpo','checkout',null)}<div class="tooltip-body" style="display:none"><div class="tooltipcontainer"><iscontentasset aid="apo-fpo"/></div></div></a>)</span>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address2}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country}" type="select"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield state">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state}" type="select"/>
+		    	<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateUS}" type="select" label="false"/>
+		    	<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateCA}" type="select" label="false"/>
+		    	<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateDE}" type="select" label="false"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.city}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.zip}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield">
+				<isinputfield formfield="${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.phone}" type="input"/>
+			    <span class="formfieldtooltip">(<a class="tooltip">${Resource.msg('singleshipping.phonerequired','checkout',null)}<div class="tooltip-body" style="display:none"><div class="tooltipcontainer"><iscontentasset aid="help-telephone"/></div></div></a>)</span>			
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+		</div><!-- END: giftregistryaddressafter -->
+		<div class="actions">
+			<isif condition="${pdict.ProductList == null}">
+				<button class="textbutton cancel" type="submit" value="&lt;&lt; ${Resource.msg('global.previous','locale',null)}" name="${pdict.CurrentForms.giftregistry.eventaddress.back.htmlName}"><span>&lt;&lt; ${Resource.msg('global.previous','locale',null)}</span></button>
+				<button type="submit" name="${pdict.CurrentForms.giftregistry.eventaddress.confirm.htmlName}" value="${Resource.msg('global.continue','locale',null)}"><span>${Resource.msg('global.continue','locale',null)}</span></button>
+			<iselse>
+				<button type="submit" name="${pdict.CurrentForms.giftregistry.eventaddress.confirm.htmlName}" value="${Resource.msg('global.apply','locale',null)}"><span>${Resource.msg('global.apply','locale',null)}</span></button>
+			</isif>
+		</div><!-- END: actions -->
+		<div style="display:none">
+			<iscomment>hide these buttons. we use via javascript to submit form during an update of an address field</iscomment>
+			<input type="submit" name="${pdict.CurrentForms.giftregistry.eventaddress.displayAfterAddress.htmlName}" />
+			<input type="submit" name="${pdict.CurrentForms.giftregistry.eventaddress.displayBeforeAddress.htmlName}" />
+		</div>
+	</form>
+	</div><!-- END: giftregistryaddresses -->
+</div><!-- END: giftregistry -->
+
+<script type="text/javascript"><!--
+
+	// updates the current address list entry with the updated address details
+	function updateAddressListEntry(addressID) {
+		// get the current address ID and load address details
+		//var addressID = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeList.htmlName}]").val();
+		var url = app.util.appendParamToURL("${URLUtils.https('Address-GetAddressDetails')}", "addressID", addressID);
+		var result = app.ajax.getJson({
+			url: url,
+			callback: function(data) {
+				if(!data || !data.address) {
+					alert("Couldn't load address");
+					return false;
+				}
+				// update the address select entry
+				var addressLine = "(" + data.address.ID + ") " + data.address.address1 + ", " + data.address.city +
+					", " + data.address.stateCode + ", " + data.address.postalCode;
+	
+				// update address list entry
+				var optionElem = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeList.htmlName}] > option[value=" + data.address.ID + "]");
+				optionElem.html(addressLine);
+				optionElem = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterList.htmlName}] > option[value=" + data.address.ID + "]");
+				optionElem.html(addressLine);
+			}
+		});
+	}
+
+	// removes the current address list entry
+	function removeAddressListEntry(addressID) {
+		// remove the option element
+		var optionElem = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeList.htmlName}] > option[value=" + addressID + "]");
+		optionElem.remove();
+		optionElem = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterList.htmlName}] > option[value=" + addressID + "]");
+		optionElem.remove();
+		// reset selection to first entry
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeList.htmlName}]")[0].selectedIndex = 0;
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterList.htmlName}]")[0].selectedIndex = 0;
+	}
+
+	// select before address from list
+	jQuery(".addressbefore select").change(function() {
+		var addressID = jQuery(this).find(":selected").val();
+		if(!addressID) return false;
+		populateBeforeAddressForm(addressID);
+		return false;
+	});
+
+	// select before address from list
+	jQuery(".addressafter select").change(function() {
+		var addressID = jQuery(this).find(":selected").val();
+		if(!addressID) return false;
+		populateAfterAddressForm(addressID);
+		return false;
+	});
+
+	// select before address from list
+	jQuery(".addressbefore input").change(function() {
+		var addressID = jQuery(this).find(":selected").val();
+		if(!addressID) return false;
+		populateBeforeAddressForm(addressID);
+		return false;
+	});
+
+	// copy after address fields if copy checked
+	jQuery(".giftregistryaddressbefore input").change(function() {
+		if (jQuery("input:checkbox[name=${pdict.CurrentForms.giftregistry.copyAddress.htmlName}]:checked").val() === "true") {
+			copyBeforeAddress();
+		}
+	});
+
+	// copy after address fields if copy checked
+	jQuery(".giftregistryaddressbefore .formfield select").change(function() {
+		if (jQuery("input:checkbox[name=${pdict.CurrentForms.giftregistry.copyAddress.htmlName}]:checked").val() === "true") {
+			copyBeforeAddress();
+		}
+	});
+
+	// bind address before country code change handler
+	jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").change(function() {
+		//updatePaymentMethods( jQuery(this).val() );
+
+		updateStateOptions( jQuery(this).val(), "addressBeforeEvent");
+		// update address before state label upon entering page
+		updateStateLabel(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val(), false, "addressBeforeEvent");
+	});
+
+	// bind address after country code change handler
+	jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").change(function() {
+		//updatePaymentMethods( jQuery(this).val() );
+	
+		updateStateOptions( jQuery(this).val(), "addressAfterEvent");
+
+		// update address after state label upon entering page
+		updateStateLabel(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(), false, "addressAfterEvent");
+	});
+
+	// updates the before address form with the attributes of a given address
+	function populateBeforeAddressForm(addressID)
+	{
+		// load address details
+		var url = "${URLUtils.https('Address-GetAddressDetails', 'addressID', '')}" + addressID;
+		var result = app.ajax.getJson({
+			url: url,
+			callback: function(data) {
+				if(!data || !data.address) {
+					alert("${Resource.msg('global.couldntloadaddress','locale',null)}");
+					return false;
+				}
+				// fill the form
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.addressid.htmlName}]").val(data.address.ID);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.firstname.htmlName}]").val(data.address.firstName);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.lastname.htmlName}]").val(data.address.lastName);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.address1.htmlName}]").val(data.address.address1);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.address2.htmlName}]").val(data.address.address2);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.city.htmlName}]").val(data.address.city);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.zip.htmlName}]").val(data.address.postalCode);
+				jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]").val(data.address.stateCode);
+				jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val(data.address.countryCode);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.phone.htmlName}]").val(data.address.phone);
+
+				updateStateOptions(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val(), "addressBeforeEvent");
+				changeFormSelection(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]")[0], data.address.stateCode);
+				updateStateLabel(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val(), false, "addressBeforeEvent");
+			}
+		});
+	}
+
+	// updates the after address form with the attributes of a given address
+	function populateAfterAddressForm(addressID)
+	{
+		// load address details
+		var url = "${URLUtils.https('Address-GetAddressDetails', 'addressID', '')}" + addressID;
+		var result = app.ajax.getJson({
+			url: url,
+			callback: function(data) {
+				if(!data || !data.address) {
+					alert("${Resource.msg('global.couldntloadaddress','locale',null)}");
+					return false;
+				}
+				// fill the form
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.addressid.htmlName}]").val(data.address.ID);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.firstname.htmlName}]").val(data.address.firstName);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.lastname.htmlName}]").val(data.address.lastName);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address1.htmlName}]").val(data.address.address1);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address2.htmlName}]").val(data.address.address2);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.city.htmlName}]").val(data.address.city);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.zip.htmlName}]").val(data.address.postalCode);
+				jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]").val(data.address.stateCode);
+				jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(data.address.countryCode);
+				jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.phone.htmlName}]").val(data.address.phone);
+
+				updateStateOptions(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(), "addressAfterEvent");
+				changeFormSelection(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]")[0], data.address.stateCode);
+				updateStateLabel(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(), false, "addressAfterEvent");
+			}
+		});
+	}
+	
+	// open the edit address dialog
+	function editAddress(editurl, addressID) {
+		if(!addressID) {
+			return false;
+		}
+		var url = app.util.appendParamToURL(editurl, "addressID", addressID);
+		app.dialog.open(url, "${Resource.msg('global.editaddress','locale',null)}");
+		app.dialog.onApply(function() {
+			updateAddressListEntry(addressID);
+			app.dialog.close();
+		});
+		app.dialog.onDelete(function() {
+			removeAddressListEntry(addressID);
+			app.dialog.close();
+		});
+	}
+
+	// copy address before fields to address after fields
+	function copyBeforeAddress() {
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterList.htmlName}]").val(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeList.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.addressid.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.addressid.htmlName}]").val());				
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.firstname.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.firstname.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.lastname.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.lastname.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address1.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.address1.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address2.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.address2.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.city.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.city.htmlName}]").val());
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]").val(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.zip.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.zip.htmlName}]").val());
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val());
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.phone.htmlName}]").val(jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.phone.htmlName}]").val());
+	}
+
+	// disable the address after fields
+	function setAfterAddressDisabled(disabled) {
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterList.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.firstname.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.lastname.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address1.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.address2.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.city.htmlName}]").attr("disabled", disabled);
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.zip.htmlName}]").attr("disabled", disabled);
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").attr("disabled", disabled);
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.phone.htmlName}]").attr("disabled", disabled);
+	}
+
+	//updates the state label depending on the given contry code
+	//if the flag updateSelection is set to true the state selection
+	//changes to the first possible select option based on the country
+	function updateStateLabel(countryCode, updateSelection, addressType) {
+
+		if (addressType === "addressBeforeEvent") {
+			state = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]";
+			stateLabel = ".giftregistryaddressbefore > div.state > .label > .labeltext";
+		}
+		else {
+			state = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]";
+			stateLabel = ".giftregistryaddressafter > div.state > .label > .labeltext";
+		}
+		
+		var label = "${Resource.msg('forms.state','forms',null)}:";
+		if(countryCode == "CA") {
+			label = "${Resource.msg('forms.province','forms',null)}:";
+		}
+
+		jQuery(stateLabel).html(label);
+
+		if(updateSelection) {
+			var initialOption = "##";
+			if(countryCode == "US") {
+				initialOption = "";
+			} else if(countryCode == "CA") {
+				initialOption = "AB";
+			}
+			changeFormSelection(jQuery(state)[0], initialOption);
+		}
+
+		if (countryCode == '') {
+			jQuery(state).attr("disabled","disabled");
+		} else {
+			jQuery(state).removeAttr("disabled");
+		}
+	}
+
+	// changes the selection of the given form select to the given value
+	function changeFormSelection(selectElem, selectedValue)
+	{
+		if(!selectElem) return;
+		var options = selectElem.options;
+		if(options.length > 0) {
+			// find index of value to select
+			var idx = 0;
+			for(var i=0; i<options.length; i++) {
+				if(options[i].value != selectedValue) continue;
+				idx = i; break;
+			}
+			selectElem.selectedIndex = idx;
+		}
+	}
+
+	//updates the options in the states field according to the selection in the country field
+	function updateStateOptions(countrySelection, addressType) {
+
+		if (addressType === "addressBeforeEvent") {
+			state = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]";
+			stateUS = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateUS.htmlName}]";
+			stateCA = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateCA.htmlName}]";
+			stateDE = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateDE.htmlName}]";
+		}
+		else {
+			state = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]";
+			stateUS = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateUS.htmlName}]";
+			stateCA = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateCA.htmlName}]";
+			stateDE = "select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateDE.htmlName}]";
+		}
+		 
+		var newOptions = null;
+		switch (countrySelection) {
+		case 'US':
+			newOptions = jQuery(stateUS).children().clone();
+			break;	
+		case 'CA':
+			newOptions = jQuery(stateCA).children().clone();
+			break;
+		case 'DE':
+			newOptions = jQuery(stateDE).children().clone();
+			break;
+		}	
+
+		if (newOptions != null) {
+			jQuery(state).children().remove();
+			jQuery(state).append(newOptions);
+			jQuery(state).removeAttr("disabled");
+		} else if (countrySelection != ''){
+			jQuery(state).children().remove();
+		}
+	}
+
+	jQuery(document).ready(function() {
+
+		// hide the state select elements
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateUS.htmlName}]").hide();
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateCA.htmlName}]").hide();
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.stateDE.htmlName}]").hide();
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateUS.htmlName}]").hide();
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateCA.htmlName}]").hide();
+		jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.stateDE.htmlName}]").hide();
+		
+		// update the state select options
+		var stateSelection = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]").val();
+		updateStateOptions(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val(), "addressBeforeEvent");
+		changeFormSelection(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.states.state.htmlName}]")[0], stateSelection);
+
+		stateSelection = jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]").val();
+		updateStateOptions(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(), "addressAfterEvent");
+		changeFormSelection(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.states.state.htmlName}]")[0], stateSelection);
+		
+		var copyAddress = jQuery("input[name=${pdict.CurrentForms.giftregistry.copyAddress.htmlName}]:checked").val();
+		if (copyAddress === "true") {
+			// fill the address after fields		
+			copyBeforeAddress();
+			setAfterAddressDisabled(true);
+		}
+		
+		jQuery("input[name=${pdict.CurrentForms.giftregistry.copyAddress.htmlName}]").click(function() {
+			if (this.checked) {
+				// fill the address after fields		
+				copyBeforeAddress();
+			}
+			setAfterAddressDisabled(this.checked);
+		});
+
+		// update address before state label upon entering page
+		updateStateLabel(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressBeforeEvent.country.htmlName}]").val(), false, "addressBeforeEvent");
+
+		// update address after state label upon entering page
+		updateStateLabel(jQuery("select[name=${pdict.CurrentForms.giftregistry.eventaddress.addressAfterEvent.country.htmlName}]").val(), false, "addressAfterEvent");
+	});
+//--></script>
+</isdecorate>

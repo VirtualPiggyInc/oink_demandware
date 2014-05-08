@@ -1,0 +1,384 @@
+<certification>
+	<cartridgeInfo>
+		<name>Virtual Piggy</name>
+		<version>1.1.0</version>
+		<implementer>astound</implementer>
+	</cartridgeInfo>
+	<certificationInfo>
+		<certificationID>117</certificationID>
+		<certifiedby>
+			Kilic Beg
+		</certifiedby>
+		<date>
+			7/26/2013
+		</date>
+		<platform>
+			<version>13.4</version>
+			<storefront>13.3</storefront>
+		</platform>
+		<usecases>
+			<usecase>
+				<description>
+					Complete checkout using Virtual Piggy Parent
+				</description>
+				<steps>
+					1.  Add a product to the cart and go to cart page
+					2.  Choose Virtual Piggy
+					3.  Complete the Virtual Piggy checkout process in the Virtual Piggy iframe
+					4.  Verify that the order is recorded correctly in the business manager
+				</steps>
+			</usecase>
+			<usecase>
+				<description>
+					Complete checkout using Virtual Piggy Chlild (below limit)
+				</description>
+				<steps>
+					1.  Add a product to the cart that is below the allowed limit for the child
+					2.  Choose Virtual Piggy
+					3.  Complete the Virtual Piggy checkout process in the Virtual Piggy iframe
+					4.  Verify that the order is recorded correctly in the business manager
+				</steps>
+			</usecase>
+
+			<usecase>
+				<description>
+					Complete checkout using Virtual Piggy Chlild (above limit)
+				</description>
+				<steps>
+					1.  Add a product to the cart that is above the allowed limit for the child
+					2.  Choose Virtual Piggy
+					3.  Complete the Virtual Piggy checkout process in the Virtual Piggy iframe
+					4.  Verify error message that not sufficient funds available
+				</steps>
+			</usecase>
+
+			<usecase>
+				<description>
+					Manual Capture placed order
+				</description>
+				<steps>
+					1.  Login to business manager 
+					2.  Make sure Manual Capture is activated in Virtual Piggy Site Preferences and the current order�s vpOrderStatus is �Authorized�. 
+					3.  Go to Ordering -> Order
+					4.  Click on Order
+					5.  Click on Payment tab of the Order
+					6.  Click on the 'Capture' button will send a request to VirtualPiggy to capture the money and will proceed with the order.
+				</steps>
+			</usecase>
+
+			<usecase>
+				<description>
+					Manual cancel placed order
+				</description>
+				<steps>
+					1.  Login to business manager 
+					2.  Make sure Manual Capture is activated in Virtual Piggy Site Preferences and the current order�s vpOrderStatus is �Authorized�. 
+					3.  Go to Ordering -> Order
+					4.  Click on Order
+					5.  Click on Payment tab of the Order
+					6.  Click on the 'Void' button will send a request to VirtualPiggy to cancel the transaction and will cancel the order.
+					7 . Verify the order status change to cancelled
+				</steps>
+			</usecase>
+			
+		</usecases>
+	</certificationInfo>
+	<contentInfo>
+		<file>
+			<hash>B8D6E494DDA141DC8AFEFDE6EDC80354</hash>
+			<name>bm_extensions.xml</name>
+		</file>
+		<file>
+			<hash>46A14D979910DB50A8DF9B925890869D</hash>
+			<name>forms\default\vpcheckout.xml</name>
+		</file>
+		<file>
+			<hash>514923BB175901265C9EDD5F1638D363</hash>
+			<name>forms\default\vpparentcheckout.xml</name>
+		</file>
+		<file>
+			<hash>75EA087EFCFD713375240EAF6764F945</hash>
+			<name>int_virtualpiggy.properties</name>
+		</file>
+		<file>
+			<hash>FB383E3D10203CC0C52F53D28B94DDCA</hash>
+			<name>pipelines\virtualpiggy.xml</name>
+		</file>
+		<file>
+			<hash>867FBC06D62D1197CE154F76164609D0</hash>
+			<name>pipelines\virtualpiggyevents.xml</name>
+		</file>
+		<file>
+			<hash>5EC12A2DFB9BC8FAC8DECE76F0660DD4</hash>
+			<name>pipelines\virtualpiggytest.xml</name>
+		</file>
+		<file>
+			<hash>CCE9640F0C721F0AD50C21722B47BDBA</hash>
+			<name>pipelines\vpcallback.xml</name>
+		</file>
+		<file>
+			<hash>6C5EB2B35132A246A16F1CCEE3B27FDC</hash>
+			<name>pipelines\vpmanualcapture.xml</name>
+		</file>
+		<file>
+			<hash>6DD14387466705CB94F972A968E88CB3</hash>
+			<name>scripts\base\soapvpwebservice.ds</name>
+		</file>
+		<file>
+			<hash>A01A95305757928567761A614CC9A03D</hash>
+			<name>scripts\prodconfig.ds</name>
+		</file>
+		<file>
+			<hash>BDB2C911328E181AB6467D22E2F76DFE</hash>
+			<name>scripts\qaconfig.ds</name>
+		</file>
+		<file>
+			<hash>3C4827636D09F4E441E8A72645EDCA02</hash>
+			<name>scripts\services\virtualpiggywebservice.ds</name>
+		</file>
+		<file>
+			<hash>FA1107F9AB837CBF187E86C50E1DB6EF</hash>
+			<name>scripts\sitegenesis\cart\validatecartforcheckout.ds</name>
+		</file>
+		<file>
+			<hash>1AF7659264E0FC3D6C232BA51CCFAECE</hash>
+			<name>scripts\vp\authorizeuser.ds</name>
+		</file>
+		<file>
+			<hash>86E508A7FEB2D8F4A6AE801719AB4B9D</hash>
+			<name>scripts\vp\converthashmaptojson.ds</name>
+		</file>
+		<file>
+			<hash>6D0A41DC02C3DDB882F17657864C58A2</hash>
+			<name>scripts\vp\createvirtualpiggypaymentinstrument.ds</name>
+		</file>
+		<file>
+			<hash>5214871B198ACD4CD418BB046A142870</hash>
+			<name>scripts\vp\getorderbyid.ds</name>
+		</file>
+		<file>
+			<hash>5FDFD97C2DFF5174E56434C209F25291</hash>
+			<name>scripts\vp\libshipping.ds</name>
+		</file>
+		<file>
+			<hash>5BEDE51620BB93B341AE4286580BF54C</hash>
+			<name>scripts\vp\libvirtualpiggy.ds</name>
+		</file>
+		<file>
+			<hash>FBB03FE8F37F7064C1ED8922B6A34BE9</hash>
+			<name>scripts\vp\libvirtualpiggytest.ds</name>
+		</file>
+		<file>
+			<hash>3F7A653FA8C5ED99B5F8969DA22D7FE2</hash>
+			<name>scripts\vp\preparecheckout.ds</name>
+		</file>
+		<file>
+			<hash>90DF5377AD2E92DDBEFBD0129C487510</hash>
+			<name>scripts\vp\preparejslibinitdata.ds</name>
+		</file>
+		<file>
+			<hash>0B99F1C218E6470580247A293928A9BC</hash>
+			<name>scripts\vp\prepareparentcheckout.ds</name>
+		</file>
+		<file>
+			<hash>AEE1F7FA27DB376F6A6E3B0D142A063B</hash>
+			<name>scripts\vp\processtransaction.ds</name>
+		</file>
+		<file>
+			<hash>5979CBFA27138AEE4FEB48C171EF588E</hash>
+			<name>scripts\vp\selecteventnodename.ds</name>
+		</file>
+		<file>
+			<hash>4FB09197CE593A03BD018730DB53D8D1</hash>
+			<name>scripts\vp\sendcapturerequest.ds</name>
+		</file>
+		<file>
+			<hash>8558552787E6E38E89AA48CA0A84E817</hash>
+			<name>scripts\vp\setchildsaddresstoshippihng.ds</name>
+		</file>
+		<file>
+			<hash>B8D3FA5B7C8296C2B6EAF82C1777B611</hash>
+			<name>scripts\vp\updateorderstatus.ds</name>
+		</file>
+		<file>
+			<hash>411CE357604CA5F16CBD1AFE15782ED6</hash>
+			<name>scripts\vp\updatepaymentinstruments.ds</name>
+		</file>
+		<file>
+			<hash>7508F6BE748C3E43F6FB769C1A3C4EE3</hash>
+			<name>scripts\vp\virtualpiggyutils.ds</name>
+		</file>
+		<file>
+			<hash>288D8825BFB7E9676C60207EF9F96381</hash>
+			<name>scripts\vp\virtualpiggywebservicetest.ds</name>
+		</file>
+		<file>
+			<hash>76AC7AA0D14D85B7C4C7C75184D6F77E</hash>
+			<name>scripts\webserviceconfigmgr.ds</name>
+		</file>
+		<file>
+			<hash>E71678EDD5FE8934286682FDA516269A</hash>
+			<name>scripts\webserviceinvoker.ds</name>
+		</file>
+		<file>
+			<hash>3FB3A7DA629E6660AF027771CA633361</hash>
+			<name>static\default\css\virtualpiggy.css</name>
+		</file>
+		<file>
+			<hash>0E365AD270639F4B8DC6C4CB5F68C5A1</hash>
+			<name>static\default\images\checkout-145x42.png</name>
+		</file>
+		<file>
+			<hash>9E45E69CB0AE7A3EFE90A7B50FAE2AD2</hash>
+			<name>static\default\js\virtualpiggy.js</name>
+		</file>
+		<file>
+			<hash>707D1AEF2930EF7ACA9D97D6C4210F9F</hash>
+			<name>templates\default\checkout\billing\paymentmethods.isml</name>
+		</file>
+		<file>
+			<hash>678B70178AF94E318F872D43046851B6</hash>
+			<name>templates\default\checkout\billing\vpminibillinginfo.isml</name>
+		</file>
+		<file>
+			<hash>BD858B1834A8B96E8B53BE8BC832D89A</hash>
+			<name>templates\default\checkout\cart\pt_cart_ui.isml</name>
+		</file>
+		<file>
+			<hash>18E8A665E618019BBDEB1FA48FB7EC28</hash>
+			<name>templates\default\checkout\cart\pt_cart_vars.isml</name>
+		</file>
+		<file>
+			<hash>F05F13529530CAE0BFFCFB339D00D2E2</hash>
+			<name>templates\default\checkout\cart\rightcolumn.isml</name>
+		</file>
+		<file>
+			<hash>F75C397FBAF9E1E52BDE9DF7E9E55B9B</hash>
+			<name>templates\default\checkout\components\minilineitems.isml</name>
+		</file>
+		<file>
+			<hash>65E832F7CEB3E48FC9BAC495DCF439C8</hash>
+			<name>templates\default\checkout\confirmaiton\vpconfirmation.isml</name>
+		</file>
+		<file>
+			<hash>E9D66974B176C9A6E8743AB94FAB1077</hash>
+			<name>templates\default\checkout\pt_checkout_ui.isml</name>
+		</file>
+		<file>
+			<hash>B96178148FC82B283B284FC4F689F35D</hash>
+			<name>templates\default\checkout\pt_vpcheckout.isml</name>
+		</file>
+		<file>
+			<hash>D86DD54B9FFFD2E8EADB77088016C42A</hash>
+			<name>templates\default\checkout\shipping\vpminishipments.isml</name>
+		</file>
+		<file>
+			<hash>5902406F79EB51FE4431D06F7D0E7575</hash>
+			<name>templates\default\checkout\virtualpiggy\checkout.isml</name>
+		</file>
+		<file>
+			<hash>6CF6A5E2C06B3680BF373B52F64EF5DB</hash>
+			<name>templates\default\checkout\virtualpiggy\childcheckout.isml</name>
+		</file>
+		<file>
+			<hash>301AA664F5B60BA7C6A5375EE8C87CBE</hash>
+			<name>templates\default\checkout\virtualpiggy\parentcheckout.isml</name>
+		</file>
+		<file>
+			<hash>659D08EA9114C88FB1D3F33BA2D537A5</hash>
+			<name>templates\default\checkout\vpminisummary.isml</name>
+		</file>
+		<file>
+			<hash>D05E5B3410F911C9FD61D26EF92ACE2C</hash>
+			<name>templates\default\components\order\ordertotals.isml</name>
+		</file>
+		<file>
+			<hash>F207661FEFF25791EECB430D078B0660</hash>
+			<name>templates\default\components\order\vporderdetails.isml</name>
+		</file>
+		<file>
+			<hash>712BDAAA7A075AF5AE0A8F95788A04E9</hash>
+			<name>templates\default\components\order\vporderdetailsemail.isml</name>
+		</file>
+		<file>
+			<hash>50D275652D651ECA9F58AB601F40BE06</hash>
+			<name>templates\default\mail\mailcallback.isml</name>
+		</file>
+		<file>
+			<hash>48B425D8E6E8D57B34DC96123A4E3CB1</hash>
+			<name>templates\default\mail\mailerror.isml</name>
+		</file>
+		<file>
+			<hash>243D62632C8C044BD2652E87374D75C7</hash>
+			<name>templates\default\mail\mailrejected.isml</name>
+		</file>
+		<file>
+			<hash>0F891570DA6630F1B1D0A80316C47D62</hash>
+			<name>templates\default\mail\vporderconfirmation.isml</name>
+		</file>
+		<file>
+			<hash>652486425729E7FC3791678837D3478D</hash>
+			<name>templates\default\manualcapture\error.isml</name>
+		</file>
+		<file>
+			<hash>FCA263AF1847EE28A50A56450459B297</hash>
+			<name>templates\default\manualcapture\noaccess.isml</name>
+		</file>
+		<file>
+			<hash>A28D5271D1CE6557AEB0388FD6C01C6C</hash>
+			<name>templates\default\manualcapture\ordercaptured.isml</name>
+		</file>
+		<file>
+			<hash>CAFFD7CED0DF0B790C53879ABACF152B</hash>
+			<name>templates\default\manualcapture\ordervoid.isml</name>
+		</file>
+		<file>
+			<hash>27E3A508B810D93D54E8C26A50A656BC</hash>
+			<name>templates\default\manualcapture\vpdialog.isml</name>
+		</file>
+		<file>
+			<hash>77D402670C7393A2EB8DCE80768A4647</hash>
+			<name>templates\default\util\vpmodules.isml</name>
+		</file>
+		<file>
+			<hash>A4D2E54A3516F2A19D564EF903A99172</hash>
+			<name>templates\default\util\_modules.isml</name>
+		</file>
+		<file>
+			<hash>35E20567DECA79E425E01BB4EE8E21D7</hash>
+			<name>templates\default\virtualpiggy\cart\loginbutton.isml</name>
+		</file>
+		<file>
+			<hash>629B3B61DD68FBFD5C0D57D5F14CFE08</hash>
+			<name>templates\default\virtualpiggy\cart\loginjs.isml</name>
+		</file>
+		<file>
+			<hash>00FB5B9321F6FE4E98B31F948310A01E</hash>
+			<name>templates\default\virtualpiggy\responsejson.isml</name>
+		</file>
+		<file>
+			<hash>34E7F3D6DCF2FEAEB63373DCFDB60FBD</hash>
+			<name>templates\default\virtualpiggy\testresult.isml</name>
+		</file>
+		<file>
+			<hash>2E6F375DD0523A518988D554A189E209</hash>
+			<name>templates\resources\forms.properties</name>
+		</file>
+		<file>
+			<hash>D54DC63FD9DBC9E97C109A4A587D6D09</hash>
+			<name>templates\resources\virtualpiggy.properties</name>
+		</file>
+		<file>
+			<hash>8110C5BACB7E4DE6E5320FBB47762900</hash>
+			<name>templates\resources\vptest.properties</name>
+		</file>
+		<file>
+			<hash>77ECBE9C44CCF0541750C83210E37E7F</hash>
+			<name>webreferences\virtualpiggy.xsd</name>
+		</file>
+		<file>
+			<hash>2047C2044E4F535FA4AC75367EBA2FAB</hash>
+			<name>webreferences\virtualpiggyservice.wsdl</name>
+		</file>
+	</contentInfo>
+</certification>

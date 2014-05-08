@@ -1,0 +1,76 @@
+<isset name="googlecheckoutstep" value="/Checkout/VP-Order-Confirmation" scope="page"/>
+
+<iscontent type="text/html" charset="UTF-8" compact="true">
+<isdecorate template="mobile/pt_mobile">
+	<isinclude template="util/modules"/>
+	<isinclude template="util/vpmodules"/>
+	<isinclude template="util/reporting/ReportOrder.isml"/>
+	
+	<isset name="GoogleAnalyticsPath" value="${URLUtils.url('Checkout-Finish')}" scope="REQUEST">
+	
+	<isinclude template="mobile/util/reporting/ReportOrder.isml">
+	
+	<isinclude template="mobile/util/modules">
+	<div id="orderconfirmation" class="mobilecontent">
+		
+		<div class="thankyoumessage">
+			<h3 class="header" style="margin-bottom:15px;">Thank you for your order</h3>
+		</div>
+		<div class="orderconfirmationdetails" style="font-size:12px;">
+			<isorderdetails order="${pdict.Order}"/>
+		</div>
+		<div class="actions">
+			<a href="${URLUtils.http('mCart-ContinueShopping').host(pdict.CurrentSession.custom.mobileHost)}">${Resource.msg('confirmation.returnshop','checkout',null)}</a>
+		</div>
+		
+		
+		<div class="clear"></div>
+		
+	</div>
+	
+	<iscomment>
+	  Commission Junction Integration 
+	  based on http://help.cj.com/downloads/tech/tech_integration_guide.pdf
+	</iscomment>
+	<isset name="CJSKUList" value="${''}" scope="page"/>
+	<isset name="CJAmtList" value="${''}" scope="page"/>
+	<isset name="CJQtyList" value="${''}" scope="page"/>
+	<isset name="CJDiscounts" value="${''}" scope="page"/>
+	<isset name="CJProdDiscounts" value="${0}" scope="page"/>
+	<isset name="CJOrderDcnt" value="${pdict.Order.merchandizeTotalNetPrice.value.toFixed(2) - pdict.Order.adjustedMerchandizeTotalNetPrice.value.toFixed(2)}" scope="page"/>
+	<isset name="CJitemcount" value="${1}" scope="page"/>
+	
+    <isloop items="${pdict.Order.allProductLineItems}" var="pli" status="orderLoop">
+    	<isif condition="${pli.productID != 'none'}">
+	 		<isset name="CJSKUList" value="${CJSKUList + 'ITEM' + CJitemcount + '=' + pli.productID  + '&'}"	scope="page"/>
+			<isset name="CJAmtList" value="${CJAmtList + 'AMT' + CJitemcount + '=' + (pli.netPrice.value.toFixed(2)/pli.quantityValue) + '&'}"	scope="page"/>
+			<isset name="CJQtyList" value="${CJQtyList + 'QTY' + CJitemcount + '=' + pli.quantityValue + '&'}"	scope="page"/>
+			<isset name="CJDiscounts" value="${CJDiscounts + 'DCNT' + CJitemcount + '=' + (pli.netPrice.value.toFixed(2) - pli.adjustedNetPrice.value.toFixed(2)) + '&'}" scope="page" />
+			<isset name="CJProdDiscounts" value="${CJProdDiscounts + (pli.netPrice.value.toFixed(2) - pli.adjustedNetPrice.value.toFixed(2))}" scope="page"/>
+			<isset name="CJitemcount" value="${CJitemcount + 1}" scope="page"/>
+		</isif>
+	</isloop>
+    <isset name="CJOrderDcnt" value="${Math.abs(CJOrderDcnt - CJProdDiscounts)}" scope="page"/>
+    <isset name="CJEnterpriseID" value="1524741" scope="page"/>
+    <isset name="CJOrderActionID" value="356935" scope="page"/> 
+    <isset name="CJCurrency" value="USD" scope="page"/> 
+
+    <img src="https://www.emjcd.com/u?CID=${CJEnterpriseID}&OID=${pdict.Order.orderNo}&TYPE=${CJOrderActionID}&<isprint value="${CJSKUList}" encoding="off"><isprint value="${CJAmtList}" encoding="off"><isprint value="${CJQtyList}" encoding="off"><isprint value="${CJDiscounts}" encoding="off">DISCOUNT=<isprint value="${CJOrderDcnt}" encoding="off"/>&CURRENCY=${CJCurrency}&METHOD=IMG" height="1" width="20"/>
+	
+	
+	<script type="text/javascript">
+	var fb_param = {};
+	fb_param.pixel_id = '6009414707943';
+	fb_param.value = '${pdict.Order.adjustedMerchandizeTotalNetPrice.value.toFixed(2)}';
+	fb_param.currency = 'USD';
+	(function(){
+	  var fpw = document.createElement('script');
+	  fpw.async = true;
+	  fpw.src = '//connect.facebook.net/en_US/fp.js';
+	  var ref = document.getElementsByTagName('script')[0];
+	  ref.parentNode.insertBefore(fpw, ref);
+	})();
+	</script>
+	<noscript><img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/offsite_event.php?id=6009414707943&amp;value=${pdict.Order.adjustedMerchandizeTotalNetPrice.value.toFixed(2)}&amp;currency=USD" /></noscript>
+
+</isdecorate>

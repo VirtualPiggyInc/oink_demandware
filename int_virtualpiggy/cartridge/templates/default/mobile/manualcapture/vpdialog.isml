@@ -1,0 +1,72 @@
+<iscomment>
+	This template renders vp capture
+</iscomment>
+<!--- TEMPLATENAME: order_paymen_dialog.isml --->
+
+<isdecorate template="application/MenuFrame">
+
+	<iscontent type="text/html" charset="UTF-8" compact="true"/>
+	<isinclude template="inc/Modules">
+	
+	<!-- Page Navigator -->
+	<isset name="TOP_URL" value="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', 'orders')}" scope="PAGE">
+	<isset name="ORDER_NAME" value="${'Order: ' + pdict.Order.getOrderNo()}" scope="PAGE" >
+	<isset name="ORDER_URL" value="${URLUtils.url('ViewOrder_52-Dispatch', 'payment', 'payment', 'OrderID', pdict.CurrentHttpParameterMap.OrderID.value)}" scope="PAGE">
+	
+	<ISBreadcrumb name1="Orders" url1="${TOP_URL}" name2="${ORDER_NAME}" url2="${ORDER_URL}" name3="Virtual Piggy">
+	
+	<div class="fielditem">
+		<br/>
+		<div id="request">
+			<form method="post">
+				<button class="button" id="vp_capture_button" type="button"><span>${Resource.msg('vp.manualcapture.capture','virtualpiggy',null)}</span></button>
+				<button class="button" id="vp_void_button" type="button"><span>${Resource.msg('vp.manualcapture.void','virtualpiggy',null)}</span></button>			
+			</form>
+		</div>
+		
+		<div id="response" style="display: none;">
+			<div id="responseText"></div>
+		</div>
+		<br/>
+		
+		<p>
+			<!-- URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId') -->
+			<button class="button" name="vp_back_button" type="button" onclick="javascript:location.href = '${URLUtils.url('ViewOrder_52-Dispatch', 'payment', 'payment', 'OrderID', pdict.CurrentHttpParameterMap.OrderID.value)}'">
+				<span>${Resource.msg('vp.manualcapture.back','virtualpiggy',null)}</span>
+			</button>
+			<!--  
+			<a href="${URLUtils.url('ViewOrder_52-Dispatch', 'payment', 'payment', 'OrderID', pdict.CurrentHttpParameterMap.OrderID.value)}">Back1</a>
+			<a href="${URLUtils.url('SiteNavigationBar-ShowMenuitemOverview', 'CurrentMenuItemId', 'orders')}">Back2</a>
+			-->
+		</p>
+	</div>
+	
+	<script type="text/javascript"><!--
+		function sendCaptureAjaxRequest(isCaptured ){
+			new Ajax.Request("${URLUtils.url('VPManualCapture-CaptureRequest')}", {
+			    method: "POST",
+			    parameters: { "orderNo" : "${pdict.Order.getOrderNo()}", "isCapture" : isCaptured},
+			    onSuccess: function(response){
+			    	var text = response.responseText || "no response text";
+					
+					$("responseText").update(text);
+					$("request").toggle();
+					$("response").toggle();
+			    },
+			    onFailure: function(){ 
+				    alert("Something went wrong...");
+				}
+			});	
+		}
+	
+		Event.observe(document.getElementById("vp_capture_button"), 'click', function(event) {
+			sendCaptureAjaxRequest(true);			
+		});
+
+		Event.observe(document.getElementById("vp_void_button"), 'click', function(event) {
+			sendCaptureAjaxRequest(false);			
+		});
+	
+	//--></script>
+	
+</isdecorate>

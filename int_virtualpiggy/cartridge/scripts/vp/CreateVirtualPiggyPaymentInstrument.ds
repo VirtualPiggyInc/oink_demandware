@@ -1,0 +1,56 @@
+/**
+ * Creates a credit card payment instrument from the given credit card form
+ * for the given basket. If any error occurs the pipelet returns PIPELET_ERROR with
+ * no payment instrument being created. If the creation succeeded the script returns 
+ * the newly created payment instrument.
+ *
+ * Only single credit card payments are allowed. Therefore any existing credit card
+ * is removed from the basket once the new credit card payment was successfully created. 
+ *
+ *  @input Basket : dw.order.Basket The basket.
+ *  -@output PaymentInstrument : dw.order.PaymentInstrument The created payment instrument.
+ */
+importPackage( dw.system );
+importPackage( dw.order );
+importPackage( dw.util );
+importPackage( dw.value );
+importPackage( dw.web );
+
+//importScript("checkout/Utils.ds");
+
+function execute( pdict : PipelineDictionary ) : Number {
+    var basket : Basket = pdict.Basket;
+
+	if (basket == null) {
+		return PIPELET_ERROR;
+	}
+
+	// remove existing credit cards from the basket
+	removeExistingPaymentInstruments( basket );
+
+	// calculate the amount to be charged for the credit card
+	//var amount = calculateNonGiftCertificateAmount( basket );
+
+	// create a payment instrument for this credit card
+	var paymentInstr : PaymentInstrument = basket.createPaymentInstrument( "VIRTUAL_PIGGY", basket.totalGrossPrice );
+
+	//pdict.PaymentInstrument = paymentInstr;
+    return PIPELET_NEXT;
+}
+
+/** 
+ * Determines if the basket already contains a payment 
+ * instruments and removes them from the basket.
+ */
+function removeExistingPaymentInstruments( basket : Basket )
+{
+	// get all payment instruments
+	var paymentInstruments : Iterator = basket.getPaymentInstruments().iterator();
+	var existingPI : OrderPaymentInstrument = null;
+
+	// remove them
+	while (paymentInstruments.hasNext()) {
+		existingPI = paymentInstruments.next();
+		basket.removePaymentInstrument( existingPI );
+	}
+}

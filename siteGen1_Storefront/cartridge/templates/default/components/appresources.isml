@@ -1,0 +1,40 @@
+<script type="text/javascript"><!--
+	//constants
+	app.constants.AVAIL_STATUS_IN_STOCK 		= "${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_IN_STOCK}";
+	app.constants.AVAIL_STATUS_PREORDER 		= "${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_PREORDER}";
+	app.constants.AVAIL_STATUS_BACKORDER 		= "${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_BACKORDER}";
+	app.constants.AVAIL_STATUS_NOT_AVAILABLE 	= "${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_NOT_AVAILABLE}";
+
+	//resources
+	app.resources["MISSINGVAL"] 		= "${Resource.msg('global.missingval','locale',null)}";
+	app.resources["SERVER_ERROR"] 		= "${Resource.msg('global.servererror','locale',null)}";
+	app.resources["MISSING_LIB"] 		= "${Resource.msg('global.missinglib','locale',null)}";
+	app.resources["BAD_RESPONSE"]		= "${Resource.msg('global.badresponse','locale',null)}";
+	app.resources["INVALID_PHONE"]		= "${Resource.msg('global.invalidphone','locale',null)}";
+	app.resources["REMOVE"]				= "${Resource.msg('global.remove','locale',null)}";
+	app.resources["QTY"]				= "${Resource.msg('global.qty','locale',null)}";
+	
+	// product availability messages
+	app.resources["${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_IN_STOCK}"] = "${StringUtils.format(Resource.msg('global.instock','locale',null))}";
+	app.resources["QTY_${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_IN_STOCK}"] = "${StringUtils.format(Resource.msg('global.quantityinstock','locale',null))}";
+	app.resources["${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_PREORDER}"] = "${StringUtils.format(Resource.msg('global.allpreorder','locale',null))}";
+	app.resources["QTY_${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_PREORDER}"] = "${StringUtils.format(Resource.msg('global.quantitypreorder','locale',null))}";
+	app.resources["REMAIN_${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_PREORDER}"] = "${StringUtils.format(Resource.msg('global.remainingpreorder','locale',null))}";
+	app.resources["${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_BACKORDER}"] = "${StringUtils.format(Resource.msg('global.allbackorder','locale',null))}";
+	app.resources["QTY_${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_BACKORDER}"] = "${StringUtils.format(Resource.msg('global.quantitybackorder','locale',null))}";
+	app.resources["REMAIN_${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_BACKORDER}"] = "${StringUtils.format(Resource.msg('global.remainingbackorder','locale',null))}";
+	app.resources["${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_NOT_AVAILABLE}"] = "${StringUtils.format(Resource.msg('global.allnotavailable','locale',null))}";
+	app.resources["REMAIN_${dw.catalog.ProductAvailabilityModel.AVAILABILITY_STATUS_NOT_AVAILABLE}"] = "${StringUtils.format(Resource.msg('global.remainingnotavailable','locale',null))}";
+	app.resources["IN_STOCK_DATE"] = "${Resource.msg('global.inStockDate','locale',null)}";
+	app.resources["NON_SELECTED"] = "${StringUtils.format(Resource.msg('global.nonSelected','locale',null))}";
+	app.resources["MISSING_VAL"] = "${StringUtils.format(Resource.msg('product.missingval','product',null))}";
+	app.resources["SIZECHART_TITLE"] = "${StringUtils.format(Resource.msg('product.sizecharttitle','product',null))}";
+	app.resources["SEND_TO_FRIEND"] = "${Resource.msg('account.sendfriend','account',null)}";
+	app.resources["MISSING_VAL"] = "${StringUtils.format(Resource.msg('product.missingval','product',null))}";
+
+	// bonus products messages
+	app.resources["BONUS_PRODUCTS"] = "${StringUtils.format(Resource.msg('product.bonusproducts','product',null))}";
+	app.resources["SELECT_BONUS_PRODUCT"] = "${StringUtils.format(Resource.msg('product.selectbonusproduct','product',null))}";
+	app.resources["BONUS_PRODUCT_MAX"] = "${StringUtils.format(Resource.msg('product.bonusproductsmax','product',null))}";
+	
+//--></script>

@@ -1,0 +1,7 @@
+<script type="text/javascript"><!--
+	jQuery(document).ready(function(){
+		jQuery('#loader').dialog('close');
+		var showurl = "${URLUtils.https('GiftRegistry-ShowRegistryByID','ProductListID',pdict.ProductList.ID)}";
+		window.location.href = showurl;
+	});
+//--></script>

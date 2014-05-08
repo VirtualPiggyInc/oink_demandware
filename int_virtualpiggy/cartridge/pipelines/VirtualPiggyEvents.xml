@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?demandware-pipeline version="2.0"?>
+
+<pipeline type="view">
+  <branch basename="_ANONYMOUS_BRANCH_1">
+    <segment>
+      <node>
+        <text-node>
+          <description>OnOrderPending - check if pending status</description>
+        </text-node>
+        <node-display x="1" y="0"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="_ANONYMOUS_BRANCH_2">
+    <segment>
+      <node>
+        <text-node>
+          <description>OnOrderAuthorize - check if autorize status</description>
+        </text-node>
+        <node-display x="3" y="0"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="OnOrderPending">
+    <segment>
+      <node>
+        <start-node call-mode="private" name="OnOrderPending" secure="false"/>
+        <node-display x="1" y="1"/>
+      </node>
+      <simple-transition/>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="true"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="vp/UpdateOrderStatus.ds"/>
+          <key-binding alias="Log" key="ScriptLog"/>
+          <key-binding alias="OrderNo" key="orderId"/>
+          <key-binding alias="&quot;PENDING_APPROVAL&quot;" key="newStatus"/>
+          <key-binding alias="false" key="cancelOrder"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+              <bend-point relative-to="target" x="0" y="-1"/>
+            </transition-display>
+          </transition>
+          <segment>
+            <node>
+              <end-node name="error"/>
+              <node-display x="1" y="1"/>
+            </node>
+          </segment>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <end-node/>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="OnOrderAuthorize">
+    <segment>
+      <node>
+        <start-node call-mode="private" name="OnOrderAuthorize" secure="false"/>
+        <node-display x="3" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="true"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="vp/UpdateOrderStatus.ds"/>
+          <key-binding alias="Log" key="ScriptLog"/>
+          <key-binding alias="OrderNo" key="orderId"/>
+          <key-binding alias="&quot;AUTHORIZED&quot;" key="newStatus"/>
+          <key-binding alias="false" key="cancelOrder"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+              <bend-point relative-to="target" x="0" y="-1"/>
+            </transition-display>
+          </transition>
+          <segment>
+            <node>
+              <end-node name="error"/>
+              <node-display x="1" y="1"/>
+            </node>
+          </segment>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <end-node/>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="_ANONYMOUS_BRANCH_5">
+    <segment>
+      <node>
+        <text-node>
+          <description>OnOrderCapture - check if captured</description>
+        </text-node>
+        <node-display x="5" y="0"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="_ANONYMOUS_BRANCH_6">
+    <segment>
+      <node>
+        <text-node>
+          <description>OnOrderVoid - check if void</description>
+        </text-node>
+        <node-display x="7" y="0"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="OnOrderCapture">
+    <segment>
+      <node>
+        <start-node call-mode="private" name="OnOrderCapture" secure="false"/>
+        <node-display x="5" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="true"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="vp/UpdateOrderStatus.ds"/>
+          <key-binding alias="Log" key="ScriptLog"/>
+          <key-binding alias="OrderNo" key="orderId"/>
+          <key-binding alias="&quot;CAPTURED&quot;" key="newStatus"/>
+          <key-binding alias="false" key="cancelOrder"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+              <bend-point relative-to="target" x="0" y="-1"/>
+            </transition-display>
+          </transition>
+          <segment>
+            <node>
+              <end-node name="error"/>
+              <node-display x="1" y="1"/>
+            </node>
+          </segment>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <end-node/>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="OnOrderVoid">
+    <segment>
+      <node>
+        <start-node call-mode="private" name="OnOrderVoid" secure="false"/>
+        <node-display x="7" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="true"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="vp/UpdateOrderStatus.ds"/>
+          <key-binding alias="Log" key="ScriptLog"/>
+          <key-binding alias="OrderNo" key="orderId"/>
+          <key-binding alias="&quot;VOIDED&quot;" key="newStatus"/>
+          <key-binding alias="true" key="cancelOrder"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in1" target-path="./b3.1">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+            </transition-display>
+          </transition>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <pipelet-node pipelet-name="CancelOrder" pipelet-set-identifier="bc_api">
+          <key-binding alias="CancelOrderStatus" key="CancelOrderStatus"/>
+          <key-binding alias="null" key="CancelCode"/>
+          <key-binding alias="null" key="CancelDescription"/>
+          <key-binding alias="Order" key="Order"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b3" source-connector="error">
+          <transition target-connector="in2"/>
+          <segment>
+            <node>
+              <join-node/>
+              <node-display x="1" y="0"/>
+            </node>
+            <simple-transition/>
+            <node>
+              <end-node name="error"/>
+              <node-display x="0" y="1"/>
+            </node>
+          </segment>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <end-node/>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="_ANONYMOUS_BRANCH_9">
+    <segment>
+      <node>
+        <text-node>
+          <description>OnOrderDecline- check if decline</description>
+        </text-node>
+        <node-display x="9" y="0"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="_ANONYMOUS_BRANCH_10">
+    <segment>
+      <node>
+        <text-node>
+          <description>OnOrderExpired - check if expired</description>
+        </text-node>
+        <node-display x="11" y="0"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="OnOrderDecline">
+    <segment>
+      <node>
+        <start-node call-mode="private" name="OnOrderDecline" secure="false"/>
+        <node-display x="9" y="1"/>
+      </node>
+      <simple-transition>
+        <transition-display>
+          <bend-point relative-to="source" x="0" y="1"/>
+        </transition-display>
+      </simple-transition>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="true"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="vp/UpdateOrderStatus.ds"/>
+          <key-binding alias="Log" key="ScriptLog"/>
+          <key-binding alias="OrderNo" key="orderId"/>
+          <key-binding alias="&quot;DECLINED&quot;" key="newStatus"/>
+          <key-binding alias="true" key="cancelOrder"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in1" target-path="./b3.1">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+            </transition-display>
+          </transition>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <pipelet-node pipelet-name="CancelOrder" pipelet-set-identifier="bc_api">
+          <key-binding alias="CancelOrderStatus" key="CancelOrderStatus"/>
+          <key-binding alias="null" key="CancelCode"/>
+          <key-binding alias="null" key="CancelDescription"/>
+          <key-binding alias="Order" key="Order"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b3" source-connector="error">
+          <transition target-connector="in2"/>
+          <segment>
+            <node>
+              <join-node/>
+              <node-display x="1" y="0"/>
+            </node>
+            <simple-transition/>
+            <node>
+              <end-node name="error"/>
+              <node-display x="0" y="1"/>
+            </node>
+          </segment>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <end-node/>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+  <branch basename="OnOrderExpired">
+    <segment>
+      <node>
+        <start-node call-mode="private" name="OnOrderExpired" secure="false"/>
+        <node-display x="11" y="1"/>
+      </node>
+      <simple-transition/>
+      <node>
+        <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+          <config-property key="Transactional" value="true"/>
+          <config-property key="OnError" value="PIPELET_ERROR"/>
+          <config-property key="ScriptFile" value="vp/UpdateOrderStatus.ds"/>
+          <key-binding alias="Log" key="ScriptLog"/>
+          <key-binding alias="OrderNo" key="orderId"/>
+          <key-binding alias="&quot;EXPIRED&quot;" key="newStatus"/>
+          <key-binding alias="true" key="cancelOrder"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b2" source-connector="error">
+          <transition target-connector="in1" target-path="./b3.1">
+            <transition-display>
+              <bend-point relative-to="source" x="2" y="0"/>
+            </transition-display>
+          </transition>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <pipelet-node pipelet-name="CancelOrder" pipelet-set-identifier="bc_api">
+          <key-binding alias="CancelOrderStatus" key="CancelOrderStatus"/>
+          <key-binding alias="null" key="CancelCode"/>
+          <key-binding alias="null" key="CancelDescription"/>
+          <key-binding alias="Order" key="Order"/>
+        </pipelet-node>
+        <node-display x="0" y="1"/>
+        <branch basename="b3" source-connector="error">
+          <transition target-connector="in2"/>
+          <segment>
+            <node>
+              <join-node/>
+              <node-display x="1" y="0"/>
+            </node>
+            <simple-transition/>
+            <node>
+              <end-node name="error"/>
+              <node-display x="0" y="1"/>
+            </node>
+          </segment>
+        </branch>
+      </node>
+      <simple-transition/>
+      <node>
+        <end-node/>
+        <node-display x="0" y="1"/>
+      </node>
+    </segment>
+  </branch>
+</pipeline>

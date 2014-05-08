@@ -1,0 +1,68 @@
+<div class="giftregistrysearchform">
+	<form action="${URLUtils.continueURL()}" method="post" id="productListSearchForm">
+		<fieldset>
+			<div class="formfield lastname">
+				<isinputfield formfield="${pdict.CurrentForms.productlists.search.registrantLastName}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formfield firstname">
+				<isinputfield formfield="${pdict.CurrentForms.productlists.search.registrantFirstName}" type="input"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>			
+			<div class="formfield event_type">
+				<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventType}" type="select"/>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>									
+			<div id="giftregistryadvanced" class="giftregistryadvanced" style="display:none;">
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventName}" type="input"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield eventmonth">
+					<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventMonth}" type="select"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield eventyear">
+					<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventYear}" type="select"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>				
+				<div class="formfield eventcity">
+					<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventCity}" type="input"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield eventstate">
+					<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventState}" type="select"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="formfield eventcountry">
+					<isinputfield formfield="${pdict.CurrentForms.productlists.search.eventCountry}" type="select"/>
+					<div class="clear"><!-- FLOAT CLEAR --></div>
+				</div>
+				<div class="clear"><!-- FLOAT CLEAR --></div>
+			</div>
+			<div class="formactions">					
+				<button type="submit" value="${Resource.msg('global.find','locale',null)}" name="${pdict.CurrentForms.productlists.search.search.htmlName}"><span>${Resource.msg('global.find','locale',null)}</span></button><br />
+				<a href="#" id="toggle_advanced">${Resource.msg('giftregistry.advanced','account',null)}</a>
+			</div><!-- END: actions -->
+
+		</fieldset>
+	</form>
+</div><!-- END: giftregistrysearchform -->
+<script type="text/javascript"><!--
+	jQuery(document).ready(function() {
+
+		jQuery('#toggle_advanced').click( function() {
+
+			if (jQuery('#toggle_advanced').html() == '${Resource.msg('giftregistry.closeadvanced','account',null)}') {
+				jQuery('#giftregistryadvanced').hide();
+				jQuery('#toggle_advanced').html('${Resource.msg('giftregistry.advanced','account',null)}');
+			}
+			else {
+				jQuery('#giftregistryadvanced').show();
+				jQuery('#toggle_advanced').html('${Resource.msg('giftregistry.closeadvanced','account',null)}');
+			}
+
+		});
+
+	});
+//--></script>

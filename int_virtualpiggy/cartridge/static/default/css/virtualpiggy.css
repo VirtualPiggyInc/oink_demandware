@@ -1,0 +1,168 @@
+hidden {
+	display: hidden;
+}
+
+a#vploginbutton {
+	cursor: pointer;
+}
+
+a#vploginbutton.inactive {
+	cursor: wait;
+}
+
+a#vploginbutton.inactive img {
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}
+#checkout-form .vploginbuttonpos {
+	position: relative;
+	top:-320px;
+	left:-170px;
+}
+.titleStuff .ui-dialog-titlebar  {
+	dispaly:none;
+    
+}
+.buttonClose {
+	width: 11px !important;
+	height: 11px !important;
+	position: relative !important;
+	top: -260px;
+	text-decoration: none !important;		
+	border: none !important;
+	padding: 0 !important;		
+	background-image:url('../images/x.png') !important;
+	left: 225px !important;
+	
+
+}
+.buttonLogin {
+	width: 98px !important;
+	height: 32px;
+	position: relative;
+	left:-370px;
+	border: none;	
+	background-image:url('../images/login.png') !important;
+	background-color:#FFFFFF;
+}
+.buttonSignup {
+	width: 105px !important;
+	height: 31px;
+	position: relative;
+	left:-50px;
+	border: none;		
+	background-image:url('../images/signup.png') !important;
+	left: 30px;
+}
+.titleaccountone {
+	width: 180px;	
+	position: relative;
+	/*top:50px;*/	
+	font-family: "open sans condensed", sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1E6FCA;
+	
+}
+
+.titleaccounttwo {
+	width: 180px;	
+	position: relative;
+	/*top:35px;*/	
+	font-family: "open sans condensed", sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1E6FCA;
+	/*margin: 1em 0;*/
+}
+
+.titlesafe {
+	width: 180px;	
+	position: relative;
+	/*top:40px;*/		
+	font-family: "open sans condensed", sans-serif;
+	font-size: 10pt;
+	color: #444;
+	line-height: 14px;	
+
+
+}
+.vpusername {
+	
+	height: 20px;
+	width: 250px;
+	font-size: 11pt;
+	color: #444;
+	padding-left: 10px;
+	padding-bottom: 0px;	
+	text-decoration: none;
+	font-family: "helvetica neue regular";
+	
+}
+.linkone {
+	position:relative;
+	top: -10px;
+	text-decoration: none;	
+    font-family: "open sans condensed", sans-serif;
+    font-weight:bold;
+
+}
+.linktwo {
+	font-weight: bold;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    width: 180px;
+    font-family: "open sans condensed", sans-serif;
+    
+	
+}
+div#vplogindialog input {
+	margin-bottom: 20px;
+
+}
+.titletext {
+    font-family: "open sans condensed", sans-serif;
+    font-size:16px;
+    font-weight:bold;
+    color:#999;
+    line-height: 25px;
+}
+
+.ui-dialog {
+	border: 1px solid black;
+}
+
+.vp-parent-checkout select {
+	width: auto;
+}
+
+#vplogindialog input[type="text"], #vplogindialog input[type="password"], #vplogindialog textarea {
+    border: 1px solid #AAAAAA;
+    margin-left: 2%;
+    padding: 0.7em 0.5em;
+    text-indent: 0;
+    width: 49.5966%;
+}
+#vplogindialog td{padding: 1em;}
+#vplogindialog a{text-decoration: none;}
+.cart-row {
+    vertical-align: top;
+}
+.cart-row td.item-total {
+    padding: 0 2px 0 0;
+    text-align: center;
+    vertical-align: top;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+    background-color:white !important;
+    border: 0px solid #D3D3D3;
+    color: #555555;
+    font-weight: normal;
+    outline: medium none;
+}
+
+#rightcolumn {
+    padding-top: 30px;
+}

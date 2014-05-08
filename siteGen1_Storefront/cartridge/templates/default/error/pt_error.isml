@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<iscomment>This page must never be cached!! This page tries to avoid having too much logic or includes to avoid any followup errors!!</iscomment>
+<head>
+	<iscomment>Include all important information globally , e.g. meta-data, link information, and javascript.</iscomment>
+	<isinclude template="components/header/htmlhead"/>
+</head>
+<body>
+<div id="container" class="pt_error">
+	<isinclude template="components/header/header"/>
+	<div id="main">
+		<div id="leftcolumn">		
+			<isinclude url="${URLUtils.url('CustomerService-LeftNav')}"/>
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+		</div><!-- END: leftcolumn -->
+		<div id="content">
+			<isreplace/>
+			<div class="clear"><!-- FLOAT CLEAR --></div>
+		</div><!-- END: content -->
+		<div class="clear"><!-- FLOAT CLEAR --></div>
+	</div><!-- END: main -->
+	<isinclude template="components/footer/footer"/>
+</div><!-- END: container -->
+</body>
+</html>

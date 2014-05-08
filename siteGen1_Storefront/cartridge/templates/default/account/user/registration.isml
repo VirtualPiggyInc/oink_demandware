@@ -1,0 +1,243 @@
+<isdecorate template="account/pt_account">
+<isinclude template="util/modules"/>
+
+<iscomment>Show any registration errors</iscomment>
+<isif condition="${pdict.RegistrationStatus != null && pdict.RegistrationStatus.error}">
+	<div class="errorform ">
+		<isif condition="${pdict.RegistrationStatus.code != null && pdict.RegistrationStatus.code=='CustomerAlreadyExistError'}">
+			${Resource.msg('registration.customerexisterror','account',null)} <a title="${Resource.msg('global.login','locale',null)}${pdict.CurrentCustomer.profile.firstName} ${pdict.CurrentCustomer.profile.lastName}" href="${URLUtils.https('Account-Show')}" class="userlogin">${Resource.msg('headercustomerinfo.pleaselogin','components',null)}</a>
+		<iselseif condition="${pdict.RegistrationStatus.code != null && pdict.BasketStatus.code=='RegistrationError'}">
+			${Resource.msg('registration.facebookregistrationerror','account',null)}		
+		</isif>
+	</div>
+</isif>
+
+<iscomment>Only enable the facebook registration if the customer isn't authenticated</iscomment>
+<isif condition="${!pdict.CurrentCustomer.authenticated}">
+	<div id="fb-root"></div>
+	<script src="https://connect.facebook.net/en_US/all.js"></script>
+	<script>
+		FB.init({
+	    	appId  : '128252567244185',
+	    	status : true, // check login status
+	    	cookie : true, // enable cookies to allow the server to access the session
+	    	xfbml  : true  // parse XFBML
+	  	});
+	
+		// Validate the phone number of the Facebook registration form.
+	 	function validate(form) {
+	  		errors = {};
+	  		phoneNumber = form.phone.replace(/\s+/g, "");
+	  
+	  		var phoneRegEx = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+	
+	  		if (form.phone == "" || phoneNumber.match(phoneRegEx) == null) {
+		  		errors.phone = "${Resource.msg('registration.invalidphone','account',null)}:";
+	  		}
+
+	  		return errors;
+		}
+			
+	</script>
+
+	<iscomment>Let the customer choice between the standard or facebook for registration</iscomment>
+	<div class="registrationselection">
+		<input type="radio" name="registration" value="newcustomerregistration" checked="checked" /> <label for="registration">New Customer</label>
+		<input type="radio" name="registration" value="facebookregistration"/> <label for="registration">Use Facebook to register</label>
+	</div>
+
+	<iscomment>Builds a registration page for the user using facebook registration plugin.</iscomment>
+	<div class="facebookregistration">
+		<fb:registration 
+			fields="[{'name':'name'},
+		 		{'name':'first_name'},
+		 		{'name':'last_name'},
+		 		{'name':'email'},
+		 		{'name':'phone','description':'Phone Number Format: 333-333-3333', 'type':'text'},
+		 		{'name':'password'}]" 
+		 	redirect-uri="${URLUtils.https('Account-Connect')}"
+		 	onvalidate="validate">
+		</fb:registration>
+	</div>
+</isif>
+<iscomment>Builds a registration page for the user. It provides all input fields for names and address</iscomment>
+<div class="registration">
+	<div class="requiredcaption">
+		<div class="label"><span class="requiredindicator">*</span><span class="requiredmessage">${Resource.msg('global.requiredfield','locale',null)}</span></div>
+		<div class="value"><!-- Empty Value Container --></div>
+		<div class="clear"><!-- FLOAT CLEAR --></div>
+	</div><!-- END: requiredcaption -->
+	<div class="registrationform">
+	<form action="${URLUtils.httpsContinue()}" method="post" id="RegistrationForm">
+		<fieldset>
+			<h4>${Resource.msg('registration.name','account',null)}</h4>
+			<div class="formfields">
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.customer.firstname}" type="input"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div><!-- END: firstname -->
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.customer.lastname}" type="input"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+			</div><!-- END: formfields -->
+			<h4>${Resource.msg('registration.logininfo','account',null)}</h4>
+			<div class="formfields">
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.customer.email}" type="input"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.customer.emailconfirm}" type="input"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.login.password}" type="password"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.login.passwordconfirm}" type="password"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+				<div class="formfield">
+					<isinputfield formfield="${pdict.CurrentForms.profile.customer.phone}" type="input"/>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+				<div class="formfield">
+					<div class="emailsignupcheckbox">
+						<isinputfield formfield="${pdict.CurrentForms.profile.customer.addtoemaillist}" type="checkbox" label="false" class="checkinput"/>
+					</div>	
+					<div class="emailsignup">
+						<span>${Resource.msg('global.email.policy','locale',null)}</span>
+						<a title="${Resource.msg('global.privacypolicy','locale',null)}" id="privacyPolicy">${Resource.msg('global.privacypolicy','locale',null)}</a>
+					</div>
+					<div class="clear"><!-- FOAT CLEAR --></div>
+				</div>
+				<div class="formactions">
+					<button type="button" onclick="submitForm();" value="${Resource.msg('global.apply','locale',null)}" name="${pdict.CurrentForms.profile.confirm.htmlName}"><span>${Resource.msg('global.apply','locale',null)}</span></button>
+				</div>
+				<div id="registrationformaction"></div>
+				<input type="hidden" name="${pdict.CurrentForms.profile.secureKeyHtmlName}" value="${pdict.CurrentForms.profile.secureKeyValue}"/>	
+			</div><!-- END: formfields -->
+		</fieldset>
+	</form>
+	</div><!-- END: registrationform -->
+</div><!-- END: registration -->
+
+<div class="privacypolicy" id="privacypolicy" style="display:none;overflow:auto;">
+	<iscontentasset aid="privacy-policy"/>
+</div>
+	
+<script type="text/javascript"><!--
+	var loginChanged = false;
+	var nameChanged = false;
+	app.URLs.submitFormURL = "${URLUtils.url('Account-UpdateName')}"
+	
+	function submitForm() {
+		// if firstname/lastname change and no other field update the data via AJAX
+		// otherwise do normal submit				
+		if (nameChanged && !loginChanged) {
+
+			if (jQuery("#RegistrationForm").validate().element( "[name=${pdict.CurrentForms.profile.customer.firstname.htmlName}]" ) && 
+					jQuery("#RegistrationForm").validate().element( "[name=${pdict.CurrentForms.profile.customer.lastname.htmlName}]" )) {
+				
+				var post = jQuery('#RegistrationForm').serialize();
+				
+		  		jQuery.ajax({
+				   type: "POST",
+				   url: app.URLs.submitFormURL,
+				   data: post,
+				   dataType: 'html',
+				   success: function(data){
+						var showurl = "${URLUtils.https('Account-Show')}";
+						window.location.href = showurl;
+				   },
+				   failure: function(data) {
+				   		alert("${Resource.msg('global.serverconnection','locale',null)}");		
+				   }
+				});
+			}
+		} else {
+			jQuery('#registrationformaction').append("<input name='${pdict.CurrentForms.profile.confirm.htmlName}' type='hidden' />");
+			jQuery("#RegistrationForm").submit();
+		}
+	}
+
+	jQuery(document).ready(function() {	
+		
+	 	jQuery('#privacypolicy').dialog({
+	 			bgiframe: true,
+				autoOpen: false,
+				modal: true,
+		    	height: 480,
+		    	width: 600,
+		    	title: '${Resource.msg('global.privacypolicy','locale',null)}',
+		    	resizable: false
+		});
+						
+		jQuery('#privacyPolicy').click( function() {
+			jQuery('#privacypolicy').show();
+			jQuery('#privacypolicy').dialog('open');
+		});
+
+		// keep track of which fields are changed, firstname/lastname are nameChanged, all others are loginChanged
+		jQuery('input').change(function(formField) {			
+	        if (formField.currentTarget.id.indexOf("${pdict.CurrentForms.profile.login.htmlName}") >= 0) {  
+	        	loginChanged = true;
+	        } else if (formField.currentTarget.id.indexOf("${pdict.CurrentForms.profile.customer.email.htmlName}") >= 0) {
+	        	loginChanged = true;
+	        } else if ((formField.currentTarget.id.indexOf("${pdict.CurrentForms.profile.customer.firstname.htmlName}") >= 0) || 
+	    	        (formField.currentTarget.id.indexOf("${pdict.CurrentForms.profile.customer.lastname.htmlName}") >= 0)) {  
+	        	nameChanged = true;    
+	        }   
+		});
+
+		// if the select box has a change set the flag
+		jQuery('select').change(function(e) {
+			loginChanged = true;
+		});
+
+		// clear out formfields that could be part of autocomplete
+	    jQuery("[name=${pdict.CurrentForms.profile.customer.emailconfirm.htmlName}]").val("");
+	    jQuery("[name=${pdict.CurrentForms.profile.login.password.htmlName}]").val("");	 
+	    jQuery("[name=${pdict.CurrentForms.profile.login.passwordconfirm.htmlName}]").val("");	
+
+	    // change the labels of the password fields in case the user is logged in
+	    if (${pdict.CurrentCustomer.registered}) {
+	    	jQuery("[name=${pdict.CurrentForms.profile.login.password.htmlName}]").parent().prev().children('.labeltext').html("${Resource.msg('label.newpassword','forms',null)}:");
+	    	jQuery("[name=${pdict.CurrentForms.profile.login.passwordconfirm.htmlName}]").parent().prev().children('.labeltext').html("${Resource.msg('profile.newpasswordconfirm','forms',null)}:");
+	    }
+
+	    // hide the facebook registration div
+	    jQuery('.facebookregistration').hide();
+    
+	 	// bind the registration selection
+	    bindRegistrationChangeHandler();
+
+	    // check for any registration errors
+	    <isif condition="${pdict.RegistrationStatus != null && pdict.RegistrationStatus.code=='CustomerAlreadyExistError'}">
+    		jQuery('.registrationselection').hide();
+	    	jQuery('.facebookregistration').hide();
+			jQuery('.registration').hide();
+	    </isif>
+	});
+
+	function bindRegistrationChangeHandler() {
+		// bind payment method change handler
+		jQuery("input[name=registration]").click(function() {
+			//var selectedID = jQuery(this).val();
+			//changePaymentMethod(selectedID);
+			registrationType = jQuery(this).val();
+
+			if (registrationType == "newcustomerregistration") {
+				jQuery('.facebookregistration').hide();
+				jQuery('.registration').show();
+			} else {
+				jQuery('.facebookregistration').show();
+				jQuery('.registration').hide();
+			}
+		});
+	}
+//--></script>
+	
+</isdecorate>

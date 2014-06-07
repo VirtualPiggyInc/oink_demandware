@@ -1,4 +1,4 @@
-﻿﻿importPackage(dw.system);
+importPackage(dw.system);
 /**
 *	This script invokes WebServcie using ConfigMgr
 *

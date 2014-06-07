@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;oink_demandware/cartridge/cartridge&apos;" deleteContents="false" description="Delete resource &apos;oink_demandware/cartridge/cartridge&apos;" element1="/oink_demandware/cartridge/cartridge" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1400012721672"/>
+</session>

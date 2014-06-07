@@ -1,0 +1,134 @@
+hidden {
+	display: hidden;
+}
+
+a#vploginbutton {
+	cursor: pointer;
+}
+
+a#vploginbutton.inactive {
+	cursor: wait;
+}
+
+a#vploginbutton.inactive img {
+	opacity:0.5;
+	filter:alpha(opacity=50);
+}
+#vploginbuttonpos {
+	position: relative;
+	top:-320px;
+	left:-170px;
+}
+.titleStuff .ui-dialog-titlebar  {
+	dispaly:none;
+    
+}
+.buttonClose {
+	width: 11px;
+	height: 11px;
+	position: relative;
+	left: 10px;
+	top: -260px;
+	text-decoration: none;		
+	border: none;		
+	background-image:url('../images/x.png');
+
+}
+.buttonLogin {
+	width: 98px;
+	height: 32px;
+	position: relative;
+	left:-230px;
+	border: none;	
+	background-image:url('../images/login.png');
+	background-color:#FFFFFF;
+}
+.buttonSignup {
+	width: 105px;
+	height: 31px;
+	position: relative;
+	left:-50px;
+	border: none;		
+	background-image:url('../images/signup.png');
+
+}
+.titleaccountone {
+	width: 180px;	
+	position: relative;
+	top:50px;	
+	font-family: "open sans condensed", sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1E6FCA;
+	//line-height: 14px;
+}
+
+.titleaccounttwo {
+	width: 180px;	
+	position: relative;
+	top:35px;	
+	font-family: "open sans condensed", sans-serif;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1E6FCA;
+	//line-height: 14px;
+}
+
+.titlesafe {
+	width: 180px;	
+	position: relative;
+	top:40px;		
+	font-family: "open sans condensed", sans-serif;
+	font-size: 10pt;
+	color: #444;
+	line-height: 14px;	
+
+
+}
+.vpusername {
+	
+	height: 20px;
+	width: 250px;
+	font-size: 11pt;
+	color: #444;
+	padding-left: 10px;
+	padding-bottom: 0px;	
+	text-decoration: none;
+	font-family: "helvetica neue regular";
+	
+}
+.linkone {
+	position:relative;
+	top: -10px;
+	text-decoration: underline;	
+    font-family: "open sans condensed", sans-serif;
+    font-weight:bold;
+
+}
+.linktwo {
+	position:relative;
+	top: 60px;
+	text-decoration: underline;
+    font-family: "open sans condensed", sans-serif;
+    font-weight:bold;
+	
+}
+div#vplogindialog input {
+	margin-bottom: 20px;
+
+}
+.titletext {
+    font-family: "open sans condensed", sans-serif;
+    font-size:16px;
+    font-weight:bold;
+    color:#999;
+    line-height: 25px;
+}
+
+.ui-dialog {
+	border: 1px solid black;
+}
+
+.vp-parent-checkout select {
+	width: auto;
+}

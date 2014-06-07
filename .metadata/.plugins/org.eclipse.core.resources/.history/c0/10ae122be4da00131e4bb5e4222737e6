@@ -1,0 +1,31 @@
+﻿importPackage(dw.system);
+
+/**
+*	This script updates ProdConfig attributes
+*
+*/
+
+function ProdConfig() {
+	return {
+		"security": {
+			"yahoo": {
+				"appid": "[yourappidhere]"
+			},
+			"default": {}			
+		},
+		"services": {
+			"PlaceFinder": {
+				"url": "http://where.yahooapis.com/geocode",
+				"timeout": 10000,
+				"retries": 0,
+				"securityKey": "yahoo"
+			},
+			"IP2Geo": {
+				"url": "http://ws.cdyne.com/ip2geo/ip2geo.asmx",
+				"timeout": 10000,
+				"retries": 1,
+				"securityKey": "default"
+			}
+		}
+	};
+};

@@ -1,0 +1,33 @@
+vp.title=Virtual Piggy
+vp.loginbuttonalt=Secure checkout for Kids with Virtual Piggy
+vp.authorize=Pay with Virtual Piggy
+vp.logindialogtitle=Login to Virtual Piggy
+vp.logindialogtext=Log in to checkout
+vp.logindialoglabellogin=User ID:
+vp.logindialoglabelpassword=Password:
+vp.logindialogbuttonlogin=Login
+vp.logindialogbuttoncancel=Cancel
+vp.loginaccounttitle1=Don't have an
+vp.loginaccounttitle2=Oink account?
+vp.loginsafe=Oink is the safe way for kids and teens to save, shop and give online.
+vp.loginforgetpassword=Forgot password?
+vp.loginlearnmore=Learn more...
+vp.checkout.buttoncheckout=Checkout
+vp.checkout.senttochildaddress=Deliver to the child's address
+vp.checkout.nochildren=No children found. Please add at least one in your Virtual Piggy account to proceed
+vp.checkout.nopaymentcards=No payment cards found. Please add at least one in your Virtual Piggy account to proceed
+vp.confirmation.thankyou.approved=Your order has been approved and will be delivered shortly
+vp.confirmation.thankyou.pendingapproval=Your order is waiting for an approval
+
+vp.globalerror.internalerror=Internal Error. Sorry for inconvenience
+vp.error.loginpasswordmandatory=Username and Password both needed
+
+vp.manualcapture.back=<< Back
+vp.manualcapture.cancel=Cancel
+vp.manualcapture.capture=Capture
+vp.manualcapture.void=Void
+
+vp.manualcapture.noaccess=This action isn't applicable for current order. 
+vp.manualcapture.error=Some error occurs
+vp.manualcapture.ordervoid=Order canceled
+vp.manualcapture.ordercaptured=Order captured with success

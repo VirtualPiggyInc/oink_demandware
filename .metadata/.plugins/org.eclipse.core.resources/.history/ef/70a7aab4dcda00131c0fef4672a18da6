@@ -1,0 +1,234 @@
+﻿/**
+*	This library is dedicated to work with SOAP only.
+*	Any public function there could perform this way:
+*		1) create a soapRequest using input parameters;
+*		2) perform a SOAP request itself;
+*		3) return general Object with data from the parsed soapResponse.
+*
+*	Any other logic is strongly prohibited there.
+*	Try to use LibVirtualPiggy.ds library for it.
+*
+*	@author Agnislav Onufrijchuk, Astound Commerce
+*	@version 1.0
+*/
+
+importPackage(dw.rpc);
+importPackage(dw.system);
+importPackage(dw.util);
+importPackage(webreferences.VirtualPiggyService);
+
+importScript("base/SoapVpWebService.ds");
+
+function VirtualPiggyWebService() {
+	var service = SoapVpWebService("VirtualPiggy");
+	
+	//
+	service._responseFields = {
+		address: ["address", "city", "country", "name", "parentEmail", "parentPhone", "state", "zip"],
+		paymentAccounts: ["identifier", "name", "type", "url"],
+		transaction: ["dataXml", "transactionIdentifier", "transactionStatus"]
+	};
+
+	service.authenticateUser = function (username, password) {
+		var soapRequest  = new AuthenticateUser(),
+			soapResponse = null;
+		
+		soapRequest.userName = username;
+		soapRequest.password = password;
+		
+		try {
+			soapResponse = this.callService("authenticateUser", soapRequest);
+			var result = this._parseResponse(soapResponse, ["userType", "token"]);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.captureTransactionByIdentifier = function (transactionID : String, isCapture : Boolean) {
+		var soapRequest  = new CaptureTransactionByIdentifier(),
+			soapResponse = null;
+		
+		soapRequest.transactionIdentifier = transactionID;
+		soapRequest.capture = isCapture;
+		
+		try {
+			soapResponse = this.callService("captureTransactionByIdentifier", soapRequest);
+			var result = this._parseResponse(soapResponse, ["transactionStatus"]);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.getAllChildren = function (parentToken : String) {
+		var soapRequest  = new GetAllChildren(),
+			soapResponse = null;
+		
+		soapRequest.token = parentToken;
+		
+		try {
+			soapResponse = this.callService("getAllChildren", soapRequest);
+			var result = this._parseArrayResponse(soapResponse, ["identifier", "name", "type"]);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.getChildAddress = function (childToken : String) {
+		var soapRequest  = new GetChildAddress(),
+			soapResponse = null;
+		
+		soapRequest.token = childToken;
+		
+		try {
+			soapResponse = this.callService("getChildAddress", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.address);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.getParentAddress = function (parentToken : String) {
+		var soapRequest  = new GetParentAddress(),
+			soapResponse = null;
+		
+		soapRequest.token = parentToken;
+		
+		try {
+			soapResponse = this.callService("getParentAddress", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.address);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.getParentChildAddress = function (parentToken : String, childID : String) {
+		var soapRequest  = new GetParentChildAddress(),
+			soapResponse = null;
+		
+		soapRequest.childIdentifier = childID;
+		soapRequest.token = parentToken;
+		
+		try {
+			soapResponse = this.callService("getParentChildAddress", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.address);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.getPaymentAccounts = function (parentToken : String) {
+		var soapRequest  = new GetPaymentAccounts(),
+			soapResponse = null;
+		
+		soapRequest.token = parentToken;
+		
+		try {
+			soapResponse = this.callService("getPaymentAccounts", soapRequest);
+			var result = this._parseArrayResponse(soapResponse, this._responseFields.paymentAccounts);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.pingHeaders = function () {
+		var soapRequest  = new PingHeaders(),
+			soapResponse = null;
+		
+		try {
+			soapResponse = this.callService("pingHeaders", soapRequest);
+			var result = this._generateSimpleStatusResponse(soapResponse);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.processParentTransaction = function (parentToken : String, checkoutXML : String, description : String,
+												 childID : String, paymentAccountID : String) {
+		var soapRequest  = new ProcessParentTransaction(),
+			soapResponse = null;
+			
+		soapRequest.token = parentToken;
+		soapRequest.checkOutData = checkoutXML;
+		soapRequest.transactionDescription = description;
+		soapRequest.childIdentifier = childID;
+		soapRequest.paymentAccountIdentifier = paymentAccountID;
+		
+		try {
+			soapResponse = this.callService("processParentTransaction", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.transaction);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service.processTransaction = function (childToken : String, checkoutXML : String, description : String) {
+		var soapRequest  = new ProcessTransaction(),
+			soapResponse = null;
+			
+		soapRequest.token = childToken;
+		soapRequest.checkOutData = checkoutXML;
+		soapRequest.transactionDescription = description;
+		
+		try {
+			soapResponse = this.callService("processTransaction", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.transaction);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
+	service._parseResponse = function (response, fields : Array) : Object {
+		var result : HashMap = new HashMap();
+		result.status = response.status;
+		result.errorMessage = response.errorMessage;
+		
+		if (fields && fields.length) {
+			for (var i in fields) {
+				var field = fields[i];
+				result[field] = response[field];
+			}
+		}
+		return result;
+	};
+	
+	service._parseArrayResponse = function (response, fields : Array) : Object {
+		var result = {
+			resultArray: []
+		};
+		
+		if (response.length) {
+			result.status = true;
+			if (fields && fields.length) {
+				for (var j in response) {
+					result.resultArray[j] = {};
+					for (var i in fields) {
+						var field = fields[i];
+						result.resultArray[j][field] = response[j][field];
+					}
+				}
+			}
+		} else {
+			result.status = false;
+		}
+			
+		return result;
+	};
+	
+	service._generateSimpleStatusResponse = function(value) {
+		return {
+				status: value
+			};
+	}
+	
+	return service;
+};

@@ -16,18 +16,29 @@
 *   @input OrderNo : String
 *   @input ChildId : String
 *   @input PaymentInputId : String
+* 	@input PaymentProcessor : Object The payment processor.
 *
 *	@output TransactionId : String
 *	@output ApprovalStatus : String
 *	@output ErrorMessage : String
+*	@output	AccountNumber : String
+*	@output	ExpirationDate : String
+*	@output	Confirmation : String
+*	@output	TestAccountNumber : String
 *
 */
 importPackage( dw.system );
 importPackage( dw.util );
+importPackage( dw.net );
+importPackage( dw.crypto );
+importPackage( dw.order );
+
 
 importScript("vp/LibVirtualPiggy.ds");
 
 var VP : Object = null;
+	
+var cipherZero : Cipher = new Cipher();
 
 function execute( args : PipelineDictionary ) : Number {
 	VP = VirtualPiggyObject();
@@ -44,22 +55,129 @@ function execute( args : PipelineDictionary ) : Number {
 	var paymentInputId : String = args.PaymentInputId;	
 	
 	var response : HashMap;
-	if(session.custom.vpUserType == "Child"){
-		response = VP.processTransaction(session.custom.vpUserToken, transactionXML, orderDescription);
-	} else {
-		response = VP.processParentTransaction(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
-	}
-	if (response.status == false || response.transactionStatus == "Error" || response.transactionStatus == "LimitExceeded" || response.transactionStatus == "Cancelled") {	
-		args.ErrorMessage = response.errorMessage;
-		if(response.transactionStatus == "Cancelled"){
-			Logger.error("Processtransaction.ds: order cancelled");
-			args.ErrorMessage = "Technical error";
+
+	try
+		{
+		if(session.custom.vpUserType == "Child"){
+			if (dw.system.Site.getCurrent().getCustomPreferenceValue("vpRecvGatewayData")){
+				response = VP.processTransactionV2(session.custom.vpUserToken, transactionXML, orderDescription);
+				Logger.debug("after processTransactionV2");
+			}
+			else {
+				response = VP.processTransaction(session.custom.vpUserToken, transactionXML, orderDescription);
+				Logger.debug("after processTransaction");
+			}
+		} else {
+			if (dw.system.Site.getCurrent().getCustomPreferenceValue("vpRecvGatewayData")){
+				response = VP.processParentTransactionV2(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
+			}
+			else {
+				response = VP.processParentTransaction(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
+			}		
 		}
-		return PIPELET_ERROR;
+		
+		if (response.status == false || response.transactionStatus == "Error" || response.transactionStatus == "LimitExceeded" || response.transactionStatus == "Cancelled") {	
+			args.ErrorMessage = response.errorMessage;
+			if(response.transactionStatus == "Cancelled"){
+				Logger.error("Processtransaction.ds: order cancelled");
+				args.ErrorMessage = "Technical error";
+			}
+			return PIPELET_ERROR;
+			}
+		}
+		catch (e) 
+        {
+            var errorTst=e.message; 
+            Logger.error(e.message);
+            return PIPELET_ERROR;
+            
+	    }
+	
+	if (dw.system.Site.getCurrent().getCustomPreferenceValue("vpRecvGatewayData")){
+		
+
+		try
+		{
+			var rsaKeyZero = dw.system.Site.current.preferences.custom.vpPrivateKey;
+			var tempCC = cipherZero.decrypt(response.accountNumber, rsaKeyZero, 'RSA', '', 0);
+			var tempExp = response.expirationDate;
+			
+			var cdexpirationDate = StringUtils.formatCalendar(response.expirationDate, "yyyy-MM-dd'T'HH:mm:ss");
+			
+			var numbersOnlyRegExpZero : RegExp = /\D/g;
+			args.AccountNumber = response.accountNumber;
+			var CCNumber = tempCC.toString().replace(numbersOnlyRegExpZero, function (strMatch, p1){return "";});
+			
+			// remove existing credit cards from the basket
+			removeExistingCreditCards( basket );
+			
+			// create a payment instrument for this credit card
+			var paymentInstr : OrderPaymentInstrument = basket.createPaymentInstrument( PaymentInstrument.METHOD_CREDIT_CARD, basket.totalGrossPrice );
+			
+			// copy the credit card details to the payment instrument
+			paymentInstr.setCreditCardHolder( "Virtual Piggy" );
+			paymentInstr.setCreditCardNumber( CCNumber );
+			paymentInstr.setCreditCardType( "VISA" );
+			var ccMM = StringUtils.formatCalendar(response.expirationDate, "MM");
+			var ccYYYY = StringUtils.formatCalendar(response.expirationDate, "yyyy");
+			paymentInstr.setCreditCardExpirationMonth(parseInt(ccMM));
+			paymentInstr.setCreditCardExpirationYear(parseInt(ccYYYY));
+			
+			paymentInstr.getPaymentTransaction().setPaymentProcessor(args.PaymentProcessor);
+			paymentInstr.paymentTransaction.amount = basket.totalGrossPrice;
+			paymentInstr.paymentTransaction.transactionID = response.confirmation;
+
+		}
+		catch (e) 
+        {
+            var errorTst=e.message; 
+            Logger.error(e.message);
+            return PIPELET_ERROR;
+            
+	    }
+		args.ExpirationDate = cdexpirationDate;
+		args.Confirmation = response.confirmation;
 	}
 	
 	args.TransactionId = response.transactionIdentifier;
 	args.ApprovalStatus = response.transactionStatus;
+				
+	
 
 	return PIPELET_NEXT;
+}
+
+function decode_base64(s) {
+    var e={},i,k,v=[],r='',w=String.fromCharCode;
+    var n=[[65,91],[97,123],[48,58],[43,44],[47,48]];
+
+    for(z in n){for(i=n[z][0];i<n[z][1];i++){v.push(w(i));}}
+    for(i=0;i<64;i++){e[v[i]]=i;}
+
+    for(i=0;i<s.length;i+=72){
+    var b=0,c,x,l=0,o=s.substring(i,i+72);
+         for(x=0;x<o.length;x++){
+                c=e[o.charAt(x)];b=(b<<6)+c;l+=6;
+                while(l>=8){r+=w((b>>>(l-=8))%256);}
+         }
+    }
+    return r;
+}
+
+
+/** 
+ * Determines if the basket already contains a credit card payment 
+ * instrument and removes it from the basket.
+ */
+function removeExistingCreditCards( basket : Basket )
+{
+	// get all payment instruments
+	var paymentInstruments : Iterator = basket.getPaymentInstruments().iterator();
+	var existingPI : OrderPaymentInstrument = null;
+
+	// remove them
+	while (paymentInstruments.hasNext()) {
+		existingPI = paymentInstruments.next();
+		basket.removePaymentInstrument( existingPI );
+	}
 }

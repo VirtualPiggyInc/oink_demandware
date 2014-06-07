@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<extensions xmlns="http://www.demandware.com/xml/bmmodules/2007-12-11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.demandware.com/xml/bmmodules/2007-12-11 bmext.xsd">
+	
+	<dialogaction id="order_extension_dialogaction" extern="true" xp_ref="xp_orders_payment">
+		<name xml:lang="x-default">Virtual Piggy</name>
+		<exec pipeline="VPManualCapture" node="Capture"/>
+		<menuactions>
+			<menuaction-ref action-id="orders_paymethods"/>
+		</menuactions>		
+	</dialogaction>	
+	
+
+</extensions>

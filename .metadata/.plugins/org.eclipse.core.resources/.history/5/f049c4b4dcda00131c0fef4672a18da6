@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!--Shopping Cart XML-->
+  <xs:element name="cart">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="cart-shipment">
+          <xs:complexType>
+            <xs:sequence>
+              <!--Tax incurred to ship the item to the child-->
+              <xs:element name="shipment-tax">
+                <xs:complexType>
+                  <xs:attribute name="total" type="xs:decimal" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <!--Cost incurred to ship the item to the child-->
+              <xs:element name="shipment-cost" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <!--Total amount of shipment cost-->
+                  <xs:attribute name="total" type="xs:decimal" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <!--Discount given on shipping the item to the child-->
+              <xs:element name="shipment-discount" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <!--Total shipment cost of the item-->
+                  <xs:attribute name="total" type="xs:decimal" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <!--Loyalty points gained on purchasing the item-->
+              <xs:element name="reward-points" minOccurs="0" maxOccurs="1" >
+                <xs:complexType>
+                  <!--Total loyalty points gained due to the purchase of the item-->
+                  <xs:attribute name="total" type="xs:decimal" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <!--Address to deliver the purchased item-->
+              <xs:element name="shipment-address" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <!--Parent Address-->
+                    <xs:element name="address" />
+                    <!--Zip code of the Parent-->
+                    <xs:element name="zip" />
+                    <!--City of the Parent-->
+                    <xs:element name="city" />
+                    <!--State which the parent belongs to-->
+                    <xs:element name="state" />
+                    <!--Country where the parent is the native of-->
+                    <xs:element name="country" minOccurs="0" maxOccurs="1" />
+                    <!--Primary Phone number of the parent of the child linked to the transaction-->
+                    <xs:element name="phone"  minOccurs="0" maxOccurs="1" />
+                    <!--Parent Name of the child-->
+                    <xs:element name="name" minOccurs="0" maxOccurs="1" />
+                    <!--The name of the child linked to the transaction-->
+                    <xs:element name="attention-of" minOccurs="0" maxOccurs="1" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <!--Item(s) details-->
+              <xs:element name="items">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="unbounded" name="item">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <!--Unique identifier of the item being purchased-->
+                          <xs:element name="item-identifier" type="xs:string" minOccurs="0" />
+                          <!--Nam of the item being purchased-->
+                          <xs:element name="item-name" type="xs:string" />
+                          <!--Description related to the item being purchased-->
+                          <xs:element name="item-description" type="xs:string" />
+                          <!--Cost of the item being purchased-->
+                          <xs:element name="item-price" type="xs:decimal" />
+                          <!--No. of items being purchased for the child-->
+                          <xs:element name="item-quantity" type="xs:int" />
+                        </xs:sequence>
+                        <!--Total price of an item-->
+                        <xs:attribute name="total" type="xs:decimal" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="total" type="xs:decimal" use="required" />
+            <!--Reference number or identifier received from the Merchant-->
+            <xs:attribute name="shipment-reference" type="xs:string" use="optional"/>
+            <!--Identifier given by the Virtual Piggy for this transaction-->
+            <xs:attribute name="transactionIdentifier" type="xs:string" use="optional"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="expirationDate" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+      <!--Currency of the cart item which has been purchased-->
+      <xs:attribute name="currency" type="xs:string" use="optional" default="USD" />
+      <!--Total amount of the cart item(s) which has been purchased after deducting the sales tax and shipping-->
+      <xs:attribute name="total" type="xs:decimal" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

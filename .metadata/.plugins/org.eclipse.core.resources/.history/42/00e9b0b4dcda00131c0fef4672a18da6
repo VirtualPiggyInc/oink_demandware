@@ -1,0 +1,71 @@
+/**
+* 	Performs the tests of the SOAP web service library and connection.
+*	It uses LibVirtualPiggyTest.ds library for all calls and logic.
+*	This file contains only methods consequences and a result representation.
+*
+*   @output TestResult : String
+*
+*/
+importPackage( dw.system );
+importPackage( dw.util );
+
+importScript("vp/LibVirtualPiggyTest.ds");
+
+var VPT							= null,
+    results 		: Array		= [],
+    functionSets	: Object	= {
+    	ping  : ["pingHeaders"],
+    	child : ["authenticateChild", "getChildAddress", "processTransaction", "captureTransactionByIdentifierCapture"],
+    	parent: ["authenticateParent", "getAllChildren", "getParentAddress", "getParentChildAddress", "getPaymentAccounts", "processParentTransaction", "captureTransactionByIdentifierVoid"]
+    };
+
+function execute( pdict : PipelineDictionary ) : Number {
+	
+	VPT = VirtualPiggyTestObject();
+	if (!VPT) {
+		return PIPELET_ERROR;
+	}
+	
+	testPingHeaders();
+	testChildCheckout();
+	testParentCheckout();
+	
+	pdict.TestResult = returnResults();
+	return PIPELET_NEXT;
+}
+
+function testPingHeaders() {
+	results.push("<li><strong>PingHeaders</strong></li>");
+	_testSet("ping");
+}
+
+function testChildCheckout() {
+	results.push("<li><strong>Child Checkout</strong></li>");
+	_testSet("child");
+}
+
+function testParentCheckout() {
+	results.push("<li><strong>Parent Checkout</strong></li>");
+	_testSet("parent");
+}
+
+/* HELPER FUNCTIONS */
+function _testSet(fSet : String){
+	for (var i in functionSets[fSet]) {
+		var funcName : String = functionSets[fSet][i];
+		var response : Object = VPT[funcName]();
+		addResult(response);
+	}
+}
+
+function addResult(result : Object) : String {
+	var resultResponse : String = result.functionName + ": ";
+	resultResponse += result.status == true ? "success" : "failure";
+	resultResponse += result.responseDetails ? ". Response details: " + result.responseDetails + "." : "";
+	resultResponse += result.errorMessage ? " (Error: " + result.errorMessage + ")" : "";
+	results.push("<li>" + resultResponse + "</li>");
+}
+
+function returnResults() {
+	return "<ul>\n" + results.join("\n") + "</ul>\n";
+}

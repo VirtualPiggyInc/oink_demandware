@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>DemandwareServer</name>
+	<comment></comment>
+	<projects>
+		<project>oink_demandware</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.demandware.studio.server.uploadBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.demandware.studio.server.serverProjectNature</nature>
+	</natures>
+</projectDescription>

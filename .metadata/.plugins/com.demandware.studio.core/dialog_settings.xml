@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="beehivePropertySheet">
+		<item value="256" key="orientation"/>
+	</section>
+	<section name="com.demandware.studio.ui.views.cartridgeView">
+		<item value="false" key="showDescription"/>
+		<item value="false" key="showResourcePart"/>
+		<section name="filters">
+			<item value="false" key="Hide Invisible Elements"/>
+			<item value="true" key="Hide Pipeline Join Nodes"/>
+			<item value="false" key="Cartridge: Show Current Cartridge Only"/>
+			<item value="true" key="Hide Simple Pipeline Transitions"/>
+			<item value="false" key="Don&apos;t expand Pipelines"/>
+			<item value="false" key="Hide Overriden Elements"/>
+		</section>
+	</section>
+	<section name="com.demandware.studio.vpmpipelineEditorOutline">
+	</section>
+</section>

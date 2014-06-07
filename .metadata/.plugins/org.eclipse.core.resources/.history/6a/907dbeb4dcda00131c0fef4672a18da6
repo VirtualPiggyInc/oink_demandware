@@ -1,0 +1,2 @@
+<!--- TEMPLATENAME: error.isml --->
+<p>${Resource.msg('vp.manualcapture.error','virtualpiggy',null)}</p>

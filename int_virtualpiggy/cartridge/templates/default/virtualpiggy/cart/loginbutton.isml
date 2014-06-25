@@ -6,9 +6,6 @@
 
 <isset name="paymentMethodVirtualPiggy" value="${dw.order.PaymentMgr.getPaymentMethod('VIRTUAL_PIGGY')}" scope="page"/>
 
-<isprint value="${paymentMethods}"/>
-<isprint value="${vpPaymentMethods}"/>
-
 <isif condition="${!empty(paymentMethodVirtualPiggy) && paymentMethodVirtualPiggy.isActive()}">
 
 		<iscomment>

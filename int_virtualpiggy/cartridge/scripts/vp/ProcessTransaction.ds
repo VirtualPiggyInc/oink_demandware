@@ -120,8 +120,8 @@ function execute( args : PipelineDictionary ) : Number {
 			paymentInstr.setCreditCardType( "VISA" );
 			var ccMM = StringUtils.formatCalendar(response.expirationDate, "MM");
 			var ccYYYY = StringUtils.formatCalendar(response.expirationDate, "yyyy");
-			paymentInstr.setCreditCardExpirationMonth(parseInt(ccMM));
-			paymentInstr.setCreditCardExpirationYear(parseInt(ccYYYY));
+			paymentInstr.setCreditCardExpirationMonth(parseInt(ccMM,10));
+			paymentInstr.setCreditCardExpirationYear(parseInt(ccYYYY,10));
 			
 			paymentInstr.getPaymentTransaction().setPaymentProcessor(args.PaymentProcessor);
 			paymentInstr.paymentTransaction.amount = basket.totalGrossPrice;

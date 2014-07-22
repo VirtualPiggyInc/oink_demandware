@@ -5,6 +5,7 @@
 *	@version 1.0
 *   @input Basket : dw.order.Basket
 *   @input IsChild : Boolean
+*	@output response: dw.util.HashMap
 *
 */
 importPackage( dw.order );
@@ -32,12 +33,20 @@ function execute( args : PipelineDictionary ) : Number {
 		address = VP.getParentAddress(session.custom.vpUserToken);
 	}
 	
-	var shippingMethodID : String = VP.utils.getShippingMethodID();
-	var result : Number = prepareShipment(basket, address, shippingMethodID);
-	
-	session.custom.vpManualCapture = VP.utils.isManualCapture();
-	
-	return result;
+	if (address.status)
+	{	
+		var shippingMethodID : String = VP.utils.getShippingMethodID();
+		var result : Number = prepareShipment(basket, address, shippingMethodID);
+		
+		session.custom.vpManualCapture = VP.utils.isManualCapture();
+		
+		return result;
+	}
+	else
+	{
+		args.response = address;
+		return PIPELET_ERROR;
+	}
 }
 
 function prepareShipment(basket : Basket, address : HashMap, shippingMethodID : String) {

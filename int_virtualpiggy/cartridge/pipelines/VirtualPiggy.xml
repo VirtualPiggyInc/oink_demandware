@@ -118,22 +118,15 @@
         </pipelet-node>
         <node-display x="0" y="1"/>
         <branch basename="b2" source-connector="error">
-          <transition target-connector="in2" target-path="./+1"/>
+          <transition target-connector="in" target-path="."/>
         </branch>
-      </node>
-      <transition target-connector="in1" target-path="./+1"/>
-    </segment>
-    <segment>
-      <node>
-        <join-node/>
-        <node-display x="0" y="1"/>
       </node>
       <simple-transition/>
       <node>
         <interaction-node transaction-required="false">
           <template buffered="true" dynamic="false" name="virtualpiggy/responsejson"/>
         </interaction-node>
-        <node-display x="0" y="1"/>
+        <node-display x="0" y="2"/>
       </node>
     </segment>
   </branch>
@@ -285,6 +278,7 @@
                 <config-property key="ScriptFile" value="vp/PrepareCheckout.ds"/>
                 <key-binding alias="Log" key="ScriptLog"/>
                 <key-binding alias="ShippingAddress" key="ShippingAddress"/>
+                <key-binding alias="response" key="response"/>
                 <key-binding alias="Basket" key="Basket"/>
                 <key-binding alias="IsChild" key="IsChild"/>
               </pipelet-node>
@@ -322,26 +316,22 @@
                     </pipelet-node>
                     <node-display orientation="horizontal" x="1" y="0"/>
                   </node>
-                  <transition target-connector="in1" target-path="../+1">
+                  <simple-transition>
                     <transition-display>
                       <bend-point relative-to="source" x="1" y="0"/>
-                      <bend-point relative-to="source" x="1" y="2"/>
                     </transition-display>
-                  </transition>
+                  </simple-transition>
+                  <node>
+                    <jump-node start-name-ref="Cart-Show"/>
+                    <node-display orientation="horizontal" x="1" y="0"/>
+                  </node>
                 </segment>
               </branch>
-            </node>
-            <transition target-connector="in1" target-path="./+1"/>
-          </segment>
-          <segment>
-            <node>
-              <join-node/>
-              <node-display x="0" y="1"/>
             </node>
             <simple-transition/>
             <node>
               <call-node start-name-ref="Cart-Calculate"/>
-              <node-display x="0" y="1"/>
+              <node-display x="0" y="2"/>
             </node>
             <simple-transition>
               <transition-display>
@@ -358,7 +348,7 @@
                 <key-binding alias="true" key="VirtualPiggyCheckout"/>
               </pipelet-node>
               <node-display x="0" y="1"/>
-              <branch basename="b2" source-connector="error">
+              <branch basename="b3" source-connector="error">
                 <transition target-connector="in2" target-path="./+1">
                   <transition-display>
                     <bend-point relative-to="source" x="1" y="0"/>

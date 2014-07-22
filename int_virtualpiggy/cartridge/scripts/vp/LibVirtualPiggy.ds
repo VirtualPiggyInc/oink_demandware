@@ -87,7 +87,10 @@ function VirtualPiggyObject() {
 			response.status = response.status == "Success" ? true : false;
 			return response;
 		} catch(e) {
-			return this.utils.catchTheException(e);
+			var response : HashMap = new HashMap();
+			response.status = false;
+			response.errorMessage = e.javaMessage;
+			return response;
 		}
 	};
 	

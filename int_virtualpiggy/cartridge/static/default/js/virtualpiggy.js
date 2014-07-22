@@ -33,8 +33,8 @@
 						}
 					});
 					$('.ui-dialog-buttonpane').find('button:contains("Login")').addClass('buttonLogin').text('');
-					$('.ui-dialog-buttonpane').find('button:contains("Signup")').addClass('buttonSignup').text('');;
-					$('.ui-dialog-buttonpane').find('button:contains("Close")').addClass('buttonClose').text('');;					
+					$('.ui-dialog-buttonpane').find('button:contains("Signup")').addClass('buttonSignup').text('');
+					$('.ui-dialog-buttonpane').find('button:contains("Close")').addClass('buttonClose').text('');
 					$('#vplogindialog').css('overflow', 'hidden'); 					
 				},
 				close: function () {

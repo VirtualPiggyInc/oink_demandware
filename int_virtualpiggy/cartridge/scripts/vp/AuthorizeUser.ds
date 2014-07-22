@@ -32,6 +32,26 @@ function execute( args : PipelineDictionary ) : Number {
 	response = VP.authenticateUser(args.username, args.password);
 
 	args.response = response;
+	
+	if(response.status)
+	{
+		if (!VP || VP == null) {
+			return PIPELET_ERROR;
+		}
+	
+		var address : HashMap;
+		
+		if(response.userType == "Child"){
+			address = VP.getChildAddress(response.token);
+		} else {
+			address = VP.getParentAddress(response.token);
+		}
+		
+		if (!address.status)
+		{
+			args.response = address;
+		}
+	}
 	return response.status == true ? PIPELET_NEXT : PIPELET_ERROR;
 }
 

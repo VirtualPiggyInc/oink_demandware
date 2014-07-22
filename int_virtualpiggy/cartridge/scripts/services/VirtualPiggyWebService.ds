@@ -230,7 +230,7 @@ function VirtualPiggyWebService() {
 		result.status = response.status;
 		result.errorMessage = response.errorMessage;
 		
-		if (fields && fields.length) {
+		if (fields && fields.length && result.status) {
 			for (var i in fields) {
 				var field = fields[i];
 				if(field == 'cardData'){

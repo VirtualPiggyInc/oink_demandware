@@ -26,9 +26,9 @@ a#vploginbutton.inactive img {
 .buttonClose {
 	width: 11px;
 	height: 11px;
-	position: relative;
-	left: 10px;
-	top: -260px;
+	position: absolute;
+	left: 590px;
+	top: 0px;
 	text-decoration: none;		
 	border: none;		
 	background-image:url('../images/x.png');
@@ -85,6 +85,15 @@ a#vploginbutton.inactive img {
 
 
 }
+
+span#vplogindialogerror {
+	text-align: left;
+	width: 250px;
+	position: relative;
+	margin: 0 0 5% 1%;
+	left: 30px;
+}
+
 .vpusername {
 	
 	height: 20px;
@@ -112,6 +121,9 @@ a#vploginbutton.inactive img {
     font-family: "open sans condensed", sans-serif;
     font-weight:bold;
 	
+}
+div#vplogindialog{
+	display: inline !important;
 }
 div#vplogindialog input {
 	margin-bottom: 20px;

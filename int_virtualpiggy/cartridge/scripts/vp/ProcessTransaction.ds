@@ -86,8 +86,7 @@ function execute( args : PipelineDictionary ) : Number {
 			}
 		}
 		catch (e) 
-        {
-            var errorTst=e.message; 
+        { 
             Logger.error(e.message);
             return PIPELET_ERROR;
             

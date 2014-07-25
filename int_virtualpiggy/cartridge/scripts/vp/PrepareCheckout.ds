@@ -76,7 +76,8 @@ function prepareShipment(basket : Basket, address : HashMap, shippingMethodID : 
 
 function prepareShippingAddress(basket : Basket, address : HashMap) {
 	var shippingAddress : OrderAddress = basket.defaultShipment.createShippingAddress();
-	shippingAddress.setFirstName( address.name );
+	shippingAddress.setFirstName( address.firstName );
+	shippingAddress.setLastName( address.lastName );
 	shippingAddress.setAddress1( address.address );
 	shippingAddress.setCity( address.city );
 	shippingAddress.setPostalCode( address.zip );
@@ -87,7 +88,8 @@ function prepareShippingAddress(basket : Basket, address : HashMap) {
 	//shippingAddress.copyTo( basket.billingAddress );
 	
 	var billingAddress : OrderAddress = basket.billingAddress;
-	billingAddress.setFirstName( address.name );
+	billingAddress.setFirstName( address.firstName );
+	billingAddress.setLastName( address.lastName );
 	billingAddress.setAddress1( address.address );
 	billingAddress.setCity( address.city );
 	billingAddress.setPostalCode( address.zip );

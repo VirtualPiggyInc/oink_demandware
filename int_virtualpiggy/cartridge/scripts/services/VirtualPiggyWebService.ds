@@ -24,7 +24,7 @@ function VirtualPiggyWebService() {
 	
 	//
 	service._responseFields = {
-		address: ["address", "city", "country", "name", "parentEmail", "parentPhone", "state", "zip"],
+		address: ["address", "city", "country", "name", "firstName", "lastName", "parentEmail", "parentPhone", "state", "zip"],
 		paymentAccounts: ["identifier", "name", "type", "url"],
 		transaction: ["dataXml", "transactionIdentifier", "transactionStatus"],
 		transactionV2: ["cardData", "confirmation", "dataXml", "transactionIdentifier", "transactionStatus"]

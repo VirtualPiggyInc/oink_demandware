@@ -116,7 +116,7 @@ function execute( args : PipelineDictionary ) : Number {
 			// copy the credit card details to the payment instrument
 			paymentInstr.setCreditCardHolder( "Virtual Piggy" );
 			paymentInstr.setCreditCardNumber( CCNumber );
-			paymentInstr.setCreditCardType( "VISA" );
+			paymentInstr.setCreditCardType( response.cardType );
 			var ccMM = StringUtils.formatCalendar(response.expirationDate, "MM");
 			var ccYYYY = StringUtils.formatCalendar(response.expirationDate, "yyyy");
 			paymentInstr.setCreditCardExpirationMonth(parseInt(ccMM,10));

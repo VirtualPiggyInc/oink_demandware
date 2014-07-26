@@ -236,6 +236,7 @@ function VirtualPiggyWebService() {
 				if(field == 'cardData'){
 					result['accountNumber'] = response.cardData['accountNumber'];
 					result['expirationDate'] = response.cardData['expirationDate'];
+					result['cardType'] = response.cardData['cardType'];
 				}else{
 					result[field] = response[field];
 				}

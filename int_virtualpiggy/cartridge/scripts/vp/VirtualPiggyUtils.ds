@@ -68,11 +68,19 @@ function VirtualPiggyUtilsObject() {
 	
 	object.prepareTransactionXML = function (basket : Basket, orderNo : String) : XML {
 		//shipment-discount
+		
+		var shippingadjustments : Iterator = basket.allShippingPriceAdjustments.iterator();
+		var totalShippingDiscount = 0;
+		while (shippingadjustments.hasNext()) {
+			var shippingAdjustment : PriceAdjustment = shippingadjustments.next();
+			totalShippingDiscount += shippingAdjustment.priceValue;
+		}
+		
 		var cart : XML = <cart currency={this.getCurrency()} total={basket.totalGrossPrice.value}>
-				<cart-shipment total={basket.totalGrossPrice.value} shipment-reference={orderNo}>
+				<cart-shipment total={basket.totalGrossPrice.value} shipment-reference={basket.UUID}>
 					<shipment-tax total={basket.totalTax.value}/>
 					<shipment-cost total={basket.shippingTotalNetPrice.value}/>
-					<shipment-discount total="0"/>
+					<shipment-discount total={totalShippingDiscount}/>
 					<shipment-address/>
 					<items/>							
 				</cart-shipment>				
@@ -84,7 +92,14 @@ function VirtualPiggyUtilsObject() {
 		while (products.hasNext()) {
 			var product : ProductLineItem = products.next();
 		
-			var itemXML : XML = <item total={product.netPrice.value}></item>;						
+			var totalProductAdjustment = 0;
+			var priceAdjustments : Iterator = product.priceAdjustments.iterator();
+				while (priceAdjustments.hasNext()) {
+					var productAdjustment : PriceAdjustment = priceAdjustments.next();
+					totalProductAdjustment += productAdjustment.priceValue;
+				}
+			
+			var itemXML : XML = <item total={product.adjustedGrossPrice.value} discount={totalProductAdjustment}></item>;						
 			itemXML.appendChild(this._cdata(new XML(<item-name/>), product.productName));
 			itemXML.appendChild(this._cdata(new XML(<item-description/>), product.product.shortDescription));
 			itemXML.appendChild(this._cdata(new XML(<item-price/>), product.basePrice.value));				

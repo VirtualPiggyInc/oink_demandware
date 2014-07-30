@@ -27,7 +27,7 @@ a#vploginbutton.inactive img {
 	width: 11px;
 	height: 11px;
 	position: absolute;
-	left: 590px;
+	left: 600px;
 	top: 0px;
 	text-decoration: none;		
 	border: none;		
@@ -139,6 +139,7 @@ div#vplogindialog input {
 
 .ui-dialog {
 	border: 1px solid black;
+	width: 620px !important;
 }
 
 .vp-parent-checkout select {

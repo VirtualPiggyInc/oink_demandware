@@ -2,19 +2,19 @@ hidden {
 	display: hidden;
 }
 
-a#vploginbutton {
+a.vploginbutton {
 	cursor: pointer;
 }
 
-a#vploginbutton.inactive {
+a.vploginbutton.inactive {
 	cursor: wait;
 }
 
-a#vploginbutton.inactive img {
+a.vploginbutton.inactive img {
 	opacity:0.5;
 	filter:alpha(opacity=50);
 }
-#vploginbuttonpos {
+.vploginbuttonpos {
 	position: relative;
 	top:-320px;
 	left:-170px;

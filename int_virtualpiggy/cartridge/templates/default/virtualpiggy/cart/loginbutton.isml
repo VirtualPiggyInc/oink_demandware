@@ -20,7 +20,7 @@
 
 			var vpbuttontext = '<p><a href="https://www.oink.com/whatis/index.html" target="_blank">&nbsp;&nbsp;&nbsp;What is Oink? </a> ';
 		
-			$('.cart-action-checkout').append('<a href="#" id="vploginbutton" class="inactive">' + vpbutton + vpbuttontext);
+			$('.cart-action-checkout').append('<a href="#" class="vploginbutton inactive">' + vpbutton + vpbuttontext);
 
 		</script>
 

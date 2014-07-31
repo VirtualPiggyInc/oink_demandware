@@ -51,11 +51,11 @@
 
 jQuery(document).ready(function() {	
 	
-	if (jQuery('#vploginbutton')) {
+	if (jQuery('.vploginbutton')) {
 		app.virtualpiggy.init('${initUrl}');
 		app.virtualpiggy.dialogLoginInit();
-		jQuery('#vploginbutton').bind('click', app.virtualpiggy.buttonShowDialogHandler);
-		jQuery('#vploginbutton').removeClass('inactive');
+		jQuery('.vploginbutton').bind('click', app.virtualpiggy.buttonShowDialogHandler);
+		jQuery('.vploginbutton').removeClass('inactive');
 	};
 
 });

@@ -330,14 +330,10 @@
                 </segment>
               </branch>
             </node>
-            <simple-transition>
-              <transition-display>
-                <bend-point relative-to="target" x="0" y="-1"/>
-              </transition-display>
-            </simple-transition>
+            <simple-transition/>
             <node>
               <call-node start-name-ref="Cart-Calculate"/>
-              <node-display x="0" y="2"/>
+              <node-display x="0" y="1"/>
             </node>
             <simple-transition>
               <transition-display>
@@ -370,11 +366,7 @@
               <join-node/>
               <node-display x="0" y="1"/>
             </node>
-            <simple-transition>
-              <transition-display>
-                <bend-point relative-to="source" x="0" y="1"/>
-              </transition-display>
-            </simple-transition>
+            <simple-transition/>
             <node>
               <decision-node condition-key="IsChild" condition-operator="expr"/>
               <node-display x="0" y="1"/>
@@ -486,11 +478,15 @@
               </interaction-continue-node>
               <node-display x="0" y="1"/>
             </node>
-            <simple-transition/>
+            <simple-transition>
+              <transition-display>
+                <bend-point relative-to="source" x="0" y="1"/>
+              </transition-display>
+            </simple-transition>
             <node>
               <pipelet-node pipelet-name="Assign" pipelet-set-identifier="bc_api">
                 <config-property key="Transactional" value="false"/>
-                <key-binding alias="!IsChild &amp;&amp; CurrentForms.vpparentcheckout.senttochildaddress.value" key="From_0"/>
+                <key-binding alias="(CurrentHttpParameterMap.dwfrm_vpcheckout_checkout.value == &quot;Checkout&quot;)" key="From_0"/>
                 <key-binding alias="checkCondition" key="To_0"/>
                 <key-binding alias="null" key="From_1"/>
                 <key-binding alias="null" key="To_1"/>
@@ -513,31 +509,46 @@
               </pipelet-node>
               <node-display x="0" y="1"/>
             </node>
-            <simple-transition/>
+            <simple-transition>
+              <transition-display>
+                <bend-point relative-to="source" x="0" y="1"/>
+              </transition-display>
+            </simple-transition>
             <node>
-              <decision-node condition-key="!IsChild &amp;&amp; CurrentForms.vpparentcheckout.senttochildaddress.value" condition-operator="expr"/>
+              <decision-node condition-key="(CurrentHttpParameterMap.dwfrm_vpcheckout_checkout.value == &quot;Checkout&quot;)" condition-operator="expr"/>
               <node-display x="0" y="1"/>
               <branch basename="b2" source-connector="yes">
-                <transition target-connector="in"/>
+                <transition target-connector="in">
+                  <transition-display>
+                    <bend-point relative-to="source" x="0" y="1"/>
+                  </transition-display>
+                </transition>
                 <segment>
                   <node>
-                    <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
-                      <config-property key="Transactional" value="true"/>
-                      <config-property key="OnError" value="PIPELET_ERROR"/>
-                      <config-property key="ScriptFile" value="vp/SetChildsAddressToShippihng.ds"/>
-                      <key-binding alias="Log" key="ScriptLog"/>
-                      <key-binding alias="Basket" key="Basket"/>
-                      <key-binding alias="CurrentForms.vpparentcheckout.childrenList.value" key="ChildId"/>
-                      <key-binding alias="CheckoutError" key="ErrorMessage"/>
+                    <pipelet-node pipelet-name="Assign" pipelet-set-identifier="bc_api">
+                      <config-property key="Transactional" value="false"/>
+                      <key-binding alias="!IsChild &amp;&amp; CurrentForms.vpparentcheckout.senttochildaddress.value" key="From_0"/>
+                      <key-binding alias="checkCondition" key="To_0"/>
+                      <key-binding alias="null" key="From_1"/>
+                      <key-binding alias="null" key="To_1"/>
+                      <key-binding alias="null" key="From_2"/>
+                      <key-binding alias="null" key="To_2"/>
+                      <key-binding alias="null" key="From_3"/>
+                      <key-binding alias="null" key="To_3"/>
+                      <key-binding alias="null" key="From_4"/>
+                      <key-binding alias="null" key="To_4"/>
+                      <key-binding alias="null" key="From_5"/>
+                      <key-binding alias="null" key="To_5"/>
+                      <key-binding alias="null" key="From_6"/>
+                      <key-binding alias="null" key="To_6"/>
+                      <key-binding alias="null" key="From_7"/>
+                      <key-binding alias="null" key="To_7"/>
+                      <key-binding alias="null" key="From_8"/>
+                      <key-binding alias="null" key="To_8"/>
+                      <key-binding alias="null" key="From_9"/>
+                      <key-binding alias="null" key="To_9"/>
                     </pipelet-node>
                     <node-display x="0" y="1"/>
-                    <branch basename="b2" source-connector="error">
-                      <transition target-connector="in1" target-path="../+1/b2.1">
-                        <transition-display>
-                          <bend-point relative-to="source" x="2" y="0"/>
-                        </transition-display>
-                      </transition>
-                    </branch>
                   </node>
                   <simple-transition>
                     <transition-display>
@@ -545,63 +556,104 @@
                     </transition-display>
                   </simple-transition>
                   <node>
-                    <call-node start-name-ref="Cart-Calculate"/>
+                    <decision-node condition-key="!IsChild &amp;&amp; CurrentForms.vpparentcheckout.senttochildaddress.value" condition-operator="expr"/>
                     <node-display x="0" y="1"/>
+                    <branch basename="b2" source-connector="yes">
+                      <transition target-connector="in"/>
+                      <segment>
+                        <node>
+                          <pipelet-node pipelet-name="Script" pipelet-set-identifier="bc_api">
+                            <config-property key="Transactional" value="true"/>
+                            <config-property key="OnError" value="PIPELET_ERROR"/>
+                            <config-property key="ScriptFile" value="vp/SetChildsAddressToShippihng.ds"/>
+                            <key-binding alias="Log" key="ScriptLog"/>
+                            <key-binding alias="Basket" key="Basket"/>
+                            <key-binding alias="CurrentForms.vpparentcheckout.childrenList.value" key="ChildId"/>
+                            <key-binding alias="CheckoutError" key="ErrorMessage"/>
+                          </pipelet-node>
+                          <node-display x="0" y="1"/>
+                          <branch basename="b2" source-connector="error">
+                            <transition target-connector="in1" target-path="../+1/b2.1">
+                              <transition-display>
+                                <bend-point relative-to="source" x="2" y="0"/>
+                              </transition-display>
+                            </transition>
+                          </branch>
+                        </node>
+                        <simple-transition>
+                          <transition-display>
+                            <bend-point relative-to="source" x="0" y="1"/>
+                          </transition-display>
+                        </simple-transition>
+                        <node>
+                          <call-node start-name-ref="Cart-Calculate"/>
+                          <node-display x="0" y="1"/>
+                        </node>
+                        <transition target-connector="in1" target-path="../+1"/>
+                      </segment>
+                    </branch>
                   </node>
-                  <transition target-connector="in1" target-path="../+1"/>
-                </segment>
-              </branch>
-            </node>
-            <transition target-connector="in1" target-path="./+1">
-              <transition-display>
-                <bend-point relative-to="source" x="5" y="0"/>
-                <bend-point relative-to="target" x="5" y="0"/>
-              </transition-display>
-            </transition>
-          </segment>
-          <segment>
-            <node>
-              <join-node/>
-              <node-display x="0" y="3"/>
-            </node>
-            <simple-transition/>
-            <node>
-              <call-node start-name-ref="VirtualPiggy-PlaceOrder"/>
-              <node-display x="0" y="1"/>
-              <branch basename="b2" source-connector="error">
-                <transition target-connector="in1">
-                  <transition-display>
-                    <bend-point relative-to="source" x="6" y="0"/>
-                  </transition-display>
-                </transition>
-                <segment>
-                  <node>
-                    <join-node/>
-                    <node-display x="3" y="-3"/>
-                  </node>
-                  <transition target-connector="in3" target-path="../-1">
+                  <transition target-connector="in1" target-path="./+1">
                     <transition-display>
-                      <bend-point relative-to="target" x="6" y="0"/>
+                      <bend-point relative-to="target" x="5" y="0"/>
                     </transition-display>
                   </transition>
                 </segment>
+                <segment>
+                  <node>
+                    <join-node/>
+                    <node-display x="0" y="3"/>
+                  </node>
+                  <simple-transition/>
+                  <node>
+                    <call-node start-name-ref="VirtualPiggy-PlaceOrder"/>
+                    <node-display x="0" y="1"/>
+                    <branch basename="b2" source-connector="error">
+                      <transition target-connector="in1">
+                        <transition-display>
+                          <bend-point relative-to="source" x="6" y="0"/>
+                        </transition-display>
+                      </transition>
+                      <segment>
+                        <node>
+                          <join-node/>
+                          <node-display x="3" y="-3"/>
+                        </node>
+                        <transition target-connector="in3" target-path="../..">
+                          <transition-display>
+                            <bend-point relative-to="target" x="6" y="0"/>
+                          </transition-display>
+                        </transition>
+                      </segment>
+                    </branch>
+                  </node>
+                  <simple-transition/>
+                  <node>
+                    <call-node start-name-ref="VirtualPiggy-OrderPostCreate"/>
+                    <node-display x="0" y="1"/>
+                  </node>
+                  <simple-transition>
+                    <transition-display>
+                      <bend-point relative-to="source" x="0" y="1"/>
+                    </transition-display>
+                  </simple-transition>
+                  <node>
+                    <interaction-node transaction-required="false">
+                      <template buffered="true" dynamic="false" name="checkout/confirmaiton/vpconfirmation"/>
+                    </interaction-node>
+                    <node-display x="0" y="1"/>
+                  </node>
+                </segment>
               </branch>
-            </node>
-            <simple-transition/>
-            <node>
-              <call-node start-name-ref="VirtualPiggy-OrderPostCreate"/>
-              <node-display x="0" y="1"/>
             </node>
             <simple-transition>
               <transition-display>
-                <bend-point relative-to="source" x="0" y="1"/>
+                <bend-point relative-to="source" x="1" y="0"/>
               </transition-display>
             </simple-transition>
             <node>
-              <interaction-node transaction-required="false">
-                <template buffered="true" dynamic="false" name="checkout/confirmaiton/vpconfirmation"/>
-              </interaction-node>
-              <node-display x="0" y="1"/>
+              <end-node/>
+              <node-display orientation="horizontal" x="1" y="0"/>
             </node>
           </segment>
         </branch>
@@ -1042,6 +1094,9 @@ Note: copy from SiteGenesis</description>
           <key-binding alias="CurrentSession.custom.vpTempAccountNumber" key="TestAccountNumber"/>
           <key-binding alias="TargetPaymentInstrument" key="TargetPaymentInstrument"/>
           <key-binding alias="PaymentProcessor" key="PaymentProcessor"/>
+          <key-binding alias="CCPaymentInstrument.paymentTransaction.custom.authorizationCode" key="AuthorizationCode"/>
+          <key-binding alias="CCPaymentInstrument.paymentTransaction.custom.avsCode" key="AVSresponseCode"/>
+          <key-binding alias="CCPaymentInstrument" key="CCPaymentInstrument"/>
         </pipelet-node>
         <node-display x="0" y="1"/>
         <branch basename="b3" source-connector="error">
@@ -1061,7 +1116,7 @@ Note: copy from SiteGenesis</description>
       </node>
       <simple-transition/>
       <node>
-        <end-node/>
+        <end-node name="success"/>
         <node-display x="0" y="1"/>
       </node>
     </segment>
@@ -1112,7 +1167,7 @@ Note: copy from SiteGenesis</description>
           <key-binding alias="Order.custom.vpTransactionId" key="To_0"/>
           <key-binding alias="CurrentSession.custom.vpAccountNumber" key="From_1"/>
           <key-binding alias="Order.custom.vpCardNumber" key="To_1"/>
-          <key-binding alias="CurrentSession.custom.vpConfirmation" key="From_2"/>
+          <key-binding alias="CurrentSession.custom.vpAuthorizationCode" key="From_2"/>
           <key-binding alias="Order.custom.vpGatewayAuthCode" key="To_2"/>
           <key-binding alias="CurrentSession.custom.vpExpirationDate" key="From_3"/>
           <key-binding alias="Order.custom.vpCardExpDate" key="To_3"/>

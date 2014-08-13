@@ -25,6 +25,9 @@
 *	@output	ExpirationDate : String
 *	@output	Confirmation : String
 *	@output	TestAccountNumber : String
+*	@output AuthorizationCode : String
+*	@output AVSresponseCode : String
+* 	@output CCPaymentInstrument : dw.order.OrderPaymentInstrument The credit card payment instrument
 *
 */
 importPackage( dw.system );
@@ -52,7 +55,7 @@ function execute( args : PipelineDictionary ) : Number {
 	var transactionXML : XML = VP.utils.prepareTransactionXML(basket, orderNo);
 	var orderDescription : String = VP.utils.prepareTransactionDescription(basket, orderNo);
 	var childId : String = args.ChildId;
-	var paymentInputId : String = args.PaymentInputId;	
+	var paymentInputId : String = args.PaymentInputId;
 	
 	var response : HashMap;
 
@@ -60,8 +63,8 @@ function execute( args : PipelineDictionary ) : Number {
 		{
 		if(session.custom.vpUserType == "Child"){
 			if (dw.system.Site.getCurrent().getCustomPreferenceValue("vpRecvGatewayData")){
-				response = VP.processTransactionV2(session.custom.vpUserToken, transactionXML, orderDescription);
-				Logger.debug("after processTransactionV2");
+				response = VP.processTransactionV3(session.custom.vpUserToken, transactionXML, orderDescription);
+				Logger.debug("after processTransactionV3");
 			}
 			else {
 				response = VP.processTransaction(session.custom.vpUserToken, transactionXML, orderDescription);
@@ -69,7 +72,7 @@ function execute( args : PipelineDictionary ) : Number {
 			}
 		} else {
 			if (dw.system.Site.getCurrent().getCustomPreferenceValue("vpRecvGatewayData")){
-				response = VP.processParentTransactionV2(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
+				response = VP.processParentTransactionV3(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
 			}
 			else {
 				response = VP.processParentTransaction(session.custom.vpUserToken, transactionXML, orderDescription, childId, paymentInputId);
@@ -125,6 +128,10 @@ function execute( args : PipelineDictionary ) : Number {
 			paymentInstr.getPaymentTransaction().setPaymentProcessor(args.PaymentProcessor);
 			paymentInstr.paymentTransaction.amount = basket.totalGrossPrice;
 			paymentInstr.paymentTransaction.transactionID = response.confirmation;
+			var gatewayData = JSON.parse(response.gatewayData);
+			paymentInstr.paymentTransaction.custom.authorizationCode = gatewayData.authorizationCode;
+			paymentInstr.paymentTransaction.custom.avsCode = gatewayData.avsRespCode;
+			args.CCPaymentInstrument = paymentInstr;
 
 		}
 		catch (e) 
@@ -140,8 +147,9 @@ function execute( args : PipelineDictionary ) : Number {
 	
 	args.TransactionId = response.transactionIdentifier;
 	args.ApprovalStatus = response.transactionStatus;
-				
-	
+	var gatewayData = JSON.parse(response.gatewayData);
+	args.AuthorizationCode = gatewayData.authorizationCode;
+	args.AVSresponseCode = gatewayData.avsRespCode;
 
 	return PIPELET_NEXT;
 }

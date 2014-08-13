@@ -27,7 +27,8 @@ function VirtualPiggyWebService() {
 		address: ["address", "city", "country", "name", "firstName", "lastName", "parentEmail", "parentPhone", "state", "zip"],
 		paymentAccounts: ["identifier", "name", "type", "url"],
 		transaction: ["dataXml", "transactionIdentifier", "transactionStatus"],
-		transactionV2: ["cardData", "confirmation", "dataXml", "transactionIdentifier", "transactionStatus"]
+		transactionV2: ["cardData", "confirmation", "dataXml", "transactionIdentifier", "transactionStatus"],
+		transactionV3: ["cardData", "confirmation", "dataXml", "transactionIdentifier", "transactionStatus", "gatewayData"]
 	};
 
 	service.authenticateUser = function (username, password) {
@@ -191,6 +192,26 @@ function VirtualPiggyWebService() {
 		}
 	};
 	
+	service.processParentTransactionV3 = function (parentToken : String, checkoutXML : String, description : String,
+												 childID : String, paymentAccountID : String) {
+		var soapRequest  = new ProcessParentTransactionV3(),
+			soapResponse = null;
+			
+		soapRequest.token = parentToken;
+		soapRequest.checkOutData = checkoutXML;
+		soapRequest.transactionDescription = description;
+		soapRequest.childIdentifier = childID;
+		soapRequest.paymentAccountIdentifier = paymentAccountID;
+		
+		try {
+			soapResponse = this.callService("processParentTransactionV3", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.transactionV3);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
 	service.processTransaction = function (childToken : String, checkoutXML : String, description : String) {
 		var soapRequest  = new ProcessTransaction(),
 			soapResponse = null;
@@ -225,6 +246,25 @@ function VirtualPiggyWebService() {
 			throw e;
 		}
 	};
+	
+	service.processTransactionV3 = function (childToken : String, checkoutXML : String, description : String) {
+		var soapRequest  = new ProcessTransactionV3(),
+			soapResponse = null;
+			
+		soapRequest.token = childToken;
+		soapRequest.checkOutData = checkoutXML;
+		soapRequest.transactionDescription = description;
+		
+		try {
+			soapResponse = this.callService("processTransactionV3", soapRequest);
+			var result = this._parseResponse(soapResponse, this._responseFields.transactionV3);
+			Logger.error("VP-WebService - error: {0}",result.errorMessage);
+			return result;
+		} catch(e) {
+			throw e;
+		}
+	};
+	
 	service._parseResponse = function (response, fields : Array) : Object {
 		var result : HashMap = new HashMap();
 		result.status = response.status;

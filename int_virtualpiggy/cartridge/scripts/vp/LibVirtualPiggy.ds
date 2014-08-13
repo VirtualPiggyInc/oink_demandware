@@ -184,6 +184,21 @@ function VirtualPiggyObject() {
 	};
 	
 	/**
+	*	Submits a cart during Parent checkout (returns back card data and gateway data)
+	*/
+	
+	object.processParentTransactionV3 = function (parentToken : String, checkoutXML : String, description : String, 
+												childID : String, paymentAccountID : String) {
+		try {
+			var response = WebServiceInvoker.invoke(this._serviceName, "processParentTransactionV3", parentToken, 
+													checkoutXML, description, childID, paymentAccountID);
+			return response;
+		} catch(e) {
+			return this.utils.catchTheException(e);
+		}
+	};
+	
+	/**
 	*	Submits a cart during Child checkout
 	*/
 	
@@ -203,6 +218,19 @@ function VirtualPiggyObject() {
 	object.processTransactionV2 = function (childToken : String, checkoutXML : String, description : String) {
 		try {
 			var response = WebServiceInvoker.invoke(this._serviceName, "processTransactionV2", childToken, checkoutXML, description);
+			return response;
+		} catch(e) {
+			return this.utils.catchTheException(e);
+		}
+	};
+	
+	/**
+	*	Submits a cart during Child checkout (returns back card data and gateway data)
+	*/
+	
+	object.processTransactionV3 = function (childToken : String, checkoutXML : String, description : String) {
+		try {
+			var response = WebServiceInvoker.invoke(this._serviceName, "processTransactionV3", childToken, checkoutXML, description);
 			return response;
 		} catch(e) {
 			return this.utils.catchTheException(e);

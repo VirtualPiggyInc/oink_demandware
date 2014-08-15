@@ -1402,7 +1402,7 @@ Note: copy from SiteGenesis</description>
       </simple-transition>
       <node>
         <pipelet-node pipelet-name="GetPaymentProcessor" pipelet-set-identifier="bc_api">
-          <key-binding alias="&quot;PAYFLOW&quot;" key="ID"/>
+          <key-binding alias="&quot;BASIC_CREDIT&quot;" key="ID"/>
           <key-binding alias="PaymentProcessor" key="PaymentProcessor"/>
         </pipelet-node>
         <node-display x="0" y="1"/>

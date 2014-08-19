@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" name="TransactionService" targetNamespace="http://tempuri.org/">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" name="TransactionService" targetNamespace="http://tempuri.org/">
 <wsp:Policy wsu:Id="BasicHttpBinding_ITransactionService_policy">
 <wsp:ExactlyOne>
 <wsp:All>
@@ -26,13 +26,13 @@
 </wsp:Policy>
 <wsdl:types>
 <xsd:schema targetNamespace="http://tempuri.org/Imports">
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd0" namespace="http://tempuri.org/"/>
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Web.Services.Model"/>
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Web.Services.Model.v1"/>
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Model"/>
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
-<xsd:import schemaLocation="https://us2016b.virtualpiggy.com/services/TransactionService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Services.Model"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd0" namespace="http://tempuri.org/"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Web.Services.Model"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Web.Services.Model.v1"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd4" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Model"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd5" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+<xsd:import schemaLocation="https://live.virtualpiggy.com/services/TransactionService.svc?xsd=xsd6" namespace="http://schemas.datacontract.org/2004/07/VirtualPiggy.Services.Model"/>
 </xsd:schema>
 </wsdl:types>
 <wsdl:message name="ITransactionService_PingHeaders_InputMessage">
@@ -972,7 +972,7 @@ Creates account for the external(merchant) referral parent
 </wsdl:binding>
 <wsdl:service name="TransactionService">
 <wsdl:port name="BasicHttpBinding_ITransactionService" binding="tns:BasicHttpBinding_ITransactionService">
-<soap:address location="https://us2016b.virtualpiggy.com/services/TransactionService.svc"/>
+<soap:address location="https://live.virtualpiggy.com/services/TransactionService.svc"/>
 </wsdl:port>
 </wsdl:service>
 </wsdl:definitions>

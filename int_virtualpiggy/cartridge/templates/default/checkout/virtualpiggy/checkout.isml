@@ -211,8 +211,12 @@
 			
 			</tfoot>	
 			
-		</table>		
-
+		</table>
+		
+		<isset name="gcApplicable" value="${'false'}" scope="page"/>
+		<isif condition="${dw.order.PaymentMgr.getPaymentMethod(dw.order.PaymentInstrument.METHOD_GIFT_CERTIFICATE).isActive() }">
+			<isset name="gcApplicable" value="${'true'}" scope="page"/>
+		</isif>
 		<isslot id="placeorder-slot" description="Slot next to Order Totals in the footer of the Place Order page." context="global"/>
 
 			

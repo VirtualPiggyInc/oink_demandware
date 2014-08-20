@@ -1,0 +1,196 @@
+<isdecorate template="checkout/pt_checkout"/>
+	<isinclude template="util/modules"/>
+		<!--  Task  #54641 Amazon Checkout -->
+	<isinclude template="widgets/modules"/>
+	<isinclude template="header/paymentjs"/>	
+
+	<iscomment>
+		This template visualizes the billing step of both checkout scenarios.
+		It provides selecting a payment method, entering gift certificates and
+		specifying a separate billing address.
+		Depending on the checkout scenario (single or multi shipping) it is
+		either the second or third checkout step.
+	</iscomment>
+	
+	<iscomment>Report this checkout step</iscomment>
+	<isreportcheckout checkoutstep="4" checkoutname="${'Billing'}"/>
+
+	<div class="checkout-titleprogress-div">
+		<div class="checkout-title">${Resource.msg('pt_checkout.breadcrumb','checkout',null)}</div>
+	
+		<iscomment> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			checkout progress indicator
+		 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</iscomment>
+	    
+	    <isif condition="${!pdict.CurrentForms.multishipping.entered.value}">
+	    	<ischeckoutprogressindicator step="2" multishipping="false" rendershipping="${pdict.Basket.productLineItems.size() == 0 ? 'false' : 'true'}"/>
+		<iselse/>
+			<ischeckoutprogressindicator step="3" multishipping="true" rendershipping="${pdict.Basket.productLineItems.size() == 0 ? 'false' : 'true'}"/>
+		</isif>
+	</div>
+
+	<isset name="gcApplicable" value="${'false'}" scope="page"/>
+	<isif condition="${dw.order.PaymentMgr.getPaymentMethod(dw.order.PaymentInstrument.METHOD_GIFT_CERTIFICATE).isActive() }">
+		<isset name="gcApplicable" value="${'true'}" scope="page"/>
+	</isif>
+	
+	<div class="billing-top error-message"><!-- placeholder to show billing page errors at top of page --></div>
+	
+	<div class="billing-top-gift-cert">								
+			<isset name="gcPITotal" value="${0}" scope="pdict"/>
+			<isset name="OrderTotal" value="${pdict.Basket.totalGrossPrice.value}" scope="pdict"/>
+			<isif condition="${gcApplicable == 'true'}">
+	
+				<iscomment>only provide gift certificate redemption, if the basket doesn't contain any gift certificates</iscomment>
+				<isif condition="${pdict.Basket.giftCertificateLineItems.size() == 0}">
+					
+					<div id="gc-applied-placeholder-top">
+			    		<iscomment>render gift cert redeemed success message for each gift certificate payment instrument</iscomment>
+			    		<isset name="gcPITotal" value="${0}" scope="pdict"/>
+			    		<isif condition="${pdict.Basket.giftCertificatePaymentInstruments.size() > 0}">
+			    			<isloop items="${pdict.Basket.giftCertificatePaymentInstruments}" var="giftCertPI">
+			    				<isset name="gcPITotal" value="${pdict.gcPITotal + giftCertPI.paymentTransaction.amount}" scope="pdict"/>
+			    				<div class="gcApplied-wrapper">			    				
+			    					<div class="gcApplied" id="gct-${giftCertPI.getGiftCertificateCode()}">
+			    						<div class="gcNum">
+				    					 	${Resource.msg('billing.giftcertlabel','checkout',null)}
+				    					 	<isprint value="${giftCertPI.getGiftCertificateCode()}"/>:
+				    					 </div>
+				    					 <div class="gcVal">
+				    						<isprint value="${giftCertPI.paymentTransaction.amount}"/> ${Resource.msg('billing.giftcertredeemed','checkout',null)}
+				    					 </div>	
+			    					</div> 
+			    					<div class="gcRemove">
+			    						<input type="image" id="rgct-${giftCertPI.getGiftCertificateCode()}" class="remove" href="${URLUtils.https('COBilling-RemoveGiftCertificate', "giftCertificateID", giftCertPI.getGiftCertificateCode(),'format','old')}" src="${URLUtils.staticURL('/images/bullet-clear.gif')}" alt="${Resource.msg('global.remove','locale',null)}"/>
+			    					</div>
+			    				</div>
+			    			</isloop>			    			
+			    		</isif>										
+						<!-- Update div with balance of Gift Cards that have been applied -->
+					</div>
+
+				</isif>
+			
+			</isif>	
+	</div>
+		
+	<div class="checkout-contentwrapper-div">	
+		<form action="${URLUtils.continueURL()}" method="post" id="${pdict.CurrentForms.billing.htmlName}" class="checkout-billing address">
+			
+		<iscomment> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			billing address
+		 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</iscomment>
+		 
+		<fieldset>
+
+			<div class="billing-address-area">	
+				<iscomment>billing address area</iscomment>
+		
+				<iscomment>hidden input with action to trigger for the address form</iscomment>
+				<input type="hidden" name="${pdict.CurrentForms.billing.save.htmlName}" value="true" />
+
+				<div class="billing-email-div">
+			    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.email.emailAddress}" xhtmlclass="email srTransactEmail" type="hidden"/>
+				</div>
+		    	<div class="save-address-options">	
+					<isset name="storeName" value="${Resource.msg('localsite.storename','site',null)}" scope="page" />
+			    </div>
+			    
+				<iscomment>display select box with stored addresses if customer is authenticated and there are saved addresses</iscomment>
+				<isif condition="${pdict.CurrentCustomer.authenticated && pdict.CurrentCustomer.profile.addressBook.addresses.size() > 0}">			
+					<div class="select-address">		
+						<div class="form-row">				
+							<label for="${pdict.CurrentForms.billing.addressList.htmlName}">
+								Choose an Address
+							</label>
+							<isscript>
+								importScript("cart/CartUtils.ds");	
+								var customerAddresses = CartUtils.getAddressList(pdict.Basket, pdict.CurrentCustomer, false);		
+							</isscript>
+							<isaddressselectlist p_listId="${pdict.CurrentForms.billing.addressList.htmlName}" p_listaddresses="${customerAddresses}" />					
+						</div>
+			
+						<div class="form-row form-row-button">
+							<button id="address-select-go-button" name="${pdict.CurrentForms.billing.selectAddress.htmlName}" type="submit" value="Go" class="simple-submit">Select</button>
+						</div>
+		
+					</div>
+				
+				</isif>
+			
+		    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.firstName}" type="hidden"/>
+		    	
+		    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.lastName}" type="hidden"/>
+		    	
+		    	<div class="address1-wrapper">
+		    		<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.address1}" type="hidden"/>
+
+					
+		    	</div>
+		    	
+		    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.address2}" type="hidden"/>
+		    			    	
+		    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.states.state}" type="hidden"/>
+		    	
+		    	<iscomment>
+			    	States will be populated via javascript in rich ui.
+			    	Solution for simple ui is still required.
+			    <isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.states.stateUS}" type="hidden"/>
+			    
+			    <isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.states.stateCA}" type="hidden"/>
+			    
+			    <isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.states.stateDE}" type="hidden"/>
+			    </iscomment>
+			    
+				<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.city}" type="hidden"/>
+		    	
+		    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.zip}" type="hidden"/>
+		    	
+		    	<isinputfield formfield="${pdict.CurrentForms.billing.billingAddress.addressFields.phone}" type="hidden"/>
+		    	
+				    
+			</div>	    	
+	    </fieldset>
+	
+		<iscomment> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			coupon / discount codes
+		 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</iscomment>
+
+		<isinclude template="checkout/billing/rewardmethods"/>
+
+		   
+	 	<iscomment> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+			payment methods
+		 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</iscomment>
+		 
+		
+			<div class="form-row form-row-button billing-btn-row">
+				<div class="billing-continue-btn">
+					<iscomment>GA Tag cart_abandon</iscomment>
+					<isif condition="${pdict.CurrentRequest.session.customer.registered}">
+						<isset name="registeredUser" value="RC" scope="page"/>
+					<iselse>
+						<isset name="registeredUser" value="NC" scope="page"/>
+					</isif>
+					
+					<button class="button-fancy-large" type="submit" name="${pdict.CurrentForms.billing.save.htmlName}" value="${Resource.msg('global.continuecheckoutbrief','locale',null)}" onclick="utag.link({event_type: 'cart_abandon', event_category: 'Checkout Billing Page', event_action: 'button', event_label: 'Continue as ${registeredUser} to Submit'});"><span>${Resource.msg('global.continuecheckoutbrief','locale',null)}</span></button>
+				</div>
+			</div>
+			
+	</form>
+</div>
+<div id="secondary" class="nav summary">
+	<isinclude template="checkout/minisummary"/>
+</div>
+<isscript>
+	importScript("util/ViewHelpers.ds");
+	var stateForm = pdict.CurrentForms.billing.billingAddress.addressFields.states;
+	var countryField = pdict.CurrentForms.billing.billingAddress.addressFields.country; 
+	var countries = ViewHelpers.getCountriesAndRegions(countryField, stateForm, "forms");	
+	var json = JSON.stringify(countries);	
+</isscript>
+<script>if (window.app) {app.countries = <isprint value="${json}" encoding="off"/>;}</script>	
+<iscomment><issrpageviews pagename="beginbilling" /></iscomment>
+<iscomment><issractions pagename="billing" /></iscomment>
+
+</isdecorate>

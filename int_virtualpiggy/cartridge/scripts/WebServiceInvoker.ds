@@ -35,6 +35,7 @@ function WebServiceInvoker() {};
 				return (service[methodName]).apply(service);
 			};
 		} catch (e) {
+			var errorobj = e;
 			throw e;
 		}
 	};

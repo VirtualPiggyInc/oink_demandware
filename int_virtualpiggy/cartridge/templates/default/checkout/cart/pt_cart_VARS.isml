@@ -23,7 +23,7 @@
 				<!--  <label for="vppassword">Password</label> -->
 					<input type="password" name="vppassword" id="vppassword" value="" class="text ui-widget-content ui-corner-all" placeholder="Password" />
 					<span class="linkone"><br>
-						<a href="https://users.virtualpiggy.com/login/resettpassword" target="_blank" style="font-size:10pt;color:#999;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginforgetpassword', 'virtualpiggy', null)}</a>
+						<a href="https://users.virtualpiggy.com/login/resetpassword" target="_blank" style="font-size:10pt;color:#999;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginforgetpassword', 'virtualpiggy', null)}</a>
 					</span>					
 				</fieldset>
 				</form>

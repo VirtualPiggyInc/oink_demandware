@@ -18,7 +18,7 @@
 			vpbutton = vpbutton + ' alt="${Resource.msg("vp.loginbuttonalt", "virtualpiggy", null)}" ';
 			vpbutton = vpbutton + 'title="${Resource.msg("vp.authorize", "virtualpiggy", null)}" /> ';
 
-			var vpbuttontext = '<p><a href="https://www.oink.com/whatis/index.html" target="_blank">&nbsp;&nbsp;&nbsp;What is Oink? </a> ';
+			var vpbuttontext = '<p><a href="https://www.oink.com/faq" target="_blank">&nbsp;&nbsp;&nbsp;What is Oink? </a> ';
 		
 			$('.cart-action-checkout').append('<a href="#" class="vploginbutton inactive">' + vpbutton + vpbuttontext);
 

@@ -127,7 +127,8 @@ div#vplogindialog{
 }
 div#vplogindialog input {
 	margin-bottom: 20px;
-
+	width: 49.5966%;
+	margin-left: 2%;
 }
 .titletext {
     font-family: "open sans condensed", sans-serif;

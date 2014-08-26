@@ -13,7 +13,7 @@
 		</iscomment>	
 		<script type="text/javascript">
 		
-			var vpbutton = '<br><img src="https://cdn.virtualpiggy.com/public/images/checkout-145x42.png" ';		
+			var vpbutton = '<br><img src="https://cdn.virtualpiggy.com/public/images/accepting-150x49.png" ';		
 			vpbutton = vpbutton + '<img src="${URLUtils.staticURL("/images/vploginbutton.png")}" ';
 			vpbutton = vpbutton + ' alt="${Resource.msg("vp.loginbuttonalt", "virtualpiggy", null)}" ';
 			vpbutton = vpbutton + 'title="${Resource.msg("vp.authorize", "virtualpiggy", null)}" /> ';

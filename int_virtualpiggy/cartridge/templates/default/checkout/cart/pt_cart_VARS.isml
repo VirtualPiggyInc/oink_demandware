@@ -1,0 +1,63 @@
+<iscomment>
+	This template is being injected after the footer element (within the <body>,
+	but near the end) of the pt_cart.isml template accordingly the latest
+	SiteGenesis modifications (12.5+).
+	
+	If your solution is based on an older SiteGenesis version, the content of this
+	file should be included into the end of the /checkout/cart/cart.isml or relevant.
+</iscomment>
+
+<div id="vplogindialog" class="hidden" >
+	<table border="0" width="400">
+	<tr>
+		<td align="center">
+			<img src="https://cdn.virtualpiggy.com/public/images/checkout-logo-192x75.png" height="70"> </img>
+			<p class="titletext">${Resource.msg('vp.logindialogtext', 'virtualpiggy', null)}</p>
+			<form>
+				<fieldset>
+		
+					<span id="vplogindialogerror" class="error"></span>
+				<!-- 	<label for="vplogin">Name</label> -->
+					<input type="text" name="vpusername" id="vpusername" class="text ui-widget-content ui-corner-all" placeholder="Username" />
+					<br clear="all"/>
+				<!--  <label for="vppassword">Password</label> -->
+					<input type="password" name="vppassword" id="vppassword" value="" class="text ui-widget-content ui-corner-all" placeholder="Password" />
+					<span class="linkone"><br>
+						<a href="https://users.virtualpiggy.com/login/resetpassword" target="_blank" style="font-size:10pt;color:#999;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginforgetpassword', 'virtualpiggy', null)}</a>
+					</span>					
+				</fieldset>
+				</form>
+	    </td>
+	    <iscomment>Vertical Line</iscomment>
+	    <td><span style="display:inline-block;height:210px;width:0px;border:1px solid #999;position: relative; top:20px;"></span></td>
+	  	<td>
+			<p align="center" class="titleaccountone">${Resource.msg('vp.loginaccounttitle1', 'virtualpiggy', null)}</p>
+			<p align="center" class="titleaccounttwo">${Resource.msg('vp.loginaccounttitle2', 'virtualpiggy', null)}</p>			
+			<p align="center" class="titlesafe"> ${Resource.msg('vp.loginsafe', 'virtualpiggy', null)}</p>
+			<p align="center" class="linktwo">
+				<a href="https://www.oink.com/faq" target="_blank" style="font-size:10pt;color:#999;font-family:" helvetica="" neue="" regular";"="">${Resource.msg('vp.loginlearnmore', 'virtualpiggy', null)}</a>
+			</p>	  	
+	      <br>
+
+	     </td>
+     </tr>
+</table>
+</div>
+
+<script src="${URLUtils.staticURL('/js/virtualpiggy.js')}" type="text/javascript"></script>
+<script type="text/javascript">
+
+<isset name="initUrl" value="${URLUtils[pdict.CurrentRequest.httpProtocol]('VirtualPiggy-InitJsLibData')}" scope="page"/>
+
+jQuery(document).ready(function() {	
+	
+	if (jQuery('.vploginbutton')) {
+		app.virtualpiggy.init('${initUrl}');
+		app.virtualpiggy.dialogLoginInit();
+		jQuery('.vploginbutton').bind('click', app.virtualpiggy.buttonShowDialogHandler);
+		jQuery('.vploginbutton').removeClass('inactive');
+	};
+
+});
+
+</script>

@@ -168,7 +168,7 @@ function VirtualPiggyUtilsObject() {
 	};
 	
 	object.getCurrency = function () : String {
-		var currency : String = Site.getCurrent().getCustomPreferenceValue("vpCurrencyID") || Site.getCurrent().getCurrencyCode();
+		var currency : String = Site.getCurrent().getCustomPreferenceValue("vpCurrencyID") || Site.getCurrent().getDefaultCurrency();
 		return currency;
 	};
 	

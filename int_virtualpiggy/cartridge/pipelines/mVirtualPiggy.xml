@@ -140,16 +140,6 @@
   <branch basename="_ANONYMOUS_BRANCH_3">
     <segment>
       <node>
-        <interaction-node transaction-required="false">
-          <template buffered="true" dynamic="false" name="virtualpiggy/responseerror"/>
-        </interaction-node>
-        <node-display orientation="horizontal" x="2" y="3"/>
-      </node>
-    </segment>
-  </branch>
-  <branch basename="_ANONYMOUS_BRANCH_4">
-    <segment>
-      <node>
         <text-node>
           <description>CheckoutTest - used to test checkout</description>
         </text-node>
@@ -157,7 +147,7 @@
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_5">
+  <branch basename="_ANONYMOUS_BRANCH_4">
     <segment>
       <node>
         <text-node>
@@ -604,7 +594,7 @@
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_8">
+  <branch basename="_ANONYMOUS_BRANCH_7">
     <segment>
       <node>
         <text-node>
@@ -615,7 +605,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_9">
+  <branch basename="_ANONYMOUS_BRANCH_8">
     <segment>
       <node>
         <text-node>
@@ -811,7 +801,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_11">
+  <branch basename="_ANONYMOUS_BRANCH_10">
     <segment>
       <node>
         <text-node>
@@ -821,7 +811,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_12">
+  <branch basename="_ANONYMOUS_BRANCH_11">
     <segment>
       <node>
         <text-node>
@@ -831,7 +821,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_13">
+  <branch basename="_ANONYMOUS_BRANCH_12">
     <segment>
       <node>
         <text-node>
@@ -877,7 +867,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_15">
+  <branch basename="_ANONYMOUS_BRANCH_14">
     <segment>
       <node>
         <text-node>
@@ -949,7 +939,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_17">
+  <branch basename="_ANONYMOUS_BRANCH_16">
     <segment>
       <node>
         <text-node>
@@ -959,21 +949,13 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_18">
+  <branch basename="_ANONYMOUS_BRANCH_17">
     <segment>
       <node>
         <text-node>
           <description>OrderPostCreate- Update &quot;processed&quot; order info</description>
         </text-node>
         <node-display x="1" y="15"/>
-      </node>
-    </segment>
-  </branch>
-  <branch basename="_ANONYMOUS_BRANCH_19">
-    <segment>
-      <node>
-        <call-node start-name-ref="VirtualPiggy-CCStart"/>
-        <node-display x="5" y="12"/>
       </node>
     </segment>
   </branch>
@@ -1197,7 +1179,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_22">
+  <branch basename="_ANONYMOUS_BRANCH_20">
     <segment>
       <node>
         <text-node>
@@ -1207,7 +1189,7 @@ Note: copy from SiteGenesis</description>
       </node>
     </segment>
   </branch>
-  <branch basename="_ANONYMOUS_BRANCH_23">
+  <branch basename="_ANONYMOUS_BRANCH_21">
     <segment>
       <node>
         <text-node>

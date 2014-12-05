@@ -1,4 +1,4 @@
-﻿//importPackage(dw.system);
+importPackage(dw.system);
 
 /**
 *	This script updates QAConfig attributes
@@ -20,7 +20,7 @@ function QAConfig() {
 				"nameSpace" : "vp",
 				"propMerchantID" : "MerchantIdentifier",
 				"propApiKey" : "APIkey",
-				"timeout": 30000,
+				"timeout": dw.system.Site.getCurrent().getCustomPreferenceValue("vpApiTimeout"),
 				"retries": 0,
 				"securityKey": "vp"
 			},

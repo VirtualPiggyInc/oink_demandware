@@ -1,8 +1,5 @@
 <isdecorate template="checkout/pt_vpcheckout"/>
 <isinclude template="util/modules"/>
-<isscript>
-	importScript("app_wetseal:product/ProductImageSO.ds");
-</isscript>
 
 <iscomment>
 	This template visualizes the last step of the checkout, the order summary

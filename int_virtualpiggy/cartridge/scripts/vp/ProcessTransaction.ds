@@ -147,9 +147,6 @@ function execute( args : PipelineDictionary ) : Number {
 	
 	args.TransactionId = response.transactionIdentifier;
 	args.ApprovalStatus = response.transactionStatus;
-	var gatewayData = JSON.parse(response.gatewayData);
-	args.AuthorizationCode = gatewayData.authorizationCode;
-	args.AVSresponseCode = gatewayData.avsRespCode;
 
 	return PIPELET_NEXT;
 }

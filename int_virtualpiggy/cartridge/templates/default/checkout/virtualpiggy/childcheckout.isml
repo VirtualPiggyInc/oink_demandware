@@ -34,13 +34,11 @@
 				<isif condition="${pdict.Basket.productLineItems.size() > 0 || pdict.Basket.giftCertificateLineItems.size() > 0}">
 					
 					<isloop items="${pdict.Basket.productLineItems}" var="productLineItem" status="pliloopstate">
-						 <isset name="product" value="${productLineItem.product}" scope="page"/>
-						 <isset name="image" value="${ new ProductImage('small', product, 0 ) }" scope="page"/>
 						<tr class="cart-row <isif condition="${pliloopstate.first}"> first <iselseif condition="${pliloopstate.last}"> last</isif>">
 							
 							<td class="item-image">
-								<isif condition="${product != null && image != null}">
-									<img src="${image.getURL()}" alt="${image.getAlt()}" title="${image.getTitle()}"/>
+								<isif condition="${productLineItem.product != null && productLineItem.product.getImage('small',0) != null}">
+									<img src="${productLineItem.product.getImage('small',0).getURL()}" alt="${productLineItem.product.getImage('small',0).alt}" title="${productLineItem.product.getImage('small',0).title}"/>
 								<iselse/>
 									<img src="${URLUtils.staticURL('/images/noimagesmall.png')}" alt="${productLineItem.productName}" title="${productLineItem.productName}"/>
 								</isif>
